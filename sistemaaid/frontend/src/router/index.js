@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/views/Home'
 import Dashboard from '@/views/Dashboard'
+import ParticipantesView from '@/views/participantes/ListaParticipante'
 import ListParticipante from '@/components/Participante/ListParticipante'
 import EditParticipante from '@/components/Participante/EditParticipante'
 import DeleteParticipante from '@/components/Participante/DeleteParticipante'
@@ -18,8 +18,8 @@ export default new Router({
     },
     {
       path: '/participantes',
-      name: 'ListParticipante',
-      component: ListParticipante
+      name: 'ParticipantesView',
+      component: ParticipantesView
     },
     {
       path: '/participantes',

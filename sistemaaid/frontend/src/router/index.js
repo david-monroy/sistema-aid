@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Dashboard from '@/views/Dashboard'
-import ParticipantesView from '@/views/participantes/ListaParticipante'
-import ListParticipante from '@/components/Participante/ListParticipante'
+import ListaParticipante from '@/views/participantes/ListaParticipante'
+import AgregarParticipante from '@/views/participantes/AgregarParticipante'
 import EditParticipante from '@/components/Participante/EditParticipante'
 import DeleteParticipante from '@/components/Participante/DeleteParticipante'
-import NewParticipante from '@/components/Participante/NewParticipante'
+import ParticipanteManual from '@/components/Participante/ParticipanteManual'
 
 Vue.use(Router)
 
@@ -18,8 +18,13 @@ export default new Router({
     },
     {
       path: '/participantes',
-      name: 'ParticipantesView',
-      component: ParticipantesView
+      name: 'ListaParticipante',
+      component: ListaParticipante
+    },
+    {
+      path: '/participantes/agregar',
+      name: 'AgregarParticipante',
+      component: AgregarParticipante
     },
     {
       path: '/participantes',
@@ -32,9 +37,9 @@ export default new Router({
       component: DeleteParticipante
     },
     {
-      path: `/participantes/new`,
-      name: 'NewParticipante',
-      component: NewParticipante
+      path: `/participantes/agregar/manual`,
+      name: 'ParticipanteManual',
+      component: ParticipanteManual
     }
   ],
   mode: 'history'

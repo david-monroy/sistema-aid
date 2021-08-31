@@ -1,10 +1,10 @@
 <template>
   <v-row align="center" class="list px-3 mx-auto nav-separator container">
       <div class="crud-buttons mx-auto">
-          <v-btn color="accent2" class="mx-4">Agregar participante</v-btn>
+          <v-btn color="accent2" class="mx-4" @click="goRoute('participantes/agregar')">Agregar participante</v-btn>
           <v-btn color="accent2" class="mx-4">Edición masiva</v-btn>
       </div>
-    <v-col cols="12" sm="12" class="mt-8">
+    <v-col cols="12" sm="12" class="mt-4">
       <v-card class="mx-auto p-3" tile>
         <v-card-title> <span class="primary--text">Participantes</span>
           <v-spacer></v-spacer>
@@ -92,6 +92,10 @@ name: "ParticipantesView",
             .catch((error) => {
                 console.log(error)
             })
+        },
+
+        goRoute(route) {
+            this.$router.push("/" + route);
         },
     },
 

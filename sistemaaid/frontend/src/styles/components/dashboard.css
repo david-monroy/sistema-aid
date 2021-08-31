@@ -1,17 +1,16 @@
-#dashboard, #dashboard-po{
+#dashboard{
     display: flex;
     align-items: center;
     min-height: 540px;
+    background-color: #F6F6F6;
+    height: 100%;
   }
   .dashboard-main-card{
     width: 60%;
     padding: 30px;
+    border-radius: 10px !important;
   }
-  .dashboard-po-main-card{
-    width: 60%;
-    padding: 30px;
-  }
-  .dashboard-item-list, .dashboard-po-item-list{
+  .dashboard-item-list{
     display: flex; 
     justify-content: space-around;
     height: 450px;
@@ -26,11 +25,17 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width:240px;
+    width:320px;
     height:200px;
-    color: white !important;
+    color: #F6F6F6 !important;
     transition: 0.3s;
-    margin: 14px  !important;
+    margin: 8px  !important;
+    border-radius: 12px !important;
+    background-color: #1E56A0 !important;
+}
+
+.dashboard-card__item:hover{
+    background-color: #163172 !important;
 }
 
 @media only screen and (max-width: 600px) {
@@ -45,12 +50,6 @@
     width: 94%;
     padding: 30px 10px;
     height: 800px;
-  }
-
-  .dashboard-po-main-card{
-    width: 94%;
-    padding: 30px 10px;
-    height: 600px ;
   }
 
   .dashboard-card__item{
@@ -92,25 +91,9 @@
     flex-wrap: nowrap;
   }
 
-  .dashboard-po-item-list{
-    display: flex; 
-    justify-content: space-around;
-    height: 520px;
-    padding: 0 40px;
-    align-items: center;
-    flex-direction: column;
-    flex-wrap: nowrap;
-  }
-
   .dashboard-main-card{
     width: 90%;
     padding: 30px 10px;
     height: 920px;
-  }
-
-  #dashboard-po{
-    display: flex;
-    align-items: center;
-    min-height: 540px;
   }
 }

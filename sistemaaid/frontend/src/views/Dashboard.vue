@@ -1,6 +1,6 @@
 <template>
   <div id="dashboard">
-    <v-card
+    <div
     class="mx-auto dashboard-main-card"
     >
       <v-card-text>
@@ -21,7 +21,7 @@
           </v-col>
         </v-row>
       </v-card-text>
-    </v-card>
+    </div>
   </div>
 </template>
 
@@ -39,29 +39,29 @@ export default {
       dashItems: [
       {
         id: 1,
-        name: "Ofertas y Proyectos",
-        icon: "mdi-folder-multiple",
+        name: "Estudios",
+        icon: "fa-file-alt",
         rol: 2,
         route: "#",
       },
       {
         id: 2,
-        name: "Usuarios",
-        icon: "mdi-account-group",
+        name: "Participantes",
+        icon: "fa-users",
         rol: 1,
         route: "#",
       },
       {
         id: 3,
-        name: "Cargar Horas",
-        icon: "mdi-progress-clock",
+        name: "Reportes",
+        icon: "fa-chart-pie",
         rol: 3,
         route: "#",
       },
       {
         id: 4,
-        name: "Reportes",
-        icon: "mdi-align-vertical-bottom",
+        name: "Configuración",
+        icon: "fa-cog",
         rol: 3,
         route: "#",
       },
@@ -72,4 +72,5 @@ export default {
 
 <style>
   @import "../styles/components/dashboard.css";
+  @import "../styles/main.css";
 </style>

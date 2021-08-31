@@ -1,12 +1,12 @@
 <template>
   <v-card 
-  class="pa-4 ma-0 dashboard-card__item primary-color" 
+  class="pa-4 ma-0 dashboard-card__item" 
   @click="goRoute(route)">
     <div class="text-center">
-      <v-icon size="60" color="white"
+      <v-icon size="60" color="light"
               class="mb-2">{{icon}}
       </v-icon>
-      <h4 class="">{{ name }}</h4>
+      <h4 color="light">{{ name }}</h4>
     </div>
   </v-card>
 </template>
@@ -30,4 +30,5 @@ export default {
 
 <style>
 @import "../../styles/components/dashboard.css";
+@import "../../styles/main.css";
 </style>

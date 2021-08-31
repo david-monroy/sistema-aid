@@ -17,13 +17,15 @@
 
 .nav-link{
     color: #F6F6F6 !important;
-    margin-left: 6px;
+    margin: 0 10px;
     transition: 0.3s;
-    font-size: 18px !important
+    font-size: 18px !important;
+    border-radius: 5px;
 }
 
 .nav-link:hover{
     color: #F3ECD3 !important;
+    background-color: rgba(30, 86, 160,0.5);
 }
 
 .nav-item{

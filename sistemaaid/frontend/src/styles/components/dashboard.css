@@ -1,0 +1,116 @@
+#dashboard, #dashboard-po{
+    display: flex;
+    align-items: center;
+    min-height: 540px;
+  }
+  .dashboard-main-card{
+    width: 60%;
+    padding: 30px;
+  }
+  .dashboard-po-main-card{
+    width: 60%;
+    padding: 30px;
+  }
+  .dashboard-item-list, .dashboard-po-item-list{
+    display: flex; 
+    justify-content: space-around;
+    height: 450px;
+    padding: 0 40px;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .dashboard-card__item{
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width:240px;
+    height:200px;
+    color: white !important;
+    transition: 0.3s;
+    margin: 14px  !important;
+}
+
+@media only screen and (max-width: 600px) {
+
+  #dashboard{
+    display: flex;
+    align-items: flex-start;
+    min-height: 800px;
+  }
+
+  .dashboard-main-card{
+    width: 94%;
+    padding: 30px 10px;
+    height: 800px;
+  }
+
+  .dashboard-po-main-card{
+    width: 94%;
+    padding: 30px 10px;
+    height: 600px ;
+  }
+
+  .dashboard-card__item{
+    width:340px;
+    height:180px;
+    margin-bottom: 100px  !important;
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+
+  #dashboard{
+    display: flex;
+    align-items: flex-start;
+    min-height: 800px;
+  }
+
+  .dashboard-main-card{
+    width: 90%;
+    padding: 30px 10px;
+    height: 560px;
+  }
+
+  .dashboard-card__item{
+    width:240px;
+    height:200px;
+    margin-bottom: 100px  !important;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .dashboard-item-list{
+    display: flex; 
+    justify-content: space-around;
+    height: 850px;
+    padding: 0 40px;
+    align-items: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+
+  .dashboard-po-item-list{
+    display: flex; 
+    justify-content: space-around;
+    height: 520px;
+    padding: 0 40px;
+    align-items: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+
+  .dashboard-main-card{
+    width: 90%;
+    padding: 30px 10px;
+    height: 920px;
+  }
+
+  #dashboard-po{
+    display: flex;
+    align-items: center;
+    min-height: 540px;
+  }
+}

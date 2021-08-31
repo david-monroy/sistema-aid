@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
-
+import HelloWorld from '@/views/Home'
+import Dashboard from '@/views/Dashboard'
 import ListParticipante from '@/components/Participante/ListParticipante'
 import EditParticipante from '@/components/Participante/EditParticipante'
 import DeleteParticipante from '@/components/Participante/DeleteParticipante'
@@ -13,8 +13,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      name: 'Dashboard',
+      component: Dashboard
     },
     {
       path: '/participantes',

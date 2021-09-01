@@ -4,7 +4,6 @@ import Dashboard from '@/views/Dashboard'
 import ListaParticipante from '@/views/participantes/ListaParticipante'
 import AgregarParticipante from '@/views/participantes/AgregarParticipante'
 import EditParticipante from '@/components/Participante/EditParticipante'
-import DeleteParticipante from '@/components/Participante/DeleteParticipante'
 import ParticipanteManual from '@/components/Participante/ParticipanteManual'
 
 Vue.use(Router)
@@ -30,11 +29,6 @@ export default new Router({
       path: '/participantes',
       name: 'EditParticipante',
       component: EditParticipante
-    },
-    {
-      path: `/participantes/:id/delete`,
-      name: 'DeleteParticipante',
-      component: DeleteParticipante
     },
     {
       path: `/participantes/agregar/manual`,

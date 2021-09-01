@@ -24,6 +24,20 @@
           :search="search"
         >
 
+          <template v-slot:top>
+              <v-dialog v-model="popupEliminar" max-width="700px">
+                <v-card>
+                  <v-card-title class="body-1 mx-auto text-center">¿Seguro que desea eliminar a {{participanteAEliminarNombre}}?</v-card-title>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn class="secondary--text" text @click="cerrarEliminar">Cancelar</v-btn>
+                    <v-btn color="blue darken-1" text @click="eliminarParticipante()">Sí, eliminar</v-btn>
+                    <v-spacer></v-spacer>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+          </template>
+
           <template v-slot:[`item.actions`]="{ item }">
             <v-tooltip
                 top 
@@ -41,7 +55,8 @@
                 style="display: inline"
             >
               <template v-slot:activator="{ on, attrs }">
-                <v-icon small v-bind="attrs" v-on="on">fa-trash</v-icon>
+                <v-icon small v-bind="attrs" v-on="on"
+                @click="mostrarEliminar(item.id, item.nombre)" class="red--text">fa-trash</v-icon>
               </template>
               <span>Eliminar</span>
             </v-tooltip>
@@ -79,7 +94,10 @@ name: "ParticipantesView",
             { text: 'Tlf. Secundario', value: 'telfSecundario' },
             { text: 'Acciones', value: 'actions', sortable: false },
             ],
-            participantes: []
+            participantes: [],
+
+            popupEliminar: false,
+            participanteAEliminar: "",
         }
     },
     methods: {
@@ -91,6 +109,27 @@ name: "ParticipantesView",
             })
             .catch((error) => {
                 console.log(error)
+            })
+        },
+
+        mostrarEliminar(participanteID, participanteNombre){
+          this.popupEliminar = true;
+          this.participanteAEliminar = participanteID;
+          this.participanteAEliminarNombre = participanteNombre;
+        },
+
+        cerrarEliminar(){
+          this.popupEliminar = false;
+        },
+
+        eliminarParticipante(){
+            const path = `http://localhost:8000/api/v1/participantes/${this.participanteAEliminar}/`
+
+            axios.delete(path).then((res) => {
+                location.href = '/participantes'
+            })
+            .catch((err) => {
+                swal('No es posible eliminar el libro', '', 'error')
             })
         },
 

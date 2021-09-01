@@ -1,14 +1,14 @@
 <template>
-  <v-card 
-  class="pa-4 ma-0 dashboard-card__item" 
-  @click="goRoute(route)">
+
+  <router-link to="/participantes" class="pa-4 ma-0 dashboard-card__item" >
     <div class="text-center">
       <v-icon size="60" color="light"
               class="mb-2">{{icon}}
       </v-icon>
       <h4 color="light">{{ name }}</h4>
     </div>
-  </v-card>
+    </router-link>
+
 </template>
 
 <script>

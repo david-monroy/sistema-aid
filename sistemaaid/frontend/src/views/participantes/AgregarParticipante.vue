@@ -40,7 +40,7 @@ components: {
                 id: 1,
                 name: "Agregar participante (manual)",
                 icon: "fa-address-card",
-                route: "/participantes/agregar/manual",
+                route: "participantes/agregar/manual",
             },
             {
                 id: 2,

@@ -49,7 +49,7 @@ export default {
         name: "Participantes",
         icon: "fa-users",
         rol: 1,
-        route: "/participantes",
+        route: "participantes",
       },
       {
         id: 3,

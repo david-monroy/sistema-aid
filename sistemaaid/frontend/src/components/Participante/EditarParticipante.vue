@@ -1,7 +1,7 @@
 <template>
   <div class="col-md-12 nav-separator pt-1">
     <div class="card card-container mt-0 form-card">
-      <h3 class="primary--text mx-auto mb-6 mt-0">Registrar nuevo participante</h3>
+      <h3 class="primary--text mx-auto mb-6 mt-0">Editar participante</h3>
       <v-spacer></v-spacer>
   
       <v-form
@@ -122,10 +122,10 @@
             </v-col>
           </v-row>
 
-            <v-btn @click="registrarParticipante"
+            <v-btn @click="guardarCambios(participanteID)"
                 :disabled="!valid"
                 class="btn secondary btn-block w-50 my-2 mx-auto  d-none d-sm-flex">
-                Registrar
+                Guardar cambios
             </v-btn>
             <v-btn @click="goRoute(back)"
                 class="btn-block accent1 w-25 mx-auto  mb-0 d-none d-sm-flex">
@@ -156,7 +156,8 @@ export default {
             date: new Date().toISOString().substr(0, 10),
             dateFormatted: this.formatDate(new Date().toISOString().substr(0, 10)),
             menu1: false,
-            back:'participantes'
+            back:'participantes',
+            participanteID: null,
         }
     },
     computed: {
@@ -175,39 +176,57 @@ export default {
             const [month, day, year] = date.split('/')
             return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
         },
-        registrarParticipante() {
+        guardarCambios(id) {
 
             let validatedForm = this.$refs.registerForm.validate();
             this.form.fechaNacimiento = this.dateFormatted;
 
                 if (validatedForm){
-                    const path = 'http://localhost:8000/api/v1/participantes/'
-                console.log(this.form)
-                axios.post(path, this.form).then((response) => {
-                    this.form.nombre = response.data.nombre
-                    this.form.genero = response.data.genero
-                    this.form.cedula = response.data.cedula
-                    this.form.fechaNacimiento = response.data.fechaNacimiento
-                    this.form.edad = response.data.edad
-                    this.form.telfPrincipal = response.data.telfPrincipal
-                    this.form.telfSecundario = response.data.telfSecundario
-                    
-                    swal("Participante creado satisfactoriamente", "", "success")
-                })
-                .catch((err) => {
-                    swal("El participante no ha sido creado", "", "error")
-                })
+                    const path = `http://localhost:8000/api/v1/participantes/${id}/`
+
+                    axios.put(path, this.form).then((response) => {
+                        this.participanteID = response.data.id
+                        this.form.nombre = response.data.nombre
+                        this.form.genero = response.data.genero
+                        this.form.cedula = response.data.cedula
+                        this.form.fechaNacimiento = response.data.fechaNacimiento
+                        this.form.edad = response.data.edad
+                        this.form.telfPrincipal = response.data.telfPrincipal
+                        this.form.telfSecundario = response.data.telfSecundario
+                        
+                        swal("Participante actualizado satisfactoriamente", "", "success")
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
                     this.reset();
                 }
-            }
+            },
+            getParticipante(id){
+            const path = `http://localhost:8000/api/v1/participantes/${id}/`
+            this.participanteID = id;
+            axios.get(path).then((response) => {
+                this.form.nombre = response.data.nombre
+                this.form.genero = response.data.genero
+                this.form.cedula = response.data.cedula
+                this.form.fechaNacimiento = response.data.fechaNacimiento
+                this.form.edad = response.data.edad
+                this.form.telfPrincipal = response.data.telfPrincipal
+                this.form.telfSecundario = response.data.telfSecundario
+                this.date = response.data.fechaNacimiento
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+        }
     },
     watch: {
       date () {
         this.dateFormatted = this.formatDate(this.date)
       },
     },
-    created(){
-
+    mounted(){
+        this.getParticipante(this.$route.params.id);
     }
 }
 </script>

@@ -45,7 +45,7 @@
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-icon small v-bind="attrs" v-on="on"
-                class="mr-2">fa-pen</v-icon>
+                @click="editarParticipante(item.id)" class="mr-2">fa-pen</v-icon>
               </template>
               <span>Editar</span>
             </v-tooltip>
@@ -131,6 +131,10 @@ name: "ParticipantesView",
             .catch((err) => {
                 swal('No es posible eliminar el libro', '', 'error')
             })
+        },
+
+        editarParticipante(id){
+          this.goRoute(`participantes/${id}/editar`);
         },
 
         goRoute(route) {

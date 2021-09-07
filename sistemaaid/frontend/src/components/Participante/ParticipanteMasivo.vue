@@ -60,14 +60,11 @@ export default {
             formData.append('file', this.file)
 
             axios.post('http://localhost:8000/api/v1/participantes/leer', formData).then((response) => {
-                    console.log(response)
-                    
                     swal("Participantes creados satisfactoriamente", "", "success")
                 })
                 .catch((err) => {
                     swal("No se ha podido cargar el archivo", "", "error")
                 })
-            
             
         },
     },

@@ -32,7 +32,16 @@
           </v-row>
 
           <v-row class="pb-0 mb-0 form-row" >
-            <v-col md="6" cols="12" class="py-0">
+            <v-col md="4" cols="12" class="py-0">
+                <div class="form-group">
+                    <v-text-field
+                        v-model="form.correo"
+                        label="Correo electrónico"
+                        required
+                    ></v-text-field>
+                </div>
+            </v-col>
+            <v-col md="4" cols="12" class="py-0">
                 <div class="form-group">
                     <v-text-field
                         v-model="form.telfPrincipal"
@@ -41,7 +50,7 @@
                     ></v-text-field>
                 </div>
             </v-col>
-            <v-col md="6" cols="12" class="py-0">
+            <v-col md="4" cols="12" class="py-0">
                 <div class="form-group">
                     <v-text-field
                         v-model="form.telfSecundario"
@@ -78,6 +87,8 @@
                         <v-date-picker
                             v-model="date"
                             no-title
+                            max="2010-01-01"
+                            color="primary"
                             @input="menu1 = false"
                         ></v-date-picker>
                     </v-menu>
@@ -150,13 +161,14 @@ export default {
                 cedula: '',
                 fechaNacimiento: null,
                 edad: null,
+                correo: '',
                 telfPrincipal: '',
                 telfSecundario: null,
             },
             date: new Date().toISOString().substr(0, 10),
             dateFormatted: this.formatDate(new Date().toISOString().substr(0, 10)),
             menu1: false,
-            back:'participantes'
+            back:'participantes',
         }
     },
     computed: {
@@ -165,6 +177,7 @@ export default {
       }
     },
     methods: {
+
         formatDate (date) {
             if (!date) return null
             const [year, month, day] = date.split('-')
@@ -189,6 +202,7 @@ export default {
                     this.form.cedula = response.data.cedula
                     this.form.fechaNacimiento = response.data.fechaNacimiento
                     this.form.edad = response.data.edad
+                    this.form.correo = response.data.correo
                     this.form.telfPrincipal = response.data.telfPrincipal
                     this.form.telfSecundario = response.data.telfSecundario
                     

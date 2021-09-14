@@ -105,6 +105,18 @@
             </v-col>
           </v-row>
 
+          <v-row class="pb-0 mb-0 form-row" >
+                <v-col md="6" cols="12" class="py-0">
+                    <v-select
+                    v-model="form.carrera"
+                    :items="carreras"
+                    item-text="nombre"
+                    item-value="id"
+                    label="Carrera"
+                    ></v-select>
+                </v-col>
+          </v-row>
+
           <div style="display: flex; justify-content: center; width: 100%">
             <label for="genero" class="text-center mx-auto">Género:</label>
           </div>
@@ -164,11 +176,13 @@ export default {
                 correo: '',
                 telfPrincipal: '',
                 telfSecundario: null,
+                carrera: null
             },
             date: new Date().toISOString().substr(0, 10),
             dateFormatted: this.formatDate(new Date().toISOString().substr(0, 10)),
             menu1: false,
             back:'participantes',
+            carreras: []
         }
     },
     computed: {
@@ -205,6 +219,7 @@ export default {
                     this.form.correo = response.data.correo
                     this.form.telfPrincipal = response.data.telfPrincipal
                     this.form.telfSecundario = response.data.telfSecundario
+
                     
                     swal("Participante creado satisfactoriamente", "", "success")
                 })
@@ -213,15 +228,24 @@ export default {
                 })
                     this.reset();
                 }
-            }
+        },
+        getCarreras(){
+            const path = 'http://localhost:8000/api/v1/carreras/'
+            axios.get(path).then((response) => {
+                this.carreras = response.data
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+        },
     },
     watch: {
       date () {
         this.dateFormatted = this.formatDate(this.date)
       },
     },
-    created(){
-
+    mounted(){
+        this.getCarreras();
     }
 }
 </script>

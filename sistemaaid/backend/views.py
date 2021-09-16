@@ -20,11 +20,20 @@ def leer_csv(request):
             nombre = row[0],
             cedula  = row[1],
             genero = row[2],
-            telfPrincipal = row[3]
+            telfPrincipal = row[3],
+            telfSecundario = row[4],
+            correo = row[5],
+            fechaNacimiento = row[6],
+            edad = row[7],
+            colegio = row[8],
+            sede = row[9],
+            carrera = row[10],
+            semestre = row[11],
         )
         for index, row in row_iter
     ]
 
     models.Participante.objects.bulk_create(objs)
+    models.ParticipanteCarrera.objects.bulk_create(objs)
 
     return HttpResponse(df)

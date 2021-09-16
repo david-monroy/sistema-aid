@@ -8,7 +8,9 @@ from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 @csrf_exempt
 def leer_csv(request):
-    path = r'C:\Users\djmon\Documents\TESIS\sistema-aid\sistemaaid\backend\participantes.csv'
+
+    path = request.FILES['file']
+
     df = pd.read_csv(path, header=0, encoding='ISO-8859-1', delimiter=',')
     
     row_iter = df.iterrows()

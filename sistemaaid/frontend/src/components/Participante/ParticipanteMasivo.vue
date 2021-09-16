@@ -55,11 +55,15 @@ export default {
             this.file = this.$refs.file.files[0]
         },
 
-        enviarCSV(){
+        async enviarCSV(){
             const formData = new FormData();
             formData.append('file', this.file)
 
-            axios.post('http://localhost:8000/api/v1/participantes/leer', formData).then((response) => {
+            axios.post('http://localhost:8000/api/v1/participantes/leer', formData,{
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              }
+            }).then((response) => {
                     swal("Participantes creados satisfactoriamente", "", "success")
                 })
                 .catch((err) => {

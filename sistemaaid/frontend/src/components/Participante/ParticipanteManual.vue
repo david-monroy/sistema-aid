@@ -108,6 +108,16 @@
           <v-row class="pb-0 mb-0 form-row" >
                 <v-col md="6" cols="12" class="py-0">
                     <v-select
+                    v-model="form.sede"
+                    :items="sedes"
+                    item-text="nombre"
+                    item-value="id"
+                    label="Sedes"
+                    ></v-select>
+                </v-col>
+
+                <v-col md="6" cols="12" class="py-0">
+                    <v-select
                     v-model="form.carrera"
                     :items="carreras"
                     item-text="nombre"
@@ -176,13 +186,15 @@ export default {
                 correo: '',
                 telfPrincipal: '',
                 telfSecundario: null,
-                carrera: null
+                carrera: null,
+                sede: null
             },
             date: new Date().toISOString().substr(0, 10),
             dateFormatted: this.formatDate(new Date().toISOString().substr(0, 10)),
             menu1: false,
             back:'participantes',
-            carreras: []
+            carreras: [],
+            sedes: []
         }
     },
     computed: {
@@ -208,9 +220,11 @@ export default {
             this.form.fechaNacimiento = this.dateFormatted;
 
                 if (validatedForm){
-                    const path = 'http://localhost:8000/api/v1/participantes/'
+                    const participante_path = 'http://localhost:8000/api/v1/participantes/'
+                    const participantecarrera_path = 'http://localhost:8000/api/v1/participantes/'
+
                 console.log(this.form)
-                axios.post(path, this.form).then((response) => {
+                axios.post(participante_path, this.form).then((response) => {
                     this.form.nombre = response.data.nombre
                     this.form.genero = response.data.genero
                     this.form.cedula = response.data.cedula
@@ -218,9 +232,16 @@ export default {
                     this.form.edad = response.data.edad
                     this.form.correo = response.data.correo
                     this.form.telfPrincipal = response.data.telfPrincipal
-                    this.form.telfSecundario = response.data.telfSecundario
+                    this.form.telfSecundario = response.data.telfSecundario        
+                    swal("Participante creado satisfactoriamente", "", "success")
+                })
+                .catch((err) => {
+                    swal("El participante no ha sido creado", "", "error")
+                })
 
-                    
+                axios.post(participantecarrera_path, this.form).then((response) => {
+                    this.form.nombre = response.data.nombre
+                    this.form.genero = response.data.genero     
                     swal("Participante creado satisfactoriamente", "", "success")
                 })
                 .catch((err) => {
@@ -238,6 +259,15 @@ export default {
                 console.log(error)
             })
         },
+        getSedes(){
+            const path = 'http://localhost:8000/api/v1/sedes/'
+            axios.get(path).then((response) => {
+                this.sedes = response.data
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+        },
     },
     watch: {
       date () {
@@ -246,6 +276,7 @@ export default {
     },
     mounted(){
         this.getCarreras();
+        this.getSedes();
     }
 }
 </script>

@@ -187,14 +187,16 @@ export default {
                 telfPrincipal: '',
                 telfSecundario: null,
                 carrera: null,
-                sede: null
+                sede: null,
+                participante: null
             },
             date: new Date().toISOString().substr(0, 10),
             dateFormatted: this.formatDate(new Date().toISOString().substr(0, 10)),
             menu1: false,
             back:'participantes',
             carreras: [],
-            sedes: []
+            sedes: [],
+      
         }
     },
     computed: {
@@ -214,41 +216,35 @@ export default {
             const [month, day, year] = date.split('/')
             return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
         },
-        registrarParticipante() {
+        async registrarParticipante() {
 
             let validatedForm = this.$refs.registerForm.validate();
             this.form.fechaNacimiento = this.dateFormatted;
+            const participante_path = 'http://localhost:8000/api/v1/participantes/'
+            const participantecarrera_path = 'http://localhost:8000/api/v1/participantecarreras/'
 
-                if (validatedForm){
-                    const participante_path = 'http://localhost:8000/api/v1/participantes/'
-                    const participantecarrera_path = 'http://localhost:8000/api/v1/participantes/'
+            if (validatedForm){
+                    
+                await axios.post(participante_path, this.form).then((response) => {
+                    this.form.participante = response.data.id
+                   
+                })
+                .catch((err) => {
+                    console.log(err)
+                    swal("Participante no pudo ser creado", "", "error")
+                })
 
-                console.log(this.form)
-                axios.post(participante_path, this.form).then((response) => {
-                    this.form.nombre = response.data.nombre
-                    this.form.genero = response.data.genero
-                    this.form.cedula = response.data.cedula
-                    this.form.fechaNacimiento = response.data.fechaNacimiento
-                    this.form.edad = response.data.edad
-                    this.form.correo = response.data.correo
-                    this.form.telfPrincipal = response.data.telfPrincipal
-                    this.form.telfSecundario = response.data.telfSecundario        
+                await axios.post(participantecarrera_path, this.form).then((response) => {
                     swal("Participante creado satisfactoriamente", "", "success")
                 })
                 .catch((err) => {
-                    swal("El participante no ha sido creado", "", "error")
+                    console.log(err)
+                    swal("Participante no pudo ser creado", "", "error")
                 })
 
-                axios.post(participantecarrera_path, this.form).then((response) => {
-                    this.form.nombre = response.data.nombre
-                    this.form.genero = response.data.genero     
-                    swal("Participante creado satisfactoriamente", "", "success")
-                })
-                .catch((err) => {
-                    swal("El participante no ha sido creado", "", "error")
-                })
-                    this.reset();
-                }
+                this.$refs.registerForm.reset();
+            }
+                
         },
         getCarreras(){
             const path = 'http://localhost:8000/api/v1/carreras/'

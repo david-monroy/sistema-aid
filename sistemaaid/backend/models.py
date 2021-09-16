@@ -3,11 +3,15 @@ from django.db.models.deletion import CASCADE
 
 class Carrera(models.Model):
     nombre = models.CharField(max_length=30)
-    codigo = models.CharField(max_length=20)
+    codigo = models.IntegerField(null=False)
     estaEnUCAB = models.BooleanField()
 
 class Sede(models.Model):
     nombre = models.CharField(max_length=30)
+
+class Colegio(models.Model):
+    nombre = models.CharField(max_length=50)
+    codigo = models.IntegerField(null=False)
 
 class Participante(models.Model):
     nombre = models.CharField(max_length=50)
@@ -19,6 +23,7 @@ class Participante(models.Model):
     telfPrincipal = models.CharField(max_length=15, null=True, blank=True)
     telfSecundario = models.CharField(max_length=15, null=True, blank=True)
     carreras = models.ManyToManyField(Carrera, through='ParticipanteCarrera')
+    colegio = models.ForeignKey(Colegio, on_delete=CASCADE, null=True, blank=True)
 
 class ParticipanteCarrera(models.Model):
     participante = models.ForeignKey(Participante, on_delete=CASCADE)

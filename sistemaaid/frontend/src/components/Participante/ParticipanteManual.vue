@@ -45,6 +45,7 @@
                 <div class="form-group">
                     <v-text-field
                         v-model="form.telfPrincipal"
+                        v-mask="'####-##'"
                         label="Teléfono primario"
                         required
                     ></v-text-field>
@@ -195,6 +196,7 @@
 <script>
 import axios from 'axios'
 import swal from 'sweetalert'
+import VueMask from 'v-mask'
 export default {
     data(){
         return {

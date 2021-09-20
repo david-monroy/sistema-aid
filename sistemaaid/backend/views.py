@@ -15,8 +15,12 @@ def leer_csv(request):
     
     row_iter = df.iterrows()
 
-    objs = [
-        models.Participante(
+    df['Fecha nacimiento'] = pd.to_datetime(df['Fecha nacimiento'])
+
+    df = df.replace('nan','nulo')
+
+    for index, row in row_iter:
+        nuevo_participante = models.Participante.objects.create(
             nombre = row[0],
             cedula  = row[1],
             genero = row[2],
@@ -25,15 +29,14 @@ def leer_csv(request):
             correo = row[5],
             fechaNacimiento = row[6],
             edad = row[7],
-            colegio = row[8],
-            sede = row[9],
-            carrera = row[10],
+            # colegio = row[8],
+        )
+
+        nuevo_participante_carrera = models.ParticipanteCarrera.objects.create(
+            participante = nuevo_participante,
+            sede  = models.Sede.objects.get(pk=row[9]),
+            carrera = models.Carrera.objects.get(pk=row[10]),
             semestre = row[11],
         )
-        for index, row in row_iter
-    ]
-
-    models.Participante.objects.bulk_create(objs)
-    models.ParticipanteCarrera.objects.bulk_create(objs)
 
     return HttpResponse(df)

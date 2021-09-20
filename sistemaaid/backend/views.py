@@ -29,7 +29,7 @@ def leer_csv(request):
             correo = row[5],
             fechaNacimiento = row[6],
             edad = row[7],
-            # colegio = row[8],
+            colegio = models.Colegio.objects.get(pk=row[8]),
         )
 
         nuevo_participante_carrera = models.ParticipanteCarrera.objects.create(

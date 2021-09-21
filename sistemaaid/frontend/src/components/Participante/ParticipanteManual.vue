@@ -264,7 +264,6 @@ export default {
             this.form.fechaNacimiento = this.dateFormatted;
             const participante_path = 'http://localhost:8000/api/v1/participantes/'
 
-            console.log(this.form)
             if (validatedForm){
                     
                 await axios.post(participante_path, this.form).then((response) => {

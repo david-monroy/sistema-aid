@@ -44,8 +44,8 @@ export default new Router({
     },
     {
       path: `/participantes/editar/masivo`,
-      name: 'ParticipanteMasivo',
-      component: ParticipanteMasivo
+      name: 'EditarParticipanteMasivo',
+      component: EditarParticipanteMasivo
     }
   ],
   mode: 'history'

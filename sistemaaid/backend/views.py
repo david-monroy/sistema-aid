@@ -40,3 +40,37 @@ def leer_csv(request):
         )
 
     return HttpResponse(df)
+
+@csrf_exempt
+def leer_csv_actualizar(request):
+
+    path = request.FILES['file']
+
+    df = pd.read_csv(path, header=0, encoding='ISO-8859-1', delimiter=';')
+    
+    row_iter = df.iterrows()
+
+    for index, row in row_iter:
+        par = models.Participante.objects.get(cedula=row[1])
+
+        if (par):
+            par.nombre = row[0]
+            par.genero = row[2]
+            par.telfPrincipal = row[3]
+            par.telfSecundario = row[4]
+            par.correo = row[5]
+            par.edad = row[7]
+            print(par.edad)
+            print(par.telfPrincipal)
+            print(par.correo)
+        #     # par.colegio = models.Colegio.objects.get(pk=row[8]),
+            par.save()
+
+        # par_car = models.ParticipanteCarrera.objects.get(participante=par.id)
+        # if (par_car):
+        #     par_car.sede  = models.Sede.objects.get(pk=row[9]),
+        #     par_car.carrera = models.Carrera.objects.get(pk=row[10]),
+        #     par_car.semestre = row[11],
+        #     par_car.save
+
+    return HttpResponse(df)

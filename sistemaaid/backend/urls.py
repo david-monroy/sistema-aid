@@ -14,6 +14,7 @@ router.register('participantecarreras', ParticipanteCarreraViewSet)
 
 urlpatterns = [
     path('participantes/leer', views.leer_csv),
+    path('participantes/leer/actualizar', views.leer_csv_actualizar),
 ]
 
 urlpatterns += router.urls

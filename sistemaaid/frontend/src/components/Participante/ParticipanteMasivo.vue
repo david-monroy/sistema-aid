@@ -1,7 +1,7 @@
 <template>
   <div class="col-md-12 nav-separator pt-1">
     <div class="card card-container mt-0 form-card">
-      <h3 class="primary--text mx-auto mb-6 mt-0">Registrar nuevo participante</h3>
+      <h3 class="primary--text mx-auto mb-6 mt-0">Registrar nuevos participantes</h3>
       <v-spacer></v-spacer>
 
       <div class="section">

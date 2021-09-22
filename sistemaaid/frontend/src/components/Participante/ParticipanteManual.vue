@@ -77,7 +77,7 @@
           </v-row>
 
           <v-row class="pb-0 mb-0 form-row" >
-                <v-col md="4" cols="12" class="py-0">
+                <v-col md="6" cols="12" class="py-0">
                     <v-menu
                         ref="menu1"
                         v-model="menu1"
@@ -108,19 +108,8 @@
                         ></v-date-picker>
                     </v-menu>
                 </v-col>
-                <v-col md="4" cols="12" class="py-0">
-                <div class="form-group">
-                    <v-text-field
-                        v-model="edad_calculada"
-                        label="Edad"
-                        required
-                        readonly
-                    ></v-text-field>
-                </div>
-            </v-col>
-
               
-            <v-col md="4" cols="12" class="py-0">
+            <v-col md="6" cols="12" class="py-0">
                 <div class="form-group" style="display: flex; justify-content: center; width: 100%">
                     <v-select
                         v-model="form.genero"
@@ -217,7 +206,6 @@ export default {
                 genero: '',
                 cedula: '',
                 fechaNacimiento: null,
-                edad: null,
                 correo: '',
                 correoUcab: '',
                 telfPrincipal: '',
@@ -301,12 +289,11 @@ export default {
 
             let validatedForm = this.$refs.registerForm.validate();
             this.form.fechaNacimiento = this.fechaNacimiento;
-            this.form.edad = this.edad_calculada;
             const participante_path = 'http://localhost:8000/api/v1/participantes/'
 
             if (validatedForm){
 
-                if (this.form.edad < 11) {
+                if (this.edad_calculada < 11) {
                     swal("El participante debe ser mayor de 11 años", "", "error") 
                 } else {
                     

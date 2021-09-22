@@ -310,6 +310,7 @@ export default {
                 this.form.nombre = response.data.nombre
                 this.form.genero = response.data.genero
                 this.form.cedula = response.data.cedula
+                this.form.correo = response.data.correo
                 this.form.fechaNacimiento = response.data.fechaNacimiento
                 this.form.edad = response.data.edad
                 this.form.telfPrincipal = response.data.telfPrincipal

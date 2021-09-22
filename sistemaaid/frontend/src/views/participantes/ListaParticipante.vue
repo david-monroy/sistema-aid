@@ -2,7 +2,7 @@
   <v-row align="center" class="list px-3 mx-auto nav-separator container">
       <div class="crud-buttons mx-auto">
           <v-btn color="accent2" class="mx-4" @click="goRoute('participantes/agregar')">Agregar participante</v-btn>
-          <v-btn color="accent2" class="mx-4">Edición masiva</v-btn>
+          <v-btn color="accent2" class="mx-4" @click="goRoute('participantes/editar/masivo')">Edición masiva</v-btn>
       </div>
     <v-col cols="12" sm="12" class="mt-4">
       <v-card class="mx-auto p-3" tile>
@@ -89,7 +89,6 @@ name: "ParticipantesView",
             { text: 'Cédula', value: 'cedula' },
             { text: 'Género', value: 'genero' },
             { text: 'Correo electrónico', value: 'correo' },
-            { text: 'Edad', value: 'edad' },
             { text: 'Tlf. Principal', value: 'telfPrincipal' },
             { text: 'Tlf. Secundario', value: 'telfSecundario' },
             { text: 'Acciones', value: 'actions', sortable: false },

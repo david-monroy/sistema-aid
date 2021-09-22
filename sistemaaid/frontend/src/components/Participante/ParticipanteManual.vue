@@ -16,6 +16,7 @@
                         v-model="form.nombre"
                         label="Nombre y apellido"
                         required
+                        :rules='[rules.required]'
                     ></v-text-field>
                 </div>
             </v-col>
@@ -26,44 +27,57 @@
                         label="Cédula"
                         name="cedula"
                         required
+                        :rules='[rules.required]'
                     ></v-text-field>
                 </div>
             </v-col>
           </v-row>
 
           <v-row class="pb-0 mb-0 form-row" >
-            <v-col md="4" cols="12" class="py-0">
+            <v-col md="6" cols="12" class="py-0">
                 <div class="form-group">
                     <v-text-field
                         v-model="form.correo"
                         label="Correo electrónico"
                         required
+                        :rules='[rules.emailRules]'
                     ></v-text-field>
                 </div>
             </v-col>
-            <v-col md="4" cols="12" class="py-0">
+            <v-col md="6" cols="12" class="py-0">
+                <div class="form-group">
+                    <v-text-field
+                        v-model="form.correoUcab"
+                        label="Correo UCAB"
+                    ></v-text-field>
+                </div>
+            </v-col>
+          </v-row>
+        <v-row class="pb-0 mb-0 form-row" >
+            <v-col md="6" cols="12" class="py-0">
                 <div class="form-group">
                     <v-text-field
                         v-model="form.telfPrincipal"
-                        v-mask="'####-##'"
+                        type="number"
                         label="Teléfono primario"
                         required
+                        :rules='[rules.required, rules.PhoneRules]'
                     ></v-text-field>
                 </div>
             </v-col>
-            <v-col md="4" cols="12" class="py-0">
+            <v-col md="6" cols="12" class="py-0">
                 <div class="form-group">
                     <v-text-field
                         v-model="form.telfSecundario"
                         label="Teléfono secundario"
-                        required
+                        type='number'
                     ></v-text-field>
                 </div>
             </v-col>
           </v-row>
 
           <v-row class="pb-0 mb-0 form-row" >
-                <v-col md="4" cols="12" class="py-0">
+                <v-col md="6" cols="12" class="py-0">
                     <v-menu
                         ref="menu1"
                         v-model="menu1"
@@ -75,9 +89,9 @@
                         >
                         <template v-slot:activator="{ on, attrs }">
                             <v-text-field
-                                v-model="dateFormatted"
+                                v-model="date"
                                 label="Fecha"
-                                hint="MM/DD/AAAA"
+                                hint="AAAA-MM-DD"
                                 persistent-hint
                                 prepend-icon="fa-calendar"
                                 v-bind="attrs"
@@ -94,19 +108,8 @@
                         ></v-date-picker>
                     </v-menu>
                 </v-col>
-                <v-col md="4" cols="12" class="py-0">
-                <div class="form-group">
-                    <v-text-field
-                        v-model="form.edad"
-                        label="Edad"
-                        required
-                        type="number"
-                    ></v-text-field>
-                </div>
-            </v-col>
-
               
-            <v-col md="4" cols="12" class="py-0">
+            <v-col md="6" cols="12" class="py-0">
                 <div class="form-group" style="display: flex; justify-content: center; width: 100%">
                     <v-select
                         v-model="form.genero"
@@ -127,14 +130,13 @@
             <v-expansion-panel-content>
                 <v-row class="pb-0 mb-0 form-row" >
                     <v-col md="6" cols="12" class="py-0">
-                        <v-combobox
+                        <v-autocomplete
                         v-model="form.colegio"
                         :items="colegios"
                         label="Colegio"
                         item-text="nombre"
                         item-value="id"
-                        :return-object="false"
-                        ></v-combobox>
+                        ></v-autocomplete>
                     </v-col>
 
                     <v-col md="6" cols="12" class="py-0">
@@ -152,14 +154,13 @@
                 <v-row class="pb-0 mb-0 form-row" >
 
                     <v-col md="6" cols="12" class="py-0">
-                        <v-combobox
+                        <v-autocomplete
                         v-model="form.carrera"
                         :items="carreras"
                         label="Carrera"
                         item-text="nombre"
                         item-value="id"
-                        :return-object="false"
-                        ></v-combobox>
+                        ></v-autocomplete>
                     </v-col>
 
                     <v-col md="6" cols="12" class="py-0">
@@ -196,7 +197,7 @@
 <script>
 import axios from 'axios'
 import swal from 'sweetalert'
-import VueMask from 'v-mask'
+
 export default {
     data(){
         return {
@@ -205,8 +206,8 @@ export default {
                 genero: '',
                 cedula: '',
                 fechaNacimiento: null,
-                edad: null,
                 correo: '',
+                correoUcab: '',
                 telfPrincipal: '',
                 telfSecundario: null,
                 carrera: null,
@@ -238,12 +239,38 @@ export default {
                 { nombre: '8vo', id: 8},
                 { nombre: '9no', id: 9},
                 { nombre: '10mo', id: 10},
-            ]
+            ],
+            rules: {} = {
+                required: (value) =>
+                (!!value && value !== "" && value !== undefined) || "Este campo es requerido",
+                cedulaRules: 
+                (v) => (v && v.length >= 6) || "Número de cédula inválido",
+                emailRules: 
+                (v) => /.+@.+\..+/.test(v) || "Dirección de correo inválida",
+                emailUcabRules: 
+                (v) => /.+@.+\..+\..+\../.test(v) || "Dirección de correo UCAB inválida",
+                PhoneRules: 
+                (v) => (v && v.length == 11) || "Número de teléfono debe tener 11 dígitos",
+                
+            }
         }
     },
     computed: {
       computedDateFormatted () {
         return this.formatDate(this.date)
+      },
+
+      edad_calculada(){
+        var hoy = new Date();
+        var fecha_nac = new Date(this.date);
+        var edad = hoy.getFullYear() - fecha_nac.getFullYear();
+        var m = hoy.getMonth() - fecha_nac.getMonth();
+
+        if (m < 0 || (m === 0 && hoy.getDate() < fecha_nac.getDate())) {
+            edad--;
+        }
+
+        return edad;
       }
     },
     methods: {
@@ -261,11 +288,14 @@ export default {
         async registrarParticipante() {
 
             let validatedForm = this.$refs.registerForm.validate();
-            this.form.fechaNacimiento = this.dateFormatted;
+            this.form.fechaNacimiento = this.fechaNacimiento;
             const participante_path = 'http://localhost:8000/api/v1/participantes/'
 
-            console.log(this.form)
             if (validatedForm){
+
+                if (this.edad_calculada < 11) {
+                    swal("El participante debe ser mayor de 11 años", "", "error") 
+                } else {
                     
                 await axios.post(participante_path, this.form).then((response) => {
                     this.form.participante = response.data.id
@@ -280,6 +310,7 @@ export default {
                     swal("Participante no pudo ser creado", "", "error")
                 })
                 //this.$refs.registerForm.reset();
+                }
             }
                 
         },
@@ -323,7 +354,7 @@ export default {
     },
     watch: {
       date () {
-        this.dateFormatted = this.formatDate(this.date)
+        this.fechaNacimiento = this.formatDate(this.date)
       },
     },
     mounted(){

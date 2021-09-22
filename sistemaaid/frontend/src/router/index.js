@@ -4,7 +4,9 @@ import Dashboard from '@/views/Dashboard'
 import ListaParticipante from '@/views/participantes/ListaParticipante'
 import AgregarParticipante from '@/views/participantes/AgregarParticipante'
 import EditarParticipante from '@/components/Participante/EditarParticipante'
+import EditarParticipanteMasivo from '@/components/Participante/EditarParticipanteMasivo'
 import ParticipanteManual from '@/components/Participante/ParticipanteManual'
+import ParticipanteMasivo from '@/components/Participante/ParticipanteMasivo'
 
 Vue.use(Router)
 
@@ -34,6 +36,16 @@ export default new Router({
       path: `/participantes/agregar/manual`,
       name: 'ParticipanteManual',
       component: ParticipanteManual
+    },
+    {
+      path: `/participantes/agregar/masivo`,
+      name: 'ParticipanteMasivo',
+      component: ParticipanteMasivo
+    },
+    {
+      path: `/participantes/editar/masivo`,
+      name: 'EditarParticipanteMasivo',
+      component: EditarParticipanteMasivo
     }
   ],
   mode: 'history'

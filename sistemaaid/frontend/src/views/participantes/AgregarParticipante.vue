@@ -46,7 +46,7 @@ components: {
                 id: 2,
                 name: "Agregar participantes (masivo)",
                 icon: "fa-users",
-                route: "#",
+                route: "participantes/agregar/masivo",
             }
             ]
         }

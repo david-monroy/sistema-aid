@@ -45,6 +45,7 @@
                 <div class="form-group">
                     <v-text-field
                         v-model="form.telfPrincipal"
+                        v-mask="'####-##'"
                         label="Teléfono primario"
                         required
                     ></v-text-field>
@@ -62,7 +63,7 @@
           </v-row>
 
           <v-row class="pb-0 mb-0 form-row" >
-                <v-col md="6" cols="12" class="py-0">
+                <v-col md="4" cols="12" class="py-0">
                     <v-menu
                         ref="menu1"
                         v-model="menu1"
@@ -93,7 +94,7 @@
                         ></v-date-picker>
                     </v-menu>
                 </v-col>
-                <v-col md="6" cols="12" class="py-0">
+                <v-col md="4" cols="12" class="py-0">
                 <div class="form-group">
                     <v-text-field
                         v-model="form.edad"
@@ -103,47 +104,78 @@
                     ></v-text-field>
                 </div>
             </v-col>
-          </v-row>
 
-          <v-row class="pb-0 mb-0 form-row" >
-                <v-col md="6" cols="12" class="py-0">
-                    <v-select
-                    v-model="form.carrera"
-                    :items="carreras"
-                    item-text="nombre"
-                    item-value="id"
-                    label="Carrera"
-                    ></v-select>
-                </v-col>
-          </v-row>
-
-          <div style="display: flex; justify-content: center; width: 100%">
-            <label for="genero" class="text-center mx-auto">Género:</label>
-          </div>
-          <v-row class="pb-0 mb-0 form-row mx-auto" style="display: flex; justify-content: center; width: 100%">
               
-            <v-col md="" cols="12" class="py-0">
+            <v-col md="4" cols="12" class="py-0">
                 <div class="form-group" style="display: flex; justify-content: center; width: 100%">
-                    <v-radio-group
-                    v-model="form.genero"
-                    row
-                    >
-                    <v-radio
-                        label="Masculino"
-                        value="M"
-                    ></v-radio>
-                    <v-radio
-                        label="Femenino"
-                        value="F"
-                    ></v-radio>
-                    <v-radio
-                        label="Otro"
-                        value="O"
-                    ></v-radio>
-                    </v-radio-group>
+                    <v-select
+                        v-model="form.genero"
+                        :items="generos"
+                        item-text="nombre"
+                        item-value="id"
+                        label="Género"
+                        ></v-select>
                 </div>
             </v-col>
           </v-row>
+
+          <v-expansion-panels class="my-6">
+            <v-expansion-panel>
+            <v-expansion-panel-header>
+                Estudios (opcional)
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+                <v-row class="pb-0 mb-0 form-row" >
+                    <v-col md="6" cols="12" class="py-0">
+                        <v-combobox
+                        v-model="form.colegio"
+                        :items="colegios"
+                        label="Colegio"
+                        item-text="nombre"
+                        item-value="id"
+                        :return-object="false"
+                        ></v-combobox>
+                    </v-col>
+
+                    <v-col md="6" cols="12" class="py-0">
+                        <v-select
+                        v-model="form.sede"
+                        :items="sedes"
+                        item-text="nombre"
+                        item-value="id"
+                        label="Sede"
+                        ></v-select>
+                    </v-col>
+
+                </v-row>
+
+                <v-row class="pb-0 mb-0 form-row" >
+
+                    <v-col md="6" cols="12" class="py-0">
+                        <v-combobox
+                        v-model="form.carrera"
+                        :items="carreras"
+                        label="Carrera"
+                        item-text="nombre"
+                        item-value="id"
+                        :return-object="false"
+                        ></v-combobox>
+                    </v-col>
+
+                    <v-col md="6" cols="12" class="py-0">
+                        <v-select
+                        v-model="form.semestre"
+                        :items="semestres"
+                        item-text="nombre"
+                        item-value="id"
+                        label="Semestre"
+                        ></v-select>
+                    </v-col>
+
+                </v-row>
+            </v-expansion-panel-content>
+            </v-expansion-panel>
+        </v-expansion-panels>
 
             <v-btn @click="registrarParticipante"
                 :disabled="!valid"
@@ -164,6 +196,7 @@
 <script>
 import axios from 'axios'
 import swal from 'sweetalert'
+import VueMask from 'v-mask'
 export default {
     data(){
         return {
@@ -176,13 +209,36 @@ export default {
                 correo: '',
                 telfPrincipal: '',
                 telfSecundario: null,
-                carrera: null
+                carrera: null,
+                sede: null,
+                colegio: null,
+                participante: null
             },
             date: new Date().toISOString().substr(0, 10),
             dateFormatted: this.formatDate(new Date().toISOString().substr(0, 10)),
             menu1: false,
             back:'participantes',
-            carreras: []
+            carreras: [],
+            sedes: [],
+            colegios: [],
+            generos: [
+                { nombre: 'Masculino', id: 'M'},
+                { nombre: 'Femenino', id: 'F'},
+                { nombre: 'Otro', id: 'O'}
+            ],
+            semestres: [
+                { nombre: 'Egresado', id: 11},
+                { nombre: '1ro', id: 1},
+                { nombre: '2do', id: 2},
+                { nombre: '3ro', id: 3},
+                { nombre: '4to', id: 4},
+                { nombre: '5to', id: 5},
+                { nombre: '6to', id: 6},
+                { nombre: '7mo', id: 7},
+                { nombre: '8vo', id: 8},
+                { nombre: '9no', id: 9},
+                { nombre: '10mo', id: 10},
+            ]
         }
     },
     computed: {
@@ -202,37 +258,62 @@ export default {
             const [month, day, year] = date.split('/')
             return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
         },
-        registrarParticipante() {
+        async registrarParticipante() {
 
             let validatedForm = this.$refs.registerForm.validate();
             this.form.fechaNacimiento = this.dateFormatted;
+            const participante_path = 'http://localhost:8000/api/v1/participantes/'
 
-                if (validatedForm){
-                    const path = 'http://localhost:8000/api/v1/participantes/'
-                console.log(this.form)
-                axios.post(path, this.form).then((response) => {
-                    this.form.nombre = response.data.nombre
-                    this.form.genero = response.data.genero
-                    this.form.cedula = response.data.cedula
-                    this.form.fechaNacimiento = response.data.fechaNacimiento
-                    this.form.edad = response.data.edad
-                    this.form.correo = response.data.correo
-                    this.form.telfPrincipal = response.data.telfPrincipal
-                    this.form.telfSecundario = response.data.telfSecundario
-
+            if (validatedForm){
                     
+                await axios.post(participante_path, this.form).then((response) => {
+                    this.form.participante = response.data.id
+
+                    if (this.form.carrera && this.form.sede) {
+                        this.registrarParticipanteCarrera()
+                    }
                     swal("Participante creado satisfactoriamente", "", "success")
                 })
                 .catch((err) => {
-                    swal("El participante no ha sido creado", "", "error")
+                    console.log(err)
+                    swal("Participante no pudo ser creado", "", "error")
                 })
-                    this.reset();
-                }
+                //this.$refs.registerForm.reset();
+            }
+                
         },
+
+        async registrarParticipanteCarrera() {
+            const participantecarrera_path = 'http://localhost:8000/api/v1/participantecarreras/'
+            await axios.post(participantecarrera_path, this.form).then((response) => {})
+                .catch((err) => {
+                    console.log(err)
+                    swal("Participante no pudo ser creado", "", "error")
+                })
+        },
+
         getCarreras(){
             const path = 'http://localhost:8000/api/v1/carreras/'
             axios.get(path).then((response) => {
                 this.carreras = response.data
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+        },
+        getSedes(){
+            const path = 'http://localhost:8000/api/v1/sedes/'
+            axios.get(path).then((response) => {
+                this.sedes = response.data
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+        },
+        getColegios(){
+            const path = 'http://localhost:8000/api/v1/colegios/'
+            axios.get(path).then((response) => {
+                this.colegios = response.data
             })
             .catch((error) => {
                 console.log(error)
@@ -246,6 +327,8 @@ export default {
     },
     mounted(){
         this.getCarreras();
+        this.getSedes();
+        this.getColegios();
     }
 }
 </script>

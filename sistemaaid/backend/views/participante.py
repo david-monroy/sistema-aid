@@ -20,7 +20,6 @@ def leer_csv(request):
     row_iter = df.iterrows()
 
     df['Fecha nacimiento'] = pd.to_datetime(df['Fecha nacimiento'])
-
     df['Telefono secundario']=df['Telefono secundario'].fillna('')
     df['Correo ucab']=df['Correo ucab'].fillna('')
     

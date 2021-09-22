@@ -51,26 +51,32 @@ def leer_csv_actualizar(request):
     row_iter = df.iterrows()
 
     for index, row in row_iter:
-        par = models.Participante.objects.get(cedula=row[1])
+        existe_participante = models.Participante.objects.filter(cedula=row[1])
 
-        if (par):
+        if (existe_participante):
+            par = models.Participante.objects.get(cedula=row[1])
             par.nombre = row[0]
             par.genero = row[2]
             par.telfPrincipal = row[3]
             par.telfSecundario = row[4]
             par.correo = row[5]
             par.edad = row[7]
-            print(par.edad)
-            print(par.telfPrincipal)
-            print(par.correo)
-        #     # par.colegio = models.Colegio.objects.get(pk=row[8]),
+            par.colegio = models.Colegio.objects.get(pk=row[8])
             par.save()
 
-        # par_car = models.ParticipanteCarrera.objects.get(participante=par.id)
-        # if (par_car):
-        #     par_car.sede  = models.Sede.objects.get(pk=row[9]),
-        #     par_car.carrera = models.Carrera.objects.get(pk=row[10]),
-        #     par_car.semestre = row[11],
-        #     par_car.save
+            print(par.id)
+            existe_par_car = models.ParticipanteCarrera.objects.filter(participante=par.id)
+            print(existe_par_car)
+
+            if (existe_par_car):
+                par_car = models.ParticipanteCarrera.objects.get(participante=par.id)
+                par_car.sede  = models.Sede.objects.get(pk=row[9])
+                par_car.carrera = models.Carrera.objects.get(pk=row[10])
+                par_car.semestre = row[11]
+                par_car.save()
+        else:
+            print('no existe')
+
+        
 
     return HttpResponse(df)

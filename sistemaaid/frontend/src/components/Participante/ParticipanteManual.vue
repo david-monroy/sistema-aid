@@ -45,7 +45,8 @@
                 <div class="form-group">
                     <v-text-field
                         v-model="form.telfPrincipal"
-                        v-mask="'####-##'"
+                        v-mask="'####-#######'"
+                        type="number"
                         label="Teléfono primario"
                         required
                     ></v-text-field>
@@ -77,7 +78,7 @@
                             <v-text-field
                                 v-model="dateFormatted"
                                 label="Fecha"
-                                hint="MM/DD/AAAA"
+                                hint="AAAA-MM-DD"
                                 persistent-hint
                                 prepend-icon="fa-calendar"
                                 v-bind="attrs"
@@ -97,10 +98,10 @@
                 <v-col md="4" cols="12" class="py-0">
                 <div class="form-group">
                     <v-text-field
-                        v-model="form.edad"
+                        v-model="edad_calculada"
                         label="Edad"
                         required
-                        type="number"
+                        readonly
                     ></v-text-field>
                 </div>
             </v-col>
@@ -196,7 +197,7 @@
 <script>
 import axios from 'axios'
 import swal from 'sweetalert'
-import VueMask from 'v-mask'
+
 export default {
     data(){
         return {
@@ -204,7 +205,7 @@ export default {
                 nombre: '',
                 genero: '',
                 cedula: '',
-                fechaNacimiento: null,
+                dateFormatted: null,
                 edad: null,
                 correo: '',
                 telfPrincipal: '',
@@ -244,6 +245,19 @@ export default {
     computed: {
       computedDateFormatted () {
         return this.formatDate(this.date)
+      },
+
+      edad_calculada(){
+        var hoy = new Date();
+        var fecha_nac = new Date(this.dateFormatted);
+        var edad = hoy.getFullYear() - fecha_nac.getFullYear();
+        var m = hoy.getMonth() - fecha_nac.getMonth();
+
+        if (m < 0 || (m === 0 && hoy.getDate() < fecha_nac.getDate())) {
+            edad--;
+        }
+
+        return edad;
       }
     },
     methods: {
@@ -262,6 +276,7 @@ export default {
 
             let validatedForm = this.$refs.registerForm.validate();
             this.form.fechaNacimiento = this.dateFormatted;
+            this.form.edad = this.edad_calculada;
             const participante_path = 'http://localhost:8000/api/v1/participantes/'
 
             if (validatedForm){

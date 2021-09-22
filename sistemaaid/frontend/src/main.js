@@ -4,13 +4,14 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import BootstrapVue from 'bootstrap-vue'
+import VueTheMask from 'vue-the-mask'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import vuetify from './plugins/vuetify'
 
 Vue.config.productionTip = false
-Vue.use(BootstrapVue)
+Vue.use(BootstrapVue, VueTheMask)
 
 /* eslint-disable no-new */
 new Vue({

@@ -1,9 +1,13 @@
+from datetime import date, datetime, timedelta
+from dateutil import relativedelta
+import dateutil
 from django.shortcuts import render
 from django.http import HttpResponse
 import pandas as pd
 from backend.models import * 
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
+from django.db import transaction
 
 # Create your views here.
 @csrf_exempt
@@ -16,28 +20,29 @@ def leer_csv(request):
     row_iter = df.iterrows()
 
     df['Fecha nacimiento'] = pd.to_datetime(df['Fecha nacimiento'])
-
-    df = df.replace('nan','nulo')
-
+    df['Telefono secundario']=df['Telefono secundario'].fillna('')
+    df['Correo ucab']=df['Correo ucab'].fillna('')
+    
     for index, row in row_iter:
-        nuevo_participante = modelParticipante.Participante.objects.create(
-            nombre = row[0],
-            cedula  = row[1],
-            genero = row[2],
-            telfPrincipal = row[3],
-            telfSecundario = row[4],
-            correo = row[5],
-            fechaNacimiento = row[6],
-            edad = row[7],
-            colegio = modelColegio.Colegio.objects.get(pk=row[8]),
-        )
 
-        nuevo_participante_carrera = modelParticipanteCarrera.ParticipanteCarrera.objects.create(
-            participante = nuevo_participante,
-            sede  = modelSede.Sede.objects.get(pk=row[9]),
-            carrera = modelCarrera.Carrera.objects.get(pk=row[10]),
-            semestre = row[11],
-        )
+            nuevo_participante = modelParticipante.Participante.objects.create(
+                nombre = row[0],
+                cedula  = row[1],
+                genero = row[2],
+                telfPrincipal = row[3],
+                telfSecundario = row[4],
+                correo = row[5],
+                correoUcab = row[6],
+                fechaNacimiento = row[7],
+                colegio = modelColegio.Colegio.objects.get(pk=row[8]),
+            )
+
+            nuevo_participante_carrera = modelParticipanteCarrera.ParticipanteCarrera.objects.create(
+                participante = nuevo_participante,
+                sede  = modelSede.Sede.objects.get(pk=row[9]),
+                carrera = modelCarrera.Carrera.objects.get(pk=row[10]),
+                semestre = row[11],
+            )
 
     return HttpResponse(df)
 

@@ -9,7 +9,7 @@ class Participante(models.Model):
     cedula = models.CharField(max_length=9, unique=True)
     correo = models.CharField(max_length=50, null=True, blank=True, unique=True)
     correoUcab = models.CharField(max_length=50, null=True, blank=True, unique=True)
-    fechaNacimiento = models.DateField()
+    fechaNacimiento = models.DateField(null=True, blank=True)
     telfPrincipal = models.CharField(max_length=15)
     telfSecundario = models.CharField(max_length=15, null=True, blank=True)
     carreras = models.ManyToManyField(Carrera, through='ParticipanteCarrera')

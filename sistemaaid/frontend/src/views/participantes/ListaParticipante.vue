@@ -36,6 +36,89 @@
                   </v-card-actions>
                 </v-card>
               </v-dialog>
+
+          <v-dialog v-model="modalEstudios" max-width="950px">
+                <v-card class="project-dialog">
+                  <v-card-title class="headline grey lighten-2">
+                    {{actualParticipanteEstudios.nombre}} ({{actualParticipanteEstudios.genero}})
+                  </v-card-title>
+
+                  <v-card-text class="my-2  pb-0" style="display: flex; justify-content: space-between">
+                    <div>
+                          <strong>Cédula: </strong> <p>{{actualParticipanteEstudios.cedula}}</p>
+                      </div>
+                      <div>
+                          <strong>Correo: </strong> <p>{{actualParticipanteEstudios.correo}}</p>
+                      </div>
+                      <div v-if="actualParticipanteEstudios.correoUcab">
+                          <strong>Correo UCAB: </strong> <p>{{actualParticipanteEstudios.correoUcab}}</p>
+                      </div>
+                      <div v-else>
+                          <strong>Correo UCAB: </strong> <p class='text-center'>-</p>
+                      </div>
+                      
+                      <div>
+                          <strong>Fecha de nacimiento: </strong> <p>{{actualParticipanteEstudios.fechaNacimiento}}</p>
+                      </div>
+                      <div>
+                          <strong>Tlf. Principal: </strong> <p>{{actualParticipanteEstudios.telfPrincipal}}</p>
+                      </div>
+                      <div v-if="actualParticipanteEstudios.telfSecundario">
+                          <strong>Tlf. Secundario: </strong> <p>{{actualParticipanteEstudios.telfSecundario}}</p>
+                      </div>
+                      <div v-else>
+                          <strong>Tlf. Secundario: </strong> <p class='text-center'>-</p>
+                      </div>
+                    
+                  </v-card-text>
+
+                  <v-expansion-panels focusable class="px-5 mb-2">
+                    <v-expansion-panel>
+                        <v-expansion-panel-header>Estudios</v-expansion-panel-header>
+                        <v-expansion-panel-content>
+                            <v-simple-table max-height="240px">
+                                <template v-slot:default>
+                                <thead >
+                                    <tr>
+                                      <th class="text-center">
+                                        Sede
+                                    </th>
+                                    <th class="text-center">
+                                        Participante
+                                    </th>
+                                    <th class="text-center">
+                                        Carrera
+                                    </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr
+                                    v-for="(par_car,p) in actualParticipanteCarreras"
+                                    :key="p"
+                                    >
+                                    <td class="text-center">{{ par_car.sede }}</td>
+                                    <td class="text-center">{{ par_car.carrera }}</td>
+                                    <td class="text-center">{{ par_car.semestre }}</td>
+                                    </tr>
+                                </tbody>
+                                </template>
+                            </v-simple-table>
+                        </v-expansion-panel-content>
+                    </v-expansion-panel>
+                </v-expansion-panels>
+
+                  <v-card-actions>
+                    <v-btn
+                      color="primary"
+                      text
+                      @click="modalEstudios = false"
+                    >
+                      Cerrar
+                    </v-btn>
+                  </v-card-actions>
+                  </v-card>
+              </v-dialog>
+
           </template>
 
           <template v-slot:[`item.actions`]="{ item }">
@@ -48,6 +131,17 @@
                 @click="editarParticipante(item.id)" class="mr-2">fa-pen</v-icon>
               </template>
               <span>Editar</span>
+            </v-tooltip>
+
+            <v-tooltip
+                top 
+                style="display: inline"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon small v-bind="attrs" v-on="on"
+                @click="abrirEstudios(item.id)" class="mr-2 secondary--text">fa-info-circle</v-icon>
+              </template>
+              <span>Estudios</span>
             </v-tooltip>
 
             <v-tooltip
@@ -97,7 +191,24 @@ name: "ParticipantesView",
 
             popupEliminar: false,
             participanteAEliminar: "",
+            participanteAEliminarNombre: "",
+            modalEstudios: false,
+            actualParticipanteEstudios: {
+              nombre: 'Provicional',
+              cedula: 'Provicional',
+              correo: 'Provicional',
+              correoUcab: 'Provicional',
+              telfPrincipal: 'Provicional',
+              telfSecundario: 'Provicional',
+              fechaNacimiento: 'Provicional',
+              genero: 'Provicional',
+            },
+            participante_carreras: null,
+            actualParticipanteCarreras: []
         }
+    },
+    computed: {
+      
     },
     methods: {
 
@@ -105,6 +216,15 @@ name: "ParticipantesView",
             const path = 'http://localhost:8000/api/v1/participantes/'
             axios.get(path).then((response) => {
                 this.participantes = response.data
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+        },
+        getParticipanteCarreras(){
+            const path = 'http://localhost:8000/api/v1/participantecarreras/'
+            axios.get(path).then((response) => {
+                this.participante_carreras = response.data
             })
             .catch((error) => {
                 console.log(error)
@@ -136,13 +256,34 @@ name: "ParticipantesView",
           this.goRoute(`participantes/${id}/editar`);
         },
 
+        setParticipanteCarreras(id){
+          this.participante_carreras.forEach(p => {
+              if (p.participante == id){
+                  this.actualParticipanteCarreras.push(p);
+              }
+          });
+      },
+
+        abrirEstudios(userID){
+          this.modalEstudios = true;
+          this.participanteEstudios = userID;
+          this.participantes.forEach(par => {
+            if (par.id == this.participanteEstudios){
+              this.actualParticipanteEstudios = par;
+            }
+          });
+          this.setParticipanteCarreras(userID);
+        },
+        
+
         goRoute(route) {
             this.$router.push("/" + route);
         },
     },
 
     mounted(){
-        this.getParticipantes()
+        this.getParticipantes();
+        this.getParticipanteCarreras();
     }
 }
 </script>

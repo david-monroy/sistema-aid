@@ -1,8 +1,95 @@
 <template>
   <v-row align="center" class="list px-3 mx-auto nav-separator container">
+
+    <v-navigation-drawer
+      class="pt-12"
+      v-model="buscador"
+      absolute
+      width="400px"
+      temporary
+      right
+    >
+      <v-form
+        ref="registerForm"
+        v-model="valid"
+        lazy-validation
+        class="mt-12"
+      >
+                <div class="form-group">
+                    <v-text-field
+                        class="px-8 my-0 py-0"
+                        v-model="form.nombre"
+                        label="Nombre y apellido"
+                    ></v-text-field>
+                </div>
+                <div class="form-group">
+                    <v-text-field
+                        class="px-8 my-0 py-0"
+                        v-model="form.cedula"
+                        label="Cédula"
+                    ></v-text-field>
+                </div>
+                <div class="form-group">
+                    <v-select
+                        v-model="form.genero"
+                        :items="generos"
+                        item-text="nombre"
+                        item-value="id"
+                        label="Género"
+                        class="px-8 my-0 py-0"
+                        ></v-select>
+                </div>
+                <div class="form-group">
+                    <v-select
+                        v-model="form.sede"
+                        :items="sedes"
+                        item-text="nombre"
+                        item-value="id"
+                        label="Sede"
+                        class="px-8 my-0 py-0"
+                        ></v-select>
+                </div>
+                <div class="form-group">
+                    <v-autocomplete
+                        v-model="form.colegio"
+                        :items="colegios"
+                        label="Colegio"
+                        item-text="nombre"
+                        item-value="id"
+                        class="px-8 my-0 py-0"
+                    ></v-autocomplete>
+                </div>
+                <div class="form-group">
+                    <v-autocomplete
+                        v-model="form.carrera"
+                        :items="carreras"
+                        label="Carrera"
+                        item-text="nombre"
+                        item-value="id"
+                        class="px-8 my-0 py-0"
+                        ></v-autocomplete>
+                </div>
+                <div class="form-group">
+                    <v-select
+                        v-model="form.semestre"
+                        :items="semestres"
+                        item-text="nombre"
+                        item-value="id"
+                        label="Semestre"
+                        class="px-8 my-0 py-0"
+                        ></v-select>
+                </div>
+                <v-btn @click="consultaDetallada()"
+                    :disabled="!valid"
+                    class="btn secondary btn-block w-50 my-2 mx-auto  d-none d-sm-flex">
+                    Buscar
+                </v-btn>
+      </v-form>
+    </v-navigation-drawer>
       <div class="crud-buttons mx-auto">
           <v-btn color="accent2" class="mx-4" @click="goRoute('participantes/agregar')">Agregar participante</v-btn>
           <v-btn color="accent2" class="mx-4" @click="goRoute('participantes/editar/masivo')">Edición masiva</v-btn>
+          <v-btn color="accent1" class="mx-4" @click="buscador = true">Consulta detallada</v-btn>
       </div>
     <v-col cols="12" sm="12" class="mt-4">
       <v-card class="mx-auto p-3" tile>
@@ -172,6 +259,7 @@ name: "ParticipantesView",
 
   data() {
         return {
+            buscador: false,
             search: '',
             headers: [
             { text: 'ID', value: 'id' },
@@ -204,7 +292,36 @@ name: "ParticipantesView",
               genero: 'Provicional',
             },
             participante_carreras: null,
-            actualParticipanteCarreras: []
+            actualParticipanteCarreras: [],
+            form: {
+              nombre: null,
+              cedula: null,
+              genero: null,
+              sede: null,
+              colegio: null,
+              semestre: null
+            },
+            carreras: [],
+            sedes: [],
+            colegios: [],
+            generos: [
+                { nombre: 'Masculino', id: 'M'},
+                { nombre: 'Femenino', id: 'F'},
+                { nombre: 'Otro', id: 'O'}
+            ],
+            semestres: [
+                { nombre: 'Egresado', id: 11},
+                { nombre: '1ro', id: 1},
+                { nombre: '2do', id: 2},
+                { nombre: '3ro', id: 3},
+                { nombre: '4to', id: 4},
+                { nombre: '5to', id: 5},
+                { nombre: '6to', id: 6},
+                { nombre: '7mo', id: 7},
+                { nombre: '8vo', id: 8},
+                { nombre: '9no', id: 9},
+                { nombre: '10mo', id: 10},
+            ],
         }
     },
     computed: {
@@ -274,7 +391,38 @@ name: "ParticipantesView",
           });
           this.setParticipanteCarreras(userID);
         },
+
+        consultaDetallada(){
+          alert(this.form.nombre)
+        },
         
+        getCarreras(){
+            const path = 'http://localhost:8000/api/v1/carreras/'
+            axios.get(path).then((response) => {
+                this.carreras = response.data
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+        },
+        getSedes(){
+            const path = 'http://localhost:8000/api/v1/sedes/'
+            axios.get(path).then((response) => {
+                this.sedes = response.data
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+        },
+        getColegios(){
+            const path = 'http://localhost:8000/api/v1/colegios/'
+            axios.get(path).then((response) => {
+                this.colegios = response.data
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+        },
 
         goRoute(route) {
             this.$router.push("/" + route);
@@ -284,6 +432,9 @@ name: "ParticipantesView",
     mounted(){
         this.getParticipantes();
         this.getParticipanteCarreras();
+        this.getCarreras();
+        this.getSedes();
+        this.getColegios();
     }
 }
 </script>

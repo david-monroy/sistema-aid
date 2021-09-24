@@ -91,6 +91,9 @@
           <v-btn color="accent2" class="mx-4" @click="goRoute('participantes/editar/masivo')">Edición masiva</v-btn>
           <v-btn color="accent1" class="mx-4" @click="buscador = true">Consulta detallada</v-btn>
       </div>
+    <div v-if="lista_consultada">
+      {{lista_consultada.nombre}}
+    </div>
     <v-col cols="12" sm="12" class="mt-4">
       <v-card class="mx-auto p-3" tile>
         <v-card-title> <span class="primary--text">Participantes</span>
@@ -322,6 +325,7 @@ name: "ParticipantesView",
                 { nombre: '9no', id: 9},
                 { nombre: '10mo', id: 10},
             ],
+            lista_consultada: []
         }
     },
     computed: {
@@ -392,8 +396,16 @@ name: "ParticipantesView",
           this.setParticipanteCarreras(userID);
         },
 
-        consultaDetallada(){
-          alert(this.form.nombre)
+        async consultaDetallada(){
+          const path = 'http://localhost:8000/api/v1/participantes/consulta'
+          await axios.post(path, this.form).then((response) => {
+                  this.lista_consultada = response.data
+                  alert(response.data)
+                })
+                .catch((err) => {
+                    console.log(err)
+                    swal("Participante no pudo ser creado", "", "error")
+                })
         },
         
         getCarreras(){

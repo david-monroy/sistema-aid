@@ -1,6 +1,4 @@
 from datetime import date, datetime, timedelta
-from dateutil import relativedelta
-import dateutil
 from django.shortcuts import render
 from django.http import HttpResponse
 import pandas as pd
@@ -8,6 +6,7 @@ from backend.models import *
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.db import transaction
+import json
 
 # Create your views here.
 @csrf_exempt
@@ -102,3 +101,15 @@ def leer_csv_actualizar(request):
             )
 
     return HttpResponse(df)
+
+@csrf_exempt
+def consulta_detallada(request):
+    
+    consulta_dict = json.loads(request.body.decode('utf8').replace("'", '"')) # request en formato DICCIONARIO, esto servira para trabajar los atributos en DJango
+    consulta_json = json.dumps(consulta_dict, indent=4, sort_keys=True) # request en formato JSON (str a ojos de python), esto servira para mandar a Vue un JSON
+    
+    consulta = modelParticipante.Participante.objects.filter(nombre=consulta_dict["nombre"])
+
+    print(list(consulta))
+    
+    return HttpResponse(consulta)

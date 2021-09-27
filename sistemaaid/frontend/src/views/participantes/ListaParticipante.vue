@@ -84,6 +84,11 @@
                     class="btn secondary btn-block w-50 my-2 mx-auto  d-none d-sm-flex">
                     Buscar
                 </v-btn>
+                <v-btn @click="limpiar()"
+                    :disabled="!valid"
+                    class="btn accent1 btn-block w-50 my-2 mx-auto  d-none d-sm-flex">
+                    Limpiar
+                </v-btn>
       </v-form>
     </v-navigation-drawer>
       <div class="crud-buttons mx-auto">
@@ -404,6 +409,11 @@ name: "ParticipantesView",
                     console.log(err)
                     swal("Participante no pudo ser creado", "", "error")
                 })
+        },
+
+        async limpiar(){
+          this.$refs.registerForm.reset();
+          this.getParticipantes();
         },
         
         getCarreras(){

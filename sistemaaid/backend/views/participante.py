@@ -105,14 +105,31 @@ def leer_csv_actualizar(request):
 
 @csrf_exempt
 def consulta_detallada(request):
-    
+
     consulta_dict = json.loads(request.body.decode('utf8').replace("'", '"')) # request en formato DICCIONARIO, esto servira para trabajar los atributos en DJango
-    consulta_json = json.dumps(consulta_dict, indent=4, sort_keys=True) # request en formato JSON (str a ojos de python), esto servira para mandar a Vue un JSON
-    
-    consulta = modelParticipante.Participante.objects.filter(nombre=consulta_dict["nombre"]).values()
 
-    lista = json.dumps(list(consulta), cls=DjangoJSONEncoder)
+    nombre = consulta_dict["nombre"]
+    cedula = consulta_dict["cedula"]
+    genero = consulta_dict["genero"]
+    colegio = consulta_dict["colegio"]
 
-    print(list(consulta))
+    print(cedula)
+
+    filtro = {}
+
+    if nombre:
+        filtro["nombre"] = nombre
     
-    return HttpResponse(lista)
+    if cedula:
+        filtro["cedula"] = cedula
+
+    if genero:
+        filtro["genero"] = genero
+
+    if colegio:
+        filtro["colegio"] = colegio
+    
+    query_respuesta = modelParticipante.Participante.objects.filter(**filtro).values()
+    query_respuesta = json.dumps(list(query_respuesta), cls=DjangoJSONEncoder) # Convierte el query retornado en un JSON para enviar a Vue
+    
+    return HttpResponse(query_respuesta)

@@ -177,10 +177,10 @@
                                         Sede
                                     </th>
                                     <th class="text-center">
-                                        Participante
+                                        Carrera
                                     </th>
                                     <th class="text-center">
-                                        Carrera
+                                        Semestre
                                     </th>
                                     </tr>
                                 </thead>
@@ -332,7 +332,13 @@ name: "ParticipantesView",
         }
     },
     computed: {
-      
+      participanteDetalleCarreras(){
+        this.actualParticipanteCarreras.forEach(par_car => {
+          this.carreras.forEach(carrera => {
+            if (par_car.carrera == carrera.id) par_car.carrera = carrera.nombre
+          });
+        });
+      }
     },
     methods: {
 
@@ -386,9 +392,22 @@ name: "ParticipantesView",
                   this.actualParticipanteCarreras.push(p);
               }
           });
+
+          this.actualParticipanteCarreras.forEach(par_car => {
+            this.carreras.forEach(carrera => {
+              if (par_car.carrera == carrera.id) par_car.carrera = carrera.nombre
+            });
+            this.sedes.forEach(sede => {
+              if (par_car.sede == sede.id) par_car.sede = sede.nombre
+            });
+            this.semestres.forEach(semestre => {
+              if (par_car.semestre == semestre.id) par_car.semestre = semestre.nombre
+            });
+          })
       },
 
         abrirEstudios(userID){
+          this.actualParticipanteCarreras.splice(0, this.actualParticipanteCarreras.length)
           this.modalEstudios = true;
           this.participanteEstudios = userID;
           this.participantes.forEach(par => {

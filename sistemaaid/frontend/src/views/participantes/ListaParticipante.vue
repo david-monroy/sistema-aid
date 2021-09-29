@@ -406,7 +406,7 @@ name: "ParticipantesView",
         },
 
         async filtrar(){
-          const path = 'http://localhost:8000/api/v1/participantes/consulta'
+          const path = 'http://localhost:8000/api/v1/participantes/filtrar'
           await axios.post(path, this.form).then((response) => {
                   this.participantes = response.data
                   console.log(response.data)

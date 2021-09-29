@@ -104,7 +104,7 @@ def leer_csv_actualizar(request):
     return HttpResponse(df)
 
 @csrf_exempt
-def consulta_detallada(request):
+def participantes_filtrar(request):
 
     consulta_dict = json.loads(request.body.decode('utf8').replace("'", '"')) # request en formato DICCIONARIO, esto servira para trabajar los atributos en DJango
 
@@ -112,23 +112,35 @@ def consulta_detallada(request):
     cedula = consulta_dict["cedula"]
     genero = consulta_dict["genero"]
     colegio = consulta_dict["colegio"]
+    carrera = consulta_dict["carrera"]
+    sede = consulta_dict["sede"]
+    semestre = consulta_dict["semestre"]
 
-    filtro = {}
+    filtro_participante = {}
 
     if nombre:
-        filtro["nombre"] = nombre
+        filtro_participante["nombre__contains"] = nombre
     
     if cedula:
-        filtro["cedula"] = cedula
+        filtro_participante["cedula"] = cedula
 
     if genero:
-        filtro["genero"] = genero
+        filtro_participante["genero"] = genero
 
     if colegio:
-        filtro["colegio"] = colegio
+        filtro_participante["colegio"] = colegio
+
+    if carrera:
+        filtro_participante["carreras"] = carrera
+
+    if sede:
+        filtro_participante["participantecarrera__sede"] = sede
+
+    if semestre:
+        filtro_participante["participantecarrera__semestre"] = semestre
     
-    query_respuesta = modelParticipante.Participante.objects.filter(**filtro).values()
+    query_participante = modelParticipante.Participante.objects.filter(**filtro_participante).values()
     
-    query_respuesta = json.dumps(list(query_respuesta), cls=DjangoJSONEncoder) # Convierte el query retornado en un JSON para enviar a Vue
-    
+    query_respuesta = json.dumps(list(query_participante), cls=DjangoJSONEncoder) # Convierte el query retornado en un JSON para enviar a Vue
+
     return HttpResponse(query_respuesta)

@@ -9,3 +9,6 @@ class ParticipanteCarrera(models.Model):
     carrera = models.ForeignKey(Carrera, on_delete=CASCADE)
     sede = models.ForeignKey(Sede, on_delete=CASCADE, null=True, blank=True)
     semestre = models.IntegerField(null=True, blank=True)
+
+    def __str__(self):
+        return self.carrera 

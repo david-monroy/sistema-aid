@@ -113,8 +113,6 @@ def consulta_detallada(request):
     genero = consulta_dict["genero"]
     colegio = consulta_dict["colegio"]
 
-    print(cedula)
-
     filtro = {}
 
     if nombre:
@@ -130,6 +128,7 @@ def consulta_detallada(request):
         filtro["colegio"] = colegio
     
     query_respuesta = modelParticipante.Participante.objects.filter(**filtro).values()
+    
     query_respuesta = json.dumps(list(query_respuesta), cls=DjangoJSONEncoder) # Convierte el query retornado en un JSON para enviar a Vue
     
     return HttpResponse(query_respuesta)

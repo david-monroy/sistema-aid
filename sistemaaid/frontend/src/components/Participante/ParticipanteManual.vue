@@ -131,7 +131,7 @@
                 <v-row class="pb-0 mb-0 form-row" >
                     <v-col md="6" cols="12" class="py-0">
                         <v-autocomplete
-                        v-model="form.colegio"
+                        v-model="form.colegio_id"
                         :items="colegios"
                         label="Colegio"
                         item-text="nombre"
@@ -141,7 +141,7 @@
 
                     <v-col md="6" cols="12" class="py-0">
                         <v-select
-                        v-model="form.sede"
+                        v-model="form.sede_id"
                         :items="sedes"
                         item-text="nombre"
                         item-value="id"
@@ -155,7 +155,7 @@
 
                     <v-col md="6" cols="12" class="py-0">
                         <v-autocomplete
-                        v-model="form.carrera"
+                        v-model="form.carrera_id"
                         :items="carreras"
                         label="Carrera"
                         item-text="nombre"
@@ -210,10 +210,10 @@ export default {
                 correoUcab: '',
                 telfPrincipal: '',
                 telfSecundario: null,
-                carrera: null,
-                sede: null,
-                colegio: null,
-                participante: null
+                carrera_id: null,
+                sede_id: null,
+                colegio_id: null,
+                participante_id: null
             },
             date: new Date().toISOString().substr(0, 10),
             dateFormatted: this.formatDate(new Date().toISOString().substr(0, 10)),
@@ -286,7 +286,8 @@ export default {
             return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
         },
         async registrarParticipante() {
-
+            
+            console.log(this.form)
             let validatedForm = this.$refs.registerForm.validate();
             this.form.fechaNacimiento = this.fechaNacimiento;
             const participante_path = 'http://localhost:8000/api/v1/participantes/'
@@ -298,9 +299,9 @@ export default {
                 } else {
                     
                 await axios.post(participante_path, this.form).then((response) => {
-                    this.form.participante = response.data.id
+                    this.form.participante_id = response.data.id
 
-                    if (this.form.carrera && this.form.sede) {
+                    if (this.form.carrera_id && this.form.sede_id) {
                         this.registrarParticipanteCarrera()
                     }
                     swal("Participante creado satisfactoriamente", "", "success")

@@ -79,7 +79,7 @@
                         class="px-8 my-0 py-0"
                         ></v-select>
                 </div>
-                <v-btn @click="consultaDetallada()"
+                <v-btn @click="filtrar()"
                     :disabled="!valid"
                     class="btn secondary btn-block w-50 my-2 mx-auto  d-none d-sm-flex">
                     Buscar
@@ -94,7 +94,7 @@
       <div class="crud-buttons mx-auto">
           <v-btn color="accent2" class="mx-4" @click="goRoute('participantes/agregar')">Agregar participante</v-btn>
           <v-btn color="accent2" class="mx-4" @click="goRoute('participantes/editar/masivo')">Edición masiva</v-btn>
-          <v-btn color="accent1" class="mx-4" @click="buscador = true">Consulta detallada</v-btn>
+          <v-btn color="accent1" class="mx-4" @click="buscador = true">Filtrar</v-btn>
       </div>
 
     <v-col cols="12" sm="12" class="mt-4">
@@ -189,8 +189,8 @@
                                     v-for="(par_car,p) in actualParticipanteCarreras"
                                     :key="p"
                                     >
-                                    <td class="text-center">{{ par_car.sede }}</td>
-                                    <td class="text-center">{{ par_car.carrera }}</td>
+                                    <td class="text-center">{{ par_car.sede.nombre }}</td>
+                                    <td class="text-center">{{ par_car.carrera.nombre }}</td>
                                     <td class="text-center">{{ par_car.semestre }}</td>
                                     </tr>
                                 </tbody>
@@ -268,7 +268,6 @@ name: "ParticipantesView",
             buscador: false,
             search: '',
             headers: [
-            { text: 'ID', value: 'id' },
             {
                 text: 'Nombre',
                 align: 'start',
@@ -388,22 +387,10 @@ name: "ParticipantesView",
 
         setParticipanteCarreras(id){
           this.participante_carreras.forEach(p => {
-              if (p.participante == id){
+              if (p.participante.id == id){
                   this.actualParticipanteCarreras.push(p);
               }
           });
-
-          this.actualParticipanteCarreras.forEach(par_car => {
-            this.carreras.forEach(carrera => {
-              if (par_car.carrera == carrera.id) par_car.carrera = carrera.nombre
-            });
-            this.sedes.forEach(sede => {
-              if (par_car.sede == sede.id) par_car.sede = sede.nombre
-            });
-            this.semestres.forEach(semestre => {
-              if (par_car.semestre == semestre.id) par_car.semestre = semestre.nombre
-            });
-          })
       },
 
         abrirEstudios(userID){
@@ -418,7 +405,7 @@ name: "ParticipantesView",
           this.setParticipanteCarreras(userID);
         },
 
-        async consultaDetallada(){
+        async filtrar(){
           const path = 'http://localhost:8000/api/v1/participantes/consulta'
           await axios.post(path, this.form).then((response) => {
                   this.participantes = response.data

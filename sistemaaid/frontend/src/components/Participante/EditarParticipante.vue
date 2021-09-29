@@ -124,7 +124,7 @@
           </v-row>
 
           <v-expansion-panels class="my-6">
-            <v-expansion-panel v-for="(pc, i) in participante_carreras_actual" :key="i">
+            <v-expansion-panel v-for="(pc, i) in participante_carreras" :key="i">
             <v-expansion-panel-header>
                 Estudios (opcional)
             </v-expansion-panel-header>
@@ -132,7 +132,7 @@
                 <v-row class="pb-0 mb-0 form-row" >
                     <v-col md="6" cols="12" class="py-0">
                         <v-autocomplete
-                        v-model="form.colegio"
+                        v-model="form.colegio_id"
                         :items="colegios"
                         label="Colegio"
                         item-text="nombre"
@@ -143,7 +143,7 @@
 
                     <v-col md="6" cols="12" class="py-0">
                         <v-select
-                        v-model="pc.sede"
+                        v-model="pc.sede_id"
                         :items="sedes"
                         item-text="nombre"
                         item-value="id"
@@ -157,7 +157,7 @@
 
                     <v-col md="6" cols="12" class="py-0">
                         <v-autocomplete
-                        v-model="pc.carrera"
+                        v-model="pc.carrera_id"
                         :items="carreras"
                         label="Carrera"
                         item-text="nombre"
@@ -181,10 +181,10 @@
             </v-expansion-panel>
         </v-expansion-panels>
 
-            <v-btn @click="guardarCambios(participanteID)"
+            <v-btn @click="guardarCambios(participante_id)"
                 :disabled="!valid"
                 class="btn secondary btn-block w-50 my-2 mx-auto  d-none d-sm-flex">
-                Registrar
+                Guardar cambios
             </v-btn>
             <v-btn @click="goRoute(back)"
                 class="btn-block accent1 w-25 mx-auto  mb-0 d-none d-sm-flex">
@@ -217,7 +217,7 @@ export default {
             dateFormatted: this.formatDate(new Date().toISOString().substr(0, 10)),
             menu1: false,
             back:'participantes',
-            participanteID: null,
+            participante_id: null,
             carreras: [],
             participante_carreras: [],
             sedes: [],
@@ -259,15 +259,6 @@ export default {
       computedDateFormatted () {
         return this.formatDate(this.date)
       },
-      participante_carreras_actual(){
-          let arreglo_pc = []
-          this.participante_carreras.forEach(p => {
-              if (p.participante == this.participanteID){
-                  arreglo_pc.push(p)
-              }
-          });
-          return arreglo_pc;
-      },
       edad_calculada(){
         var hoy = new Date();
         var fecha_nac = new Date(this.date);
@@ -306,9 +297,9 @@ export default {
                     } else {
 
                         axios.put(participante_path, this.form).then((response) => {
-                            this.participanteID = response.data.id
+                            this.participante_id = response.data.id
 
-                            if (this.participante_carreras_actual) {
+                            if (this.participante_carreras) {
                                 this.actualizarParticipanteCarrera()
                             }
                             
@@ -319,11 +310,10 @@ export default {
                         })
                     }
                 }
-            },
+        },
 
             actualizarParticipanteCarrera() {
-                
-                this.participante_carreras_actual.forEach(pc => {
+                this.participante_carreras.forEach(pc => {
                     let id = pc.id
                     const participantecarrera_path = `http://localhost:8000/api/v1/participantecarreras/${id}/`
 
@@ -338,7 +328,7 @@ export default {
 
             getParticipante(id){
             const path = `http://localhost:8000/api/v1/participantes/${id}/`
-            this.participanteID = id;
+            this.participante_id = id;
             axios.get(path).then((response) => {
                 this.form.nombre = response.data.nombre
                 this.form.genero = response.data.genero
@@ -348,7 +338,7 @@ export default {
                 this.form.fechaNacimiento = response.data.fechaNacimiento
                 this.form.telfPrincipal = response.data.telfPrincipal
                 this.form.telfSecundario = response.data.telfSecundario
-                this.form.colegio = response.data.colegio
+                this.form.colegio_id = response.data.colegio.id
                 this.date = response.data.fechaNacimiento
             })
             .catch((err) => {
@@ -364,14 +354,15 @@ export default {
                 console.log(error)
             })
         },
-        getParticipanteCarreras(){
-            const path = 'http://localhost:8000/api/v1/participantecarreras/'
-            axios.get(path).then((response) => {
-                this.participante_carreras = response.data
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+        async getParticipanteCarreras(id){
+            const path = `http://localhost:8000/api/v1/participantes/participantecarreras`
+            await axios.post(path, id).then((response) => {
+                  this.participante_carreras = response.data
+                })
+                .catch((err) => {
+                    console.log(err)
+                    swal("Participante no pudo ser creado", "", "error")
+                })
         },
         getSedes(){
             const path = 'http://localhost:8000/api/v1/sedes/'
@@ -402,7 +393,7 @@ export default {
         this.getCarreras();
         this.getSedes();
         this.getColegios();
-        this.getParticipanteCarreras();
+        this.getParticipanteCarreras(this.$route.params.id);
     }
 }
 </script>

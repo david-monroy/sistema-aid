@@ -14,3 +14,6 @@ class Participante(models.Model):
     telfSecundario = models.CharField(max_length=15, null=True, blank=True)
     carreras = models.ManyToManyField(Carrera, through='ParticipanteCarrera')
     colegio = models.ForeignKey(Colegio, on_delete=CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return self.nombre

@@ -6,7 +6,7 @@ class Edicion(models.Model):
     codigo = models.CharField(max_length=10, unique=True)
     fechaInicio = models.DateField()
     fechaFin = models.DateField()
-    periodo = models.CharField(max_length=10)
+    periodo = models.CharField(max_length=10, null=True, blank=True)
     vinculada = models.BooleanField()
     totalMuestra = models.IntegerField()
     estudio =models.ForeignKey(Estudio, on_delete=CASCADE, null=True, blank=True)

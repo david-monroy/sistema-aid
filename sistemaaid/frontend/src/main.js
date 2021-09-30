@@ -13,6 +13,8 @@ import vuetify from './plugins/vuetify'
 Vue.config.productionTip = false
 Vue.use(BootstrapVue, VueTheMask)
 
+export const EventBus = new Vue();
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

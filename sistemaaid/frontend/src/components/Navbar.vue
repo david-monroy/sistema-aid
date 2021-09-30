@@ -10,7 +10,7 @@
 
           <div class="navbar-list">
               <li class="nav-item">
-            <router-link to="#" class="nav-link">Estudios</router-link>
+            <router-link to="/estudios" class="nav-link">Estudios</router-link>
             </li>
             <li class="nav-item">
                 <router-link to="/participantes" class="nav-link">Participantes</router-link>

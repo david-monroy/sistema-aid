@@ -7,6 +7,10 @@ import EditarParticipante from '@/components/Participante/EditarParticipante'
 import EditarParticipanteMasivo from '@/components/Participante/EditarParticipanteMasivo'
 import ParticipanteManual from '@/components/Participante/ParticipanteManual'
 import ParticipanteMasivo from '@/components/Participante/ParticipanteMasivo'
+import ListaEstudios from '@/views/estudios/ListaEstudios'
+import MenuAgregarEstudio from '@/views/estudios/MenuAgregarEstudio'
+import AgregarEstudio from '@/views/estudios/AgregarEstudio'
+import AgregarEdicion from '@/views/estudios/AgregarEdicion'
 
 Vue.use(Router)
 
@@ -46,7 +50,28 @@ export default new Router({
       path: `/participantes/editar/masivo`,
       name: 'EditarParticipanteMasivo',
       component: EditarParticipanteMasivo
-    }
+    },
+    {
+      path: '/estudios',
+      name: 'ListaEstudios',
+      component: ListaEstudios
+    },
+    {
+      path: `/estudios/agregar`,
+      name: 'MenuAgregarEstudio',
+      component: MenuAgregarEstudio
+    },
+    {
+      path: `/estudios/agregarEstudio`,
+      name: 'AgregarEstudio',
+      component: AgregarEstudio
+    },
+    {
+      path: `/estudios/agregarEdicion`,
+      name: 'AgregarEdicion',
+      component: AgregarEdicion
+    },
+
   ],
   mode: 'history'
 })

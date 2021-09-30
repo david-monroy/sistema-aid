@@ -167,7 +167,7 @@
 
                   <v-expansion-panels focusable class="px-5 mb-2">
                     <v-expansion-panel>
-                        <v-expansion-panel-header>Estudios</v-expansion-panel-header>
+                        <v-expansion-panel-header>Información académica</v-expansion-panel-header>
                         <v-expansion-panel-content>
                             <v-simple-table max-height="240px">
                                 <template v-slot:default>
@@ -265,6 +265,7 @@ name: "ParticipantesView",
 
   data() {
         return {
+            valid: false,
             buscador: false,
             search: '',
             headers: [
@@ -304,7 +305,8 @@ name: "ParticipantesView",
               genero: null,
               sede: null,
               colegio: null,
-              semestre: null
+              semestre: null,
+              carrera: null
             },
             carreras: [],
             sedes: [],

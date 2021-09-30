@@ -15,5 +15,5 @@ def get_participantecarrera(request):
     participanteCarreras = modelParticipanteCarrera.ParticipanteCarrera.objects.filter(participante_id=id).values()
 
     query_respuesta = json.dumps(list(participanteCarreras), cls=DjangoJSONEncoder) # Convierte el query retornado en un JSON para enviar a Vue
-
+    print(query_respuesta)
     return HttpResponse(query_respuesta)

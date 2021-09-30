@@ -125,11 +125,11 @@
           <v-expansion-panels class="my-6">
             <v-expansion-panel>
             <v-expansion-panel-header>
-                Estudios (opcional)
+                Información académica (opcional)
             </v-expansion-panel-header>
             <v-expansion-panel-content>
                 <v-row class="pb-0 mb-0 form-row" >
-                    <v-col md="6" cols="12" class="py-0">
+                    <v-col cols="12" class="py-0">
                         <v-autocomplete
                         v-model="form.colegio_id"
                         :items="colegios"
@@ -138,8 +138,10 @@
                         item-value="id"
                         ></v-autocomplete>
                     </v-col>
+                </v-row>
+                <v-row class="pb-0 mb-0 form-row">
 
-                    <v-col md="6" cols="12" class="py-0">
+                    <v-col md="4" cols="12" class="py-0">
                         <v-select
                         v-model="form.sede_id"
                         :items="sedes"
@@ -149,11 +151,7 @@
                         ></v-select>
                     </v-col>
 
-                </v-row>
-
-                <v-row class="pb-0 mb-0 form-row" >
-
-                    <v-col md="6" cols="12" class="py-0">
+                    <v-col md="4" cols="12" class="py-0">
                         <v-autocomplete
                         v-model="form.carrera_id"
                         :items="carreras"
@@ -163,7 +161,7 @@
                         ></v-autocomplete>
                     </v-col>
 
-                    <v-col md="6" cols="12" class="py-0">
+                    <v-col md="4" cols="12" class="py-0">
                         <v-select
                         v-model="form.semestre"
                         :items="semestres"
@@ -180,7 +178,7 @@
 
             <v-btn @click="registrarParticipante"
                 :disabled="!valid"
-                class="btn secondary btn-block w-50 my-2 mx-auto  d-none d-sm-flex">
+                class="btn success btn-block w-50 my-2 mx-auto  d-none d-sm-flex">
                 Registrar
             </v-btn>
             <v-btn @click="goRoute(back)"
@@ -201,6 +199,7 @@ import swal from 'sweetalert'
 export default {
     data(){
         return {
+            valid: false,
             form: {
                 nombre: '',
                 genero: '',
@@ -252,7 +251,8 @@ export default {
                 PhoneRules: 
                 (v) => (v && v.length == 11) || "Número de teléfono debe tener 11 dígitos",
                 
-            }
+            },
+            informacion_academica: []
         }
     },
     computed: {

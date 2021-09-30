@@ -116,30 +116,30 @@ def participantes_filtrar(request):
     sede = consulta_dict["sede"]
     semestre = consulta_dict["semestre"]
 
-    filtro_participante = {}
+    filtro = {}
 
     if nombre:
-        filtro_participante["nombre__contains"] = nombre
+        filtro["nombre__contains"] = nombre
     
     if cedula:
-        filtro_participante["cedula"] = cedula
+        filtro["cedula"] = cedula
 
     if genero:
-        filtro_participante["genero"] = genero
+        filtro["genero"] = genero
 
     if colegio:
-        filtro_participante["colegio"] = colegio
+        filtro["colegio"] = colegio
 
     if carrera:
-        filtro_participante["carreras"] = carrera
+        filtro["carreras"] = carrera
 
     if sede:
-        filtro_participante["participantecarrera__sede"] = sede
+        filtro["participantecarrera__sede"] = sede
 
     if semestre:
-        filtro_participante["participantecarrera__semestre"] = semestre
+        filtro["participantecarrera__semestre"] = semestre
     
-    query_participante = modelParticipante.Participante.objects.filter(**filtro_participante).values()
+    query_participante = modelParticipante.Participante.objects.filter(**filtro).values()
     
     query_respuesta = json.dumps(list(query_participante), cls=DjangoJSONEncoder) # Convierte el query retornado en un JSON para enviar a Vue
 

@@ -11,7 +11,7 @@
                 <div class="form-group">
                     <v-text-field
                         v-model="form.codigo"
-                        label="Código "
+                        label="Código *"
                         required
                         :rules='[rules.required]'
                     ></v-text-field>
@@ -21,7 +21,7 @@
                 <div class="form-group">
                     <v-text-field
                         v-model="form.nombre"
-                        label="Nombre del Estudio"
+                        label="Nombre del Estudio *"
                         required
                         :rules='[rules.required]'
                     ></v-text-field>
@@ -45,7 +45,7 @@
                 <div class="form-group">
                     <v-text-field
                         v-model="form.objetivoNegocio"
-                        label="Objetivo del negocio"
+                        label="Objetivo del negocio *"
                         required
                         :rules='[rules.required]'
                     ></v-text-field>
@@ -58,7 +58,7 @@
                 <div class="form-group">
                     <v-text-field
                         v-model="form.objetivoOrganizacion"
-                        label="Objetivo de la Organización"
+                        label="Objetivo de la Organización *"
                         required
                         :rules='[rules.required]'
                     ></v-text-field>
@@ -71,7 +71,7 @@
                 <div class="form-group">
                     <v-text-field
                         v-model="form.poblacionObjetivo"
-                        label="Población objetivo"
+                        label="Población objetivo *"
                         required
                         :rules='[rules.required]'
                     ></v-text-field>
@@ -79,6 +79,111 @@
             </v-col>
         </v-row>
 
+        <v-row class="pb-0 mb-0 form-row" >
+            <v-col md="6" cols="12" class="py-0">
+                <div class="form-group">
+                    <v-tooltip left>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                            v-model="form.periodo"
+                            label="Periodo"
+                            v-bind="attrs"
+                            v-on="on"
+                        ></v-text-field>
+                         </template>
+                        <span>Período académico de la UCAB</span>
+                    </v-tooltip>
+                    
+                </div>
+            </v-col>
+
+            <v-col md="6" cols="12" class="py-0">
+                <div class="form-group">
+                    <v-tooltip right>
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-text-field
+                            v-model="form.totalMuestra"
+                            label="Total de la muestra"
+                            required
+                            :rules='[rules.required]'
+                            v-bind="attrs"
+                            v-on="on"
+                            ></v-text-field>
+                        </template>
+                        <span>Cantidad de personas a encuestar</span>
+                    </v-tooltip>
+                    
+                </div>
+            </v-col>
+        </v-row>
+
+        <v-row class="pb-0 mb-0 form-row" >
+            <v-col md="6" cols="12" class="py-0">
+                <v-menu
+                    ref="menu1"
+                    v-model="menu1"
+                    :close-on-content-click="false"
+                    transition="scale-transition"
+                    offset-y
+                    max-width="290px"
+                    min-width="auto"
+                    >
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                            v-model="form.fechaInicio"
+                            label="Fecha inicio *"
+                            hint="AAAA-MM-DD"
+                            persistent-hint
+                            prepend-icon="fa-calendar"
+                            v-bind="attrs"
+                            v-on="on"
+                            required
+                            :rules='[rules.required]'
+                        ></v-text-field>
+                    </template>
+                    <v-date-picker
+                        v-model="form.fechaInicio"
+                        no-title
+                        color="primary"
+                        @input="menu1 = false"
+                    ></v-date-picker>
+                </v-menu>
+            </v-col>
+
+            <v-col md="6" cols="12" class="py-0">
+                <v-menu
+                    ref="menu2"
+                    v-model="menu2"
+                    :close-on-content-click="false"
+                    transition="scale-transition"
+                    offset-y
+                    max-width="290px"
+                    min-width="auto"
+                    >
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                            v-model="form.fechaFin"
+                            label="Fecha estimada fin *"
+                            hint="AAAA-MM-DD"
+                            persistent-hint
+                            prepend-icon="fa-calendar"
+                            v-bind="attrs"
+                            v-on="on"
+                            required
+                            :rules='[rules.required]'
+                        ></v-text-field>
+                    </template>
+                    <v-date-picker
+                        v-model="form.fechaFin"
+                        no-title
+                        color="primary"
+                        @input="menu1 = false"
+                    ></v-date-picker>
+                </v-menu>
+            </v-col>
+        </v-row>
+
+        
         <v-row>
             <v-col align="begin"></v-col>
             <v-col align="center">
@@ -108,6 +213,7 @@
 
 <script>
 import { EventBus } from "../../main.js";
+import moment from "moment";
 
 export default {
     data(){
@@ -118,8 +224,16 @@ export default {
                 poblacionObjetivo:'', 
                 antecedentes:'', 
                 objetivoNegocio :'',
-                objetivoOrganizacion:''
+                objetivoOrganizacion:'',
+                periodo:'',
+                fechaInicio: moment().format("YYYY-MM-DD"),
+                fechaFin:'',
+                idEstudio:'',
+                vinculada: true,
+                totalMuestra: 1000
             },
+            menu1:false,
+            menu2:false,
             rules: {} = {
                 required: (value) =>
                 (!!value && value !== "" && value !== undefined) || "Este campo es requerido",

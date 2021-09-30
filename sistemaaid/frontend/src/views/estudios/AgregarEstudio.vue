@@ -66,13 +66,26 @@ export default {
     async insertarEstudio(data){
       const estudio_path = 'http://localhost:8000/api/v1/estudios/'
       await axios.post(estudio_path, data).then((response) => {
-          swal("Participante creado satisfactoriamente", "", "success")
+          data.estudio = response.data.id;
+          this.insertarEdicion(data)
         })
         .catch((err) => {
           console.log(err)
-          swal("Participante no pudo ser creado", "", "error")
+          swal("Estudio no pudo ser creado", "", "error")
+        })
+    },
+    async insertarEdicion(data){
+      console.log("ediciones")
+      const edicion_path = 'http://localhost:8000/api/v1/ediciones/'
+      await axios.post(edicion_path, data).then((response) => {
+          swal("Estudio creado satisfactoriamente", "", "success")
+        })
+        .catch((err) => {
+          console.log(err)
+          swal("Estudio no pudo ser creado", "", "error")
         })
     }
+
   }
 };
 </script>

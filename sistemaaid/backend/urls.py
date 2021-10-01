@@ -1,7 +1,13 @@
 from rest_framework import routers, urlpatterns
 from .viewsets import ParticipanteSerializer, ParticipanteViewSet
+from rest_framework_simplejwt import views as jwt_views
+from django.urls import path
 
 router = routers.SimpleRouter()
 router.register('participantes', ParticipanteViewSet)
 
-urlpatterns = router.urls
+urlpatterns = [
+    path('login', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
+]
+

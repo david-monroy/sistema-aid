@@ -6,6 +6,7 @@ import ListParticipante from '@/components/Participante/ListParticipante'
 import EditParticipante from '@/components/Participante/EditParticipante'
 import DeleteParticipante from '@/components/Participante/DeleteParticipante'
 import NewParticipante from '@/components/Participante/NewParticipante'
+import Login from '@/views/Login'
 
 Vue.use(Router)
 
@@ -13,8 +14,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      name: 'Login',
+      component: Login
     },
     {
       path: '/participantes',

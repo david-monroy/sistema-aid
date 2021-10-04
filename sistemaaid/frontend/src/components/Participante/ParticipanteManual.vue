@@ -77,7 +77,7 @@
           </v-row>
 
           <v-row class="pb-0 mb-0 form-row" >
-                <v-col md="6" cols="12" class="py-0">
+                <v-col md="4" cols="12" class="py-0">
                     <v-menu
                         ref="menu1"
                         v-model="menu1"
@@ -109,7 +109,7 @@
                     </v-menu>
                 </v-col>
               
-            <v-col md="6" cols="12" class="py-0">
+            <v-col md="4" cols="12" class="py-0">
                 <div class="form-group" style="display: flex; justify-content: center; width: 100%">
                     <v-select
                         v-model="form.genero"
@@ -118,6 +118,14 @@
                         item-value="id"
                         label="Género"
                         ></v-select>
+                </div>
+            </v-col>
+            <v-col md="4" cols="12" class="py-0">
+                <div class="form-group">
+                    <v-text-field
+                        v-model="form.lugar"
+                        label="Municipio"
+                    ></v-text-field>
                 </div>
             </v-col>
           </v-row>
@@ -147,7 +155,7 @@
                         :items="sedes"
                         item-text="nombre"
                         item-value="id"
-                        label="Sede"
+                        label="Sede UCAB"
                         ></v-select>
                     </v-col>
 
@@ -171,6 +179,40 @@
                         ></v-select>
                     </v-col>
 
+                </v-row>
+            </v-expansion-panel-content>
+            </v-expansion-panel>
+
+            <v-expansion-panel>
+            <v-expansion-panel-header>
+                Redes sociales (opcional)
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+                <v-row class="pb-0 mb-0 form-row" >
+                    <v-col md="3" cols="12" class="py-0">
+                        <v-text-field
+                        v-model="form.instagram"
+                        label="Instagram"
+                        ></v-text-field>
+                    </v-col>
+                    <v-col md="3" cols="12" class="py-0">
+                        <v-text-field
+                        v-model="form.twitter"
+                        label="Twitter"
+                        ></v-text-field>
+                    </v-col>
+                    <v-col md="3" cols="12" class="py-0">
+                        <v-text-field
+                        v-model="form.facebook"
+                        label="Facebook"
+                        ></v-text-field>
+                    </v-col>
+                    <v-col md="3" cols="12" class="py-0">
+                        <v-text-field
+                        v-model="form.tiktok"
+                        label="Tik Tok"
+                        ></v-text-field>
+                    </v-col>
                 </v-row>
             </v-expansion-panel-content>
             </v-expansion-panel>
@@ -206,7 +248,7 @@ export default {
                 cedula: '',
                 fechaNacimiento: null,
                 correo: '',
-                correoUcab: '',
+                correoUcab: null,
                 telfPrincipal: '',
                 telfSecundario: null,
                 carrera_id: null,
@@ -287,11 +329,10 @@ export default {
         },
         async registrarParticipante() {
             
-            console.log(this.form)
             let validatedForm = this.$refs.registerForm.validate();
             this.form.fechaNacimiento = this.fechaNacimiento;
             const participante_path = 'http://localhost:8000/api/v1/participantes/'
-
+            console.log(this.form)
             if (validatedForm){
 
                 if (this.edad_calculada < 11) {
@@ -305,12 +346,13 @@ export default {
                         this.registrarParticipanteCarrera()
                     }
                     swal("Participante creado satisfactoriamente", "", "success")
+                    this.$refs.registerForm.reset();
                 })
                 .catch((err) => {
                     console.log(err)
                     swal("Participante no pudo ser creado", "", "error")
                 })
-                //this.$refs.registerForm.reset();
+
                 }
             }
                 

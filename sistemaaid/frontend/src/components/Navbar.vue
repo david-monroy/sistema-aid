@@ -24,7 +24,8 @@
 
             <li class="nav-item">
                 <a class="nav-link">
-                <v-icon>fas fa-sign-out-alt</v-icon>   Cerrar sesión
+                  {{activeUser()}}
+                <v-icon color="white" @click="cerrarSesion">fas fa-sign-out-alt</v-icon>
                 </a>
             </li>
           </div>
@@ -39,6 +40,16 @@ export default {
   name: "navbar",
   data: () => ({
   }),
+
+  methods:{
+   activeUser() {
+      return this.$store.getters["users/getUser"].username;
+    },
+     cerrarSesion() {
+      this.$store.dispatch("users/cerrarSesion", this.form);
+      this.$router.push("/login");
+    }
+  }
 
 }
 </script>

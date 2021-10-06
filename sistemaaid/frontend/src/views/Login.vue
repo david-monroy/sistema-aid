@@ -42,8 +42,6 @@
 </template>
 
 <script>
-import Repository from "../services/repositories/repositoryFactory";
-const AutorizacionRepository = Repository.get("Autorizacion");
 export default {
   data() {
       return {

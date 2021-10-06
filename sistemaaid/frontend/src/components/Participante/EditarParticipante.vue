@@ -192,8 +192,13 @@
 
 
 <script>
-import axios from 'axios'
-import swal from 'sweetalert'
+import swal from 'sweetalert';
+import Repository from "../../services/repositories/repositoryFactory";
+const ParticipantesRepository = Repository.get("Participantes");
+const ParticipanteCarrerasRepository = Repository.get("ParticipanteCarreras");
+const SedesRepository = Repository.get("Sedes");
+const CarrerasRepository = Repository.get("Carreras");
+const ColegiosRepository = Repository.get("Colegios");
 export default {
     data(){
         return {
@@ -283,14 +288,12 @@ export default {
 
             let validatedForm = this.$refs.registerForm.validate();
             this.form.fechaNacimiento = this.dateFormatted;
-            const participante_path = `http://localhost:8000/api/v1/participantes/${id}/`
                 if (validatedForm){
-
                     if (this.edad_calculada < 11) {
                         swal("El participante debe ser mayor de 11 años", "", "error") 
                     } else {
-
-                        await axios.put(participante_path, this.form).then((response) => {
+                        try{
+                            await ParticipantesRepository.actualizar(id, this.form);
                             if (this.informacion_academica.sede_id){
                                 if (this.informacion_academica.id) this.actualizarParticipanteCarrera(this.informacion_academica.id)
                                 else this.agregarParticipanteCarrera()
@@ -298,93 +301,64 @@ export default {
                                 swal("Participante actualizado satisfactoriamente", "", "success")
                                 location.reload()
                             }
-                        })
-                        .catch((err) => {
+                            swal("Participante actualizado satisfactoriamente", "", "success")
+                            location.reload()
+                        }
+                        catch(err){
                             console.log(err)
-                        })
+                            swal("El participante no pudo ser creado", "", "error")
+                        }
                     }
                 }
         },
 
             async actualizarParticipanteCarrera(id) {
-                const participantecarreras_path = `http://localhost:8000/api/v1/participantecarreras/${id}/`
-                await axios.put(participantecarreras_path, this.informacion_academica).then((response) => {
-                    swal("Participante actualizado satisfactoriamente", "", "success")
-                    location.reload()
-                })
-                .catch((err) => {
+                try{
+                    await ParticipanteCarrerasRepository.actualizar(id, this.informacion_academica);
+                }
+                catch(err){
                     console.log(err)
-                })
+                    swal("El participante no pudo ser creado", "", "error")
+                }
             },
 
             async agregarParticipanteCarrera() {
                 this.informacion_academica.participante_id = this.participante_id
-                console.log(this.informacion_academica)
-                const participantecarreras_path = `http://localhost:8000/api/v1/participantecarreras/`
-                await axios.post(participantecarreras_path, this.informacion_academica).then((response) => {
-                    swal("Participante actualizado satisfactoriamente", "", "success")
-                    location.reload()
-                })
-                .catch((err) => {
+                try{
+                    await ParticipanteCarrerasRepository.agregar(this.informacion_academica);
+                }
+                catch(err){
                     console.log(err)
-                })
+                    swal("El participante no pudo ser creado", "", "error")
+                }
             },
 
-            getParticipante(id){
-            const path = `http://localhost:8000/api/v1/participantes/${id}/`
+        async getParticipante(id){
             this.participante_id = id;
-            axios.get(path).then((response) => {
-                this.form.nombre = response.data.nombre
-                this.form.genero = response.data.genero
-                this.form.cedula = response.data.cedula
-                this.form.correo = response.data.correo
-                this.form.correoUcab = response.data.correoUcab
-                this.form.fechaNacimiento = response.data.fechaNacimiento
-                this.form.telfPrincipal = response.data.telfPrincipal
-                this.form.telfSecundario = response.data.telfSecundario
-                this.form.colegio_id = response.data.colegio.id
-                this.date = response.data.fechaNacimiento
-            })
-            .catch((err) => {
-                console.log(err)
-            })
+            let res = await ParticipantesRepository.obtenerPorId(id);
+            this.form.nombre = res.nombre
+            this.form.genero = res.genero
+            this.form.cedula = res.cedula
+            this.form.correo = res.correo
+            this.form.correoUcab = res.correoUcab
+            this.form.fechaNacimiento = res.fechaNacimiento
+            this.form.telfPrincipal = res.telfPrincipal
+            this.form.telfSecundario = res.telfSecundario
+            this.form.colegio_id = res.colegio.id
+            this.date = res.fechaNacimiento
         },
-        getCarreras(){
-            const path = 'http://localhost:8000/api/v1/carreras/'
-            axios.get(path).then((response) => {
-                this.carreras = response.data
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+        async getParticipanteCarreras(id){
+            let res = await ParticipanteCarrerasRepository.obtenerPorId(id);
+            if (res[0]) this.informacion_academica = res[0]
         },
-        getParticipanteCarreras(id){
-            const path = `http://localhost:8000/api/v1/participantes/participantecarreras`
-            axios.post(path, id).then((response) => {
-                if (response.data[0]) this.informacion_academica = response.data[0]
-            })
-            .catch((err) => {
-                console.log(err)
-                swal("Participante no pudo ser creado", "", "error")
-            })
+        async getCarreras(){
+            this.carreras = await CarrerasRepository.obtener();
         },
-        getSedes(){
-            const path = 'http://localhost:8000/api/v1/sedes/'
-            axios.get(path).then((response) => {
-                this.sedes = response.data
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+        async getSedes(){
+            this.sedes = await SedesRepository.obtener();
         },
-        getColegios(){
-            const path = 'http://localhost:8000/api/v1/colegios/'
-            axios.get(path).then((response) => {
-                this.colegios = response.data
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+        async getColegios(){
+            this.colegios = await ColegiosRepository.obtener();
         },
     },
     watch: {

@@ -235,10 +235,13 @@
 
 
 <script>
-import axios from 'axios'
-import swal from 'sweetalert'
+import swal from 'sweetalert';
 import Repository from "../../services/repositories/repositoryFactory";
 const ParticipantesRepository = Repository.get("Participantes");
+const ParticipanteCarrerasRepository = Repository.get("ParticipanteCarreras");
+const SedesRepository = Repository.get("Sedes");
+const CarrerasRepository = Repository.get("Carreras");
+const ColegiosRepository = Repository.get("Colegios");
 export default {
     data(){
         return {
@@ -335,66 +338,40 @@ export default {
                 if (this.edad_calculada < 11) {
                     swal("El participante debe ser mayor de 11 años", "", "error") 
                 } else {
-                    // try{
-                        console.log(ParticipantesRepository.agregar(this.form));
+                    try{
+                        let res = await ParticipantesRepository.agregar(this.form);
+                        this.form.participante_id = res.id;
+                        if (this.form.carrera_id && this.form.sede_id) {
+                            this.registrarParticipanteCarrera()
+                        }
                         swal("Participante creado satisfactoriamente", "", "success")
-                    // }
-                    
-                    
-                // await axios.post(participante_path, this.form).then((response) => {
-                //     this.form.participante_id = response.data.id
-
-                //     if (this.form.carrera_id && this.form.sede_id) {
-                //         this.registrarParticipanteCarrera()
-                //     }
-                //     swal("Participante creado satisfactoriamente", "", "success")
-                //     this.$refs.registerForm.reset();
-                // })
-                // .catch((err) => {
-                //     console.log(err)
-                //     swal("Participante no pudo ser creado", "", "error")
-                // })
-
+                    }
+                    catch(err){
+                        console.log(err)
+                        swal("El participante no pudo ser creado", "", "error")
+                    }
                 }
             }
-                
         },
 
         async registrarParticipanteCarrera() {
-            const participantecarrera_path = 'http://localhost:8000/api/v1/participantecarreras/'
-            await axios.post(participantecarrera_path, this.form).then((response) => {})
-                .catch((err) => {
-                    console.log(err)
-                    swal("Participante no pudo ser creado", "", "error")
-                })
+            try{
+                await ParticipanteCarrerasRepository.agregar(this.form);
+            }
+            catch(err){
+                console.log(err)
+                swal("El participante no pudo ser creado", "", "error")
+            }
         },
 
-        getCarreras(){
-            const path = 'http://localhost:8000/api/v1/carreras/'
-            axios.get(path).then((response) => {
-                this.carreras = response.data
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+        async getCarreras(){
+            this.carreras = await CarrerasRepository.obtener();
         },
-        getSedes(){
-            const path = 'http://localhost:8000/api/v1/sedes/'
-            axios.get(path).then((response) => {
-                this.sedes = response.data
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+        async getSedes(){
+            this.sedes = await SedesRepository.obtener();
         },
-        getColegios(){
-            const path = 'http://localhost:8000/api/v1/colegios/'
-            axios.get(path).then((response) => {
-                this.colegios = response.data
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+        async getColegios(){
+            this.colegios = await ColegiosRepository.obtener();
         },
     },
     watch: {

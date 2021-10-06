@@ -11,7 +11,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 
 # Create your views here.
 @csrf_exempt
-def leer_csv(request):
+def agregar_masivo(request):
 
     path = request.FILES['file']
 
@@ -47,7 +47,7 @@ def leer_csv(request):
     return HttpResponse(df)
 
 @csrf_exempt
-def leer_csv_actualizar(request):
+def editar_masivo(request):
 
     path = request.FILES['file']
 

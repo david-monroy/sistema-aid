@@ -15,10 +15,10 @@ router.register('estudios', EstudioViewSet)
 urlpatterns = [
     path('login/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('login/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
-    path('participantes/leer', views.leer_csv),
-    path('participantes/leer/actualizar', views.leer_csv_actualizar),
-    path('participantes/participantecarreras', views.get_participantecarrera),
-    path('participantes/filtrar', views.participantes_filtrar),
+    path('participantes/agregar_masivo/', views.agregar_masivo),
+    path('participantes/editar_masivo/', views.editar_masivo),
+    path('participantes/participantecarreras/', views.get_participantecarrera),
+    path('participantes/filtrar/', views.participantes_filtrar),
 ]
 
 urlpatterns += router.urls

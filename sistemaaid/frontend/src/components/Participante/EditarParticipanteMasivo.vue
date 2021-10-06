@@ -35,9 +35,9 @@
 
 
 <script>
-import axios from 'axios'
-import swal from 'sweetalert'
-
+import swal from 'sweetalert';
+import Repository from "../../services/repositories/repositoryFactory";
+const ParticipantesRepository = Repository.get("Participantes");
 export default {
     data(){
         return {
@@ -50,31 +50,22 @@ export default {
       }
     },
     methods: {
-
         seleccionarCSV(){
             this.file = this.$refs.file.files[0]
         },
-
         async enviarCSV(){
             const formData = new FormData();
             formData.append('file', this.file)
-
-            axios.post('http://localhost:8000/api/v1/participantes/leer/actualizar', formData,{
-              headers: {
-                'Content-Type': 'multipart/form-data'
-              }
-            }).then((response) => {
-                    swal("Participantes creados satisfactoriamente", "", "success")
-                })
-                .catch((err) => {
-                    swal("No se ha podido cargar el archivo", "", "error")
-                })
-            
+            try{
+                await ParticipantesRepository.editarMasivo(formData);
+                swal("Participantes actualizados satisfactoriamente", "", "success")
+            }
+            catch(err){
+              console.log(err)
+              swal("No se ha podido cargar el archivo", "", "error")
+            }  
         },
     },
-    created(){
-
-    }
 }
 </script>
 

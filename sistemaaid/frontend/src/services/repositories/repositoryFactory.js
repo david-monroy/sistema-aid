@@ -1,4 +1,4 @@
-import AutorizacionRepository from "./autorizacion.repository";
+import AutorizacionRepository from "./autenticacion.repository";
 
 const repositories = {
     Autorizacion: AutorizacionRepository

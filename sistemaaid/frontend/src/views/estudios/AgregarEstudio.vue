@@ -51,6 +51,9 @@ import FichaTecnica from "../../components/estudios/FichaTecnica.vue";
 import { EventBus } from "../../main.js";
 import axios from 'axios'
 import swal from 'sweetalert'
+import Repository from "../../services/repositories/repositoryFactory";
+const EstudiosRepository = Repository.get("Estudios");
+
 export default {
   components: {
     FichaTecnica
@@ -64,14 +67,14 @@ export default {
 
   methods:{
     async insertarEstudio(data){
-      const estudio_path = 'http://localhost:8000/api/v1/estudios/'
-      await axios.post(estudio_path, data).then((response) => {
-          swal("Participante creado satisfactoriamente", "", "success")
-        })
-        .catch((err) => {
-          console.log(err)
+      try{
+        await EstudiosRepository.agregar(data);
+        swal("Participante creado satisfactoriamente", "", "success")
+      }
+      catch(err){
+        console.log(err)
           swal("Participante no pudo ser creado", "", "error")
-        })
+      }
     }
   }
 };

@@ -1,9 +1,11 @@
 import AutorizacionRepository from "./autenticacion.repository";
-import estudiosRepository from "./estudios.repository";
+import EstudiosRepository from "./Estudios/estudios.repository";
+import EdicionesRepository from "./Estudios/ediciones.repository";
 
 const repositories = {
     Autorizacion: AutorizacionRepository,
-    Estudios: estudiosRepository,
+    Estudios: EstudiosRepository,
+    Ediciones: EdicionesRepository,
 };
 
 export default {

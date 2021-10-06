@@ -1,7 +1,7 @@
 from rest_framework import routers, urlpatterns
 from . import views
 from django.urls import path
-from .viewsets import EstudioViewSet, ParticipanteViewSet, CarreraViewSet, SedeViewSet, ParticipanteCarreraViewSet, ColegioViewSet
+from .viewsets import EstudioViewSet, ParticipanteViewSet, CarreraViewSet, SedeViewSet, ParticipanteCarreraViewSet, ColegioViewSet, EdicionViewSet
 from rest_framework_simplejwt import views as jwt_views
 
 router = routers.SimpleRouter()
@@ -11,6 +11,7 @@ router.register('sedes', SedeViewSet)
 router.register('colegios', ColegioViewSet)
 router.register('participantecarreras', ParticipanteCarreraViewSet)
 router.register('estudios', EstudioViewSet)
+router.register('ediciones', EdicionViewSet)
 
 urlpatterns = [
     path('login/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),

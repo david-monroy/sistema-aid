@@ -24,6 +24,7 @@
               <div class="form-group">
                 <v-text-field
                   v-model="form.password"
+                  type="password"
                   label="Contraseña"
                   required
                   :rules='[rules.required]'
@@ -42,6 +43,7 @@
 </template>
 
 <script>
+import swal from 'sweetalert'
 export default {
   data() {
       return {
@@ -67,7 +69,7 @@ export default {
       if (validatedForm){
           await this.$store.dispatch("users/authorize", this.form);
           this.error = this.$store.getters["users/getError"].error;
-          if (this.error !== "") console.log('error');
+          if (this.error !== "") swal("Las credenciales son inválidas", "", "error");
           else this.$router.push("/inicio");
       }
     },

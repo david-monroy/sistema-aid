@@ -2,9 +2,10 @@
   <v-container fluid elevation="0" class="nav-separator">
     <v-row no-gutters justify="center">
       <v-col cols="12" md="8" align="center">
+        <h3 class="primary--text mx-auto mb-6 mt-0 md=8">Agregar un nuevo estudio</h3>
         <v-stepper v-model="pasoActual">
           <v-stepper-header class="third accent-1">
-            <v-stepper-step step="1" 
+            <v-stepper-step step="1"
             :complete="pasoActual>1">
             Ficha Técnica
             </v-stepper-step>
@@ -32,8 +33,7 @@
 
             <v-divider></v-divider>
 
-            <v-stepper-step step="5"
-            :complete="pasoActual>5">
+            <v-stepper-step step="5">
             Flujo de ejecución
             </v-stepper-step>
             
@@ -99,6 +99,7 @@ export default {
           swal("El estudio no pudo ser agregado", "", "error")
       }
     }
+
   }
 };
 </script>

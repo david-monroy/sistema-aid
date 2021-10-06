@@ -6,7 +6,7 @@
         v-model="valid"
         lazy-validation
       >
-        <v-row class="pb-0 mb-0 form-row" >
+        <v-row class="pb-0 mb-0 form-row mt-4" >
             <v-col md="2" cols="12" class="py-0">
                 <div class="form-group">
                     <v-text-field
@@ -34,11 +34,15 @@
         <v-row class="pb-0 mb-0 form-row" >
             <v-col md="12" cols="12" class="py-0">
                 <div class="form-group">
-                    <v-text-field
-                        v-model="form.antecendentes"
-                        dense
-                        label="Antecedentes del estudio"
-                    ></v-text-field>
+                    <v-textarea
+                    v-model="form.antecedentes"
+                    dense
+                    label="Antecedentes del estudio"
+                    :rules='[rules.textos]'
+                    auto-grow
+                    counter
+                    rows="2"
+                    ></v-textarea>
                 </div>
             </v-col>
         </v-row>
@@ -46,27 +50,15 @@
         <v-row class="pb-0 mb-0 form-row" >
             <v-col md="12" cols="12" class="py-0">
                 <div class="form-group">
-                    <v-text-field
-                        v-model="form.objetivoNegocio"
-                        label="Objetivo del negocio *"
-                        required
-                        dense
-                        :rules='[rules.required]'
-                    ></v-text-field>
-                </div>
-            </v-col>
-        </v-row>
-
-        <v-row class="pb-0 mb-0 form-row" >
-            <v-col md="12" cols="12" class="py-0">
-                <div class="form-group">
-                    <v-text-field
-                        v-model="form.objetivoOrganizacion"
-                        label="Objetivo de la Organización *"
-                        required
-                        dense
-                        :rules='[rules.required]'
-                    ></v-text-field>
+                    <v-textarea
+                    v-model="form.objetivoNegocio"
+                    dense
+                    label="Objetivo del negocio/organización *"
+                    :rules='[rules.required, rules.textos]'
+                    counter
+                    auto-grow
+                    rows="2"
+                    ></v-textarea>
                 </div>
             </v-col>
         </v-row>
@@ -79,7 +71,7 @@
                         label="Población objetivo *"
                         required
                         dense
-                        :rules='[rules.required]'
+                        :rules='[rules.required, rules.poblacion]'
                     ></v-text-field>
                 </div>
             </v-col>
@@ -96,6 +88,7 @@
                             v-bind="attrs"
                             v-on="on"
                             dense
+                            type="number"
                         ></v-text-field>
                          </template>
                         <span>Período académico de la UCAB</span>
@@ -112,6 +105,7 @@
                             v-model="form.totalMuestra"
                             label="Total de la muestra * "
                             required
+                            type="number"
                             :rules='[rules.required,rules.muestra]'
                             v-bind="attrs"
                             v-on="on"
@@ -211,7 +205,7 @@
                 <v-btn
                     :small="$vuetify.breakpoint.smAndDown"
                     class="primary"
-                    @click="enviarDatos()"
+                    @click="paso2()"
                     :disable=!valid
                 >
                     <p class="mt-3 hidden-sm-and-down">Muestra</p>
@@ -239,7 +233,6 @@ export default {
                 poblacionObjetivo:'', 
                 antecedentes:'', 
                 objetivoNegocio :'',
-                objetivoOrganizacion:'',
                 periodo:'',
                 fechaInicio: moment().format("YYYY-MM-DD"),
                 fechaFin:'',
@@ -255,12 +248,17 @@ export default {
                 (!!value && value !== "" && value !== undefined) || "Este campo es requerido",
                 muestra: (value) =>
                 (!!value && value > 0) || "La muestra debe ser mayor a 0",
+                textos: (value) => 
+                (value.length <= 280) || "El texto es demasiado largo",
+                poblacion: (value) => 
+                (value.length <= 50) || "El texto es demasiado largo",
+
             }
         }
     },
     computed: {},
     methods: {
-        enviarDatos() {
+        paso2() {
             let validatedForm = this.$refs.registerForm.validate();
 
             if (validatedForm){
@@ -268,10 +266,9 @@ export default {
                     swal("La fecha fin del estudio debe ser mayor a la fecha de inicio", "", "error")
                 }
                 else {
-                    EventBus.$emit("ficha-tecnica",this.form)
+                    EventBus.$emit("paso2",this.form)
                 }
-            }
-                
+            }   
         },  
         actualizarFecha(){
             this.form.fechaFin = ''
@@ -279,8 +276,7 @@ export default {
         goRoute(route) {
             this.$router.push("/" + route);
         },
-    },
-    mounted(){}
+    }
 }
 </script>
 

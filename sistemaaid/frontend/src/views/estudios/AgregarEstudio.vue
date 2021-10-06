@@ -33,20 +33,27 @@
 
             <v-divider></v-divider>
 
-            <v-stepper-step step="5"
-            >
+            <v-stepper-step step="5">
             Flujo de ejecución
             </v-stepper-step>
             
           </v-stepper-header>
 
          <v-stepper-items>
-            <v-stepper-content step="1">
+            <v-stepper-content step="1" >
               <FichaTecnica></FichaTecnica>
             </v-stepper-content>
-
-            <v-stepper-content step="2">
-              <FichaTecnica></FichaTecnica>
+            <v-stepper-content step="2" >
+              <h3>Proximamente</h3>
+            </v-stepper-content>
+            <v-stepper-content step="3" >
+              <h3>Proximamente</h3>
+            </v-stepper-content>
+            <v-stepper-content step="4" >
+              <h3>Proximamente</h3>
+            </v-stepper-content>
+            <v-stepper-content step="5" >
+              <h3>Proximamente</h3>
             </v-stepper-content>
           </v-stepper-items> 
         </v-stepper>
@@ -72,7 +79,11 @@ export default {
   },
 
   created() {
-    EventBus.$on("ficha-tecnica", (data) => {
+    EventBus.$on("paso2", (data) => {
+        this.pasoActual += 1;  
+        console.log(data)
+    }),
+    EventBus.$on("registrar", (data) => {
         this.insertarEstudio(data);  
     })
   },

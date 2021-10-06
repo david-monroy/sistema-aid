@@ -1,22 +1,27 @@
 <template>
-  <div id="app">
-    <router-view/>
-  </div>
+  <v-app>
+
+    <v-main>
+      <navbar id="navbar" style="z-index: 100; position: fixed; width: 100%" v-if="estaLogueado() == true"></navbar>
+      <router-view/>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
+import Navbar from "./components/Navbar.vue";
+import jwt from "../src/common/jwt.service";
 export default {
-  name: 'App'
-}
+  name: 'App',
+  components: { Navbar },
+  data: () => ({
+    //
+  }),
+  methods: {
+    estaLogueado() {
+      var token = jwt.isTokenValid();
+      return token
+    },
+  },
+};
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>

@@ -48,7 +48,6 @@ const actions = {
       jwt.saveToken(response.access);
       commit("set_user", payload);
     } catch (e) {
-      console.log (e)
       commit("set_error_message", e);
     }
   }

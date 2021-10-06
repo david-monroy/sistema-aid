@@ -59,8 +59,10 @@
 
 import FichaTecnica from "../../components/estudios/FichaTecnica.vue";
 import { EventBus } from "../../main.js";
-import axios from 'axios'
 import swal from 'sweetalert'
+import Repository from "../../services/repositories/repositoryFactory";
+const EstudiosRepository = Repository.get("Estudios");
+
 export default {
   data: () => ({
     pasoActual: 1
@@ -77,26 +79,15 @@ export default {
 
   methods:{
     async insertarEstudio(data){
-      const estudio_path = 'http://localhost:8000/api/v1/estudios/'
-      await axios.post(estudio_path, data).then((response) => {
-          data.estudio = response.data.id;
-          this.insertarEdicion(data)
-        })
-        .catch((err) => {
-          console.log(err)
-          swal("El código del estudio está duplicado", "", "error")
-        })
-    },
-    async insertarEdicion(data){
-      const edicion_path = 'http://localhost:8000/api/v1/ediciones/'
-      await axios.post(edicion_path, data).then((response) => {
-          swal("Estudio creado satisfactoriamente", "", "success")
-          this.pasoActual = 2; 
-        })
-        .catch((err) => {
-          console.log(err)
-          swal("Estudio no pudo ser creado", "", "error")
-        })
+      try{
+        console.log('entro a insertarEstudio')
+        await EstudiosRepository.agregar(data);
+        swal("El estudio ha sido agregado satisfactoriamente", "", "success")
+      }
+      catch(err){
+        console.log(err)
+          swal("El estudio no pudo ser agregado", "", "error")
+      }
     }
 
   }

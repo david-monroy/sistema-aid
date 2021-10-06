@@ -59,8 +59,9 @@
 
 import InformacionGeneral from "../../components/estudios/InformacionGeneral.vue";
 import { EventBus } from "../../main.js";
-import axios from 'axios'
 import swal from 'sweetalert'
+import Repository from "../../services/repositories/repositoryFactory";
+const EdicionesRepository = Repository.get("Ediciones");
 export default {
   data: () => ({
     pasoActual: 1
@@ -78,15 +79,15 @@ export default {
 
   methods:{
     async insertarEdicion(data){
-      const edicion_path = 'http://localhost:8000/api/v1/ediciones/'
-      await axios.post(edicion_path, data).then((response) => {
-          swal("Edición agregada satisfactoriamente", "", "success")
-          this.pasoActual = 2; 
-        })
-        .catch((err) => {
-          console.log(err)
-          swal("El código de la edición está duplicado", "", "error")
-        })
+      try{
+                console.log('entro a insertaredicion')
+        await EdicionesRepository.agregar(data);
+        swal("La edición ha sido agregada satisfactoriamente", "", "success")
+      }
+      catch(err){
+        console.log(err)
+          swal("La edición no se pudo agregar", "", "error")
+      }
     }
 
   }

@@ -24,7 +24,7 @@
 
             <li class="nav-item">
                 <a class="nav-link">
-                <font-awesome-icon icon="sign-out-alt" />     Cerrar sesión
+                <v-icon class="sign-out-alt" />     Cerrar sesión
                 </a>
             </li>
           </div>

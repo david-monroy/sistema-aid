@@ -49,7 +49,12 @@ const actions = {
     } catch (e) {
       commit("set_error_message", e);
     }
-  }
+  },
+
+  cerrarSesion({ commit }) {
+    commit("reset");
+    jwt.destroyToken();
+  },
 };
 
 export default {

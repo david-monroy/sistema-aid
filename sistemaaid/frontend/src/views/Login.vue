@@ -70,7 +70,7 @@ export default {
           await this.$store.dispatch("users/authorize", this.form);
           this.error = this.$store.getters["users/getError"].error;
           if (this.error !== "") swal("Las credenciales son inválidas", "", "error");
-          else this.$router.push("/Home");
+          else this.$router.push("/inicio");
       }
     },
   }

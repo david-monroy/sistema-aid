@@ -1,83 +1,114 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Dashboard from '@/views/Dashboard'
-import ListaParticipante from '@/views/participantes/ListaParticipante'
-import AgregarParticipante from '@/views/participantes/AgregarParticipante'
-import EditarParticipante from '@/components/Participante/EditarParticipante'
-import EditarParticipanteMasivo from '@/components/Participante/EditarParticipanteMasivo'
-import ParticipanteManual from '@/components/Participante/ParticipanteManual'
-import ParticipanteMasivo from '@/components/Participante/ParticipanteMasivo'
-import ListaEstudios from '@/views/estudios/ListaEstudios'
-import MenuAgregarEstudio from '@/views/estudios/MenuAgregarEstudio'
-import AgregarEstudio from '@/views/estudios/AgregarEstudio'
-import AgregarEdicion from '@/views/estudios/AgregarEdicion'
-import Login from '@/views/Login'
+import jwt from '../common/jwt.service'
+import store from '../store/index'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'Login',
-      component: Login
+      redirect: '/login'
     },
     {
-    path: '/Home',
+      path: '/login',
+      name: 'Login',
+      component: () => import("../views/Login.vue"),
+      meta: {
+        hideForAuth: true
+      }
+    },
+    {
+      path: '/inicio',
       name: 'Dashboard',
-      component: Dashboard
+      meta: { requiresAuth: true },
+      component: () => import("../views/Dashboard.vue")
     },
     {
       path: '/participantes',
       name: 'ListaParticipante',
-      component: ListaParticipante
+      meta: { requiresAuth: true },
+      component: () => import("../views/participantes/ListaParticipante.vue")
     },
     {
       path: '/participantes/agregar',
       name: 'AgregarParticipante',
-      component: AgregarParticipante
+      meta: { requiresAuth: true },
+      component: () => import("../views/participantes/AgregarParticipante.vue")
     },
     {
       path: '/participantes/:id/editar',
       name: 'EditarParticipante',
-      component: EditarParticipante
+      meta: { requiresAuth: true },
+      component: () => import("../components/Participante/EditarParticipante.vue")
     },
     {
       path: `/participantes/agregar/manual`,
       name: 'ParticipanteManual',
-      component: ParticipanteManual
+      meta: { requiresAuth: true },
+      component: () => import("../components/Participante/ParticipanteManual.vue")
     },
     {
       path: `/participantes/agregar/masivo`,
       name: 'ParticipanteMasivo',
-      component: ParticipanteMasivo
+      meta: { requiresAuth: true },
+      component: () => import("../components/Participante/ParticipanteMasivo.vue")
     },
     {
       path: `/participantes/editar/masivo`,
       name: 'EditarParticipanteMasivo',
-      component: EditarParticipanteMasivo
+      meta: { requiresAuth: true },
+      component: () => import("../components/Participante/EditarParticipanteMasivo.vue")
     },
     {
       path: '/estudios',
       name: 'ListaEstudios',
-      component: ListaEstudios
+      meta: { requiresAuth: true },
+      component: () => import("../views/estudios/ListaEstudios.vue")
     },
     {
       path: `/estudios/agregar`,
       name: 'MenuAgregarEstudio',
-      component: MenuAgregarEstudio
+      meta: { requiresAuth: true },
+      component: () => import("../views/estudios/MenuAgregarEstudio.vue")
     },
     {
       path: `/estudios/agregarEstudio`,
       name: 'AgregarEstudio',
-      component: AgregarEstudio
+      meta: { requiresAuth: true },
+      component: () => import("../views/estudios/AgregarEstudio.vue")
     },
     {
       path: `/estudios/agregarEdicion`,
       name: 'AgregarEdicion',
-      component: AgregarEdicion
+      meta: { requiresAuth: true },
+      component: () => import("../views/estudios/AgregarEdicion.vue")
     },
 
   ],
-  mode: 'history'
+  mode: 'history',
+
 })
+
+router.beforeEach((to, from, next) => {
+  to.matched.some((route) => {
+    if (!jwt.isTokenValid()) {
+      store.dispatch("logout");
+      if (route.meta.requiresAuth) {
+        jwt.destroyToken();
+        next({ name: "Login" });
+      } else {
+        next();
+      }
+    } else {
+      if (route.meta.hideForAuth) {
+        next({ name: "Dashboard" });
+      } else {
+      next();
+      }
+    };
+});
+});
+
+export default router

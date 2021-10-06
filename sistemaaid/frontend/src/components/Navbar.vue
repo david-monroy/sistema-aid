@@ -24,12 +24,8 @@
 
             <li class="nav-item">
                 <a class="nav-link">
-<<<<<<< HEAD
-                <v-icon class="sign-out-alt" />     Cerrar sesión
-=======
                   {{activeUser()}}
                 <v-icon color="white" @click="cerrarSesion">fas fa-sign-out-alt</v-icon>
->>>>>>> 652b92a2c3334a41f303b3e57a407fb3df766a0a
                 </a>
             </li>
           </div>

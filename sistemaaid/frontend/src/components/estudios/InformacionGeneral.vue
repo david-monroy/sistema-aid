@@ -39,6 +39,7 @@
                         <v-text-field
                             v-model="form.periodo"
                             label="Periodo"
+                            type="number"
                             v-bind="attrs"
                             v-on="on"
                         ></v-text-field>
@@ -54,8 +55,9 @@
                         <template v-slot:activator="{ on, attrs }">
                             <v-text-field
                             v-model="form.totalMuestra"
-                            label="Total de la muestra *"
+                            label="Tamaño muestral *"
                             required
+                            type="number"
                             :rules='[rules.required,rules.muestra]'
                             v-bind="attrs"
                             v-on="on"
@@ -179,7 +181,8 @@
 import { EventBus } from "../../main.js";
 import moment from "moment";
 import swal from 'sweetalert';
-import axios from 'axios'
+import Repository from "../../services/repositories/repositoryFactory";
+const EstudiosRepository = Repository.get("Estudios");
 
 export default {
     data(){
@@ -227,14 +230,13 @@ export default {
         goRoute(route) {
             this.$router.push("/" + route);
         },
-        getEstudios(){
-            const path = 'http://localhost:8000/api/v1/estudios/'
-            axios.get(path).then((response) => {
-                this.estudios = response.data
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+        async getEstudios(){
+            try{
+                this.estudios = await EstudiosRepository.consultar();
+            }
+            catch(err){
+                console.log(err)   
+            }
         },
     },
     mounted(){

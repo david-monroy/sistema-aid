@@ -91,7 +91,6 @@ export default {
   methods:{
     async insertarEstudio(data){
       try{
-        console.log('entro a insertarEstudio')
         await EstudiosRepository.agregar(data);
         swal("El estudio ha sido agregado satisfactoriamente", "", "success")
       }

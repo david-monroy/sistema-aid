@@ -124,7 +124,7 @@
                   <v-card-title class="body-1 mx-auto text-center">¿Seguro que desea eliminar a {{participanteAEliminarNombre}}?</v-card-title>
                   <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn class="secondary--text" text @click="cerrarEliminar">Cancelar</v-btn>
+                    <v-btn class="secondary--text" text @click="popupEliminar = false">Cancelar</v-btn>
                     <v-btn color="blue darken-1" text @click="eliminarParticipante()">Sí, eliminar</v-btn>
                     <v-spacer></v-spacer>
                   </v-card-actions>
@@ -255,7 +255,13 @@
 </template>
 
 <script>
-import axios from 'axios';
+import swal from 'sweetalert';
+import Repository from "../../services/repositories/repositoryFactory";
+const ParticipantesRepository = Repository.get("Participantes");
+const ParticipanteCarrerasRepository = Repository.get("ParticipanteCarreras");
+const SedesRepository = Repository.get("Sedes");
+const CarrerasRepository = Repository.get("Carreras");
+const ColegiosRepository = Repository.get("Colegios");
 export default {
 name: "ParticipantesView",
   data() {
@@ -336,41 +342,26 @@ name: "ParticipantesView",
       }
     },
     methods: {
-        getParticipantes(){
-            const path = 'http://localhost:8000/api/v1/participantes/'
-            axios.get(path).then((response) => {
-                this.participantes = response.data
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+        async getParticipantes(){
+            this.participantes = await ParticipantesRepository.obtener();
         },
-        getParticipanteCarreras(){
-            const path = 'http://localhost:8000/api/v1/participantecarreras/'
-            axios.get(path).then((response) => {
-                this.participante_carreras = response.data
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+        async getParticipanteCarreras(){
+            this.participante_carreras = await ParticipanteCarrerasRepository.obtener();
         },
         mostrarEliminar(participanteID, participanteNombre){
           this.popupEliminar = true;
           this.participanteAEliminar = participanteID;
           this.participanteAEliminarNombre = participanteNombre;
         },
-        cerrarEliminar(){
-          this.popupEliminar = false;
-        },
-        eliminarParticipante(){
-            const path = `http://localhost:8000/api/v1/participantes/${this.participanteAEliminar}/`
-
-            axios.delete(path).then((res) => {
-                location.href = '/participantes'
-            })
-            .catch((err) => {
-                swal('No es posible eliminar el libro', '', 'error')
-            })
+        async eliminarParticipante(){
+          try{
+            await ParticipantesRepository.eliminar(this.participanteAEliminar)
+            location.href = '/participantes'
+          }
+          catch(err){
+            console.log(err)
+            swal("El participante no pudo ser eliminado", "", "error")
+          }
         },
         editarParticipante(id){
           this.goRoute(`participantes/${id}/editar`);
@@ -396,14 +387,13 @@ name: "ParticipantesView",
         },
 
         async filtrar(){
-          const path = 'http://localhost:8000/api/v1/participantes/filtrar'
-          await axios.post(path, this.form).then((response) => {
-                  this.participantes = response.data
-                })
-                .catch((err) => {
-                    console.log(err)
-                    swal("Participante no pudo ser creado", "", "error")
-                })
+          try{
+            this.participantes = await ParticipantesRepository.filtrar(this.form);
+          }
+          catch(err){
+            console.log(err)
+            swal("La consulta no pudo ser realizada", "", "error")
+          }
         },
 
         async limpiar(){
@@ -411,32 +401,14 @@ name: "ParticipantesView",
           this.getParticipantes();
         },
         
-        getCarreras(){
-            const path = 'http://localhost:8000/api/v1/carreras/'
-            axios.get(path).then((response) => {
-                this.carreras = response.data
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+        async getCarreras(){
+            this.carreras = await CarrerasRepository.obtener();
         },
-        getSedes(){
-            const path = 'http://localhost:8000/api/v1/sedes/'
-            axios.get(path).then((response) => {
-                this.sedes = response.data
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+        async getSedes(){
+            this.sedes = await SedesRepository.obtener();
         },
-        getColegios(){
-            const path = 'http://localhost:8000/api/v1/colegios/'
-            axios.get(path).then((response) => {
-                this.colegios = response.data
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+        async getColegios(){
+            this.colegios = await ColegiosRepository.obtener();
         },
 
         goRoute(route) {

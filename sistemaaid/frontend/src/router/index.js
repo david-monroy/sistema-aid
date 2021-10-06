@@ -11,6 +11,7 @@ import ListaEstudios from '@/views/estudios/ListaEstudios'
 import MenuAgregarEstudio from '@/views/estudios/MenuAgregarEstudio'
 import AgregarEstudio from '@/views/estudios/AgregarEstudio'
 import AgregarEdicion from '@/views/estudios/AgregarEdicion'
+import Login from '@/views/Login'
 
 Vue.use(Router)
 
@@ -18,6 +19,11 @@ export default new Router({
   routes: [
     {
       path: '/',
+      name: 'Login',
+      component: Login
+    },
+    {
+    path: '/Home',
       name: 'Dashboard',
       component: Dashboard
     },

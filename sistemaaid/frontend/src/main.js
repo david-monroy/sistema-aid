@@ -4,10 +4,16 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import BootstrapVue from 'bootstrap-vue'
+<<<<<<< HEAD
 import VueTheMask from 'vue-the-mask'
+=======
+import store from "./store";
+>>>>>>> aid-us1
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import vuetify from './plugins/vuetify'
+
 import vuetify from './plugins/vuetify'
 
 Vue.config.productionTip = false
@@ -19,6 +25,7 @@ export const EventBus = new Vue();
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   vuetify,
   template: '<App/>'

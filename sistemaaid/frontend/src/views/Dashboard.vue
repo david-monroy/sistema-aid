@@ -42,7 +42,7 @@ export default {
         name: "Estudios",
         icon: "fa-file-alt",
         rol: 2,
-        route: "#",
+        route: "estudios",
       },
       {
         id: 2,

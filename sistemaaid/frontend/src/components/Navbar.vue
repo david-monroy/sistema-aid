@@ -10,7 +10,7 @@
 
           <div class="navbar-list">
               <li class="nav-item">
-            <router-link to="#" class="nav-link">Estudios</router-link>
+            <router-link to="/estudios" class="nav-link">Estudios</router-link>
             </li>
             <li class="nav-item">
                 <router-link to="/participantes" class="nav-link">Participantes</router-link>
@@ -24,7 +24,7 @@
 
             <li class="nav-item">
                 <a class="nav-link">
-                <font-awesome-icon icon="sign-out-alt" />     Cerrar sesión
+                <v-icon>fas fa-sign-out-alt</v-icon>   Cerrar sesión
                 </a>
             </li>
           </div>

@@ -237,7 +237,8 @@
 <script>
 import axios from 'axios'
 import swal from 'sweetalert'
-
+import Repository from "../../services/repositories/repositoryFactory";
+const ParticipantesRepository = Repository.get("Participantes");
 export default {
     data(){
         return {
@@ -316,7 +317,6 @@ export default {
       }
     },
     methods: {
-
         formatDate (date) {
             if (!date) return null
             const [year, month, day] = date.split('-')
@@ -328,30 +328,32 @@ export default {
             return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
         },
         async registrarParticipante() {
-            
             let validatedForm = this.$refs.registerForm.validate();
             this.form.fechaNacimiento = this.fechaNacimiento;
-            const participante_path = 'http://localhost:8000/api/v1/participantes/'
-            console.log(this.form)
-            if (validatedForm){
 
+            if (validatedForm){
                 if (this.edad_calculada < 11) {
                     swal("El participante debe ser mayor de 11 años", "", "error") 
                 } else {
+                    // try{
+                        console.log(ParticipantesRepository.agregar(this.form));
+                        swal("Participante creado satisfactoriamente", "", "success")
+                    // }
                     
-                await axios.post(participante_path, this.form).then((response) => {
-                    this.form.participante_id = response.data.id
+                    
+                // await axios.post(participante_path, this.form).then((response) => {
+                //     this.form.participante_id = response.data.id
 
-                    if (this.form.carrera_id && this.form.sede_id) {
-                        this.registrarParticipanteCarrera()
-                    }
-                    swal("Participante creado satisfactoriamente", "", "success")
-                    this.$refs.registerForm.reset();
-                })
-                .catch((err) => {
-                    console.log(err)
-                    swal("Participante no pudo ser creado", "", "error")
-                })
+                //     if (this.form.carrera_id && this.form.sede_id) {
+                //         this.registrarParticipanteCarrera()
+                //     }
+                //     swal("Participante creado satisfactoriamente", "", "success")
+                //     this.$refs.registerForm.reset();
+                // })
+                // .catch((err) => {
+                //     console.log(err)
+                //     swal("Participante no pudo ser creado", "", "error")
+                // })
 
                 }
             }

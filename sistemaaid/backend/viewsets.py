@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from .models import Participante, Carrera, Sede, ParticipanteCarrera, Colegio
-from .serializers import SedeSerializer, CarreraSerializer, ParticipanteCarreraSerializer,ParticipanteSerializer, ColegioSerializer
+from .models import *
+from .serializers import *
 
 class CarreraViewSet(viewsets.ModelViewSet):
     queryset = Carrera.objects.all()
@@ -21,3 +21,9 @@ class ParticipanteViewSet(viewsets.ModelViewSet):
 class ParticipanteCarreraViewSet(viewsets.ModelViewSet):
     queryset = ParticipanteCarrera.objects.all()
     serializer_class = ParticipanteCarreraSerializer
+
+#ESTUDIOS 
+
+class EstudioViewSet(viewsets.ModelViewSet):
+    queryset = Estudio.objects.all()
+    serializer_class = EstudioSerializer

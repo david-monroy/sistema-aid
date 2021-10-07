@@ -208,7 +208,7 @@
                     @click="paso2()"
                     :disable=!valid
                 >
-                    <p class="mt-3 hidden-sm-and-down">Muestra</p>
+                    <p class="mt-3 hidden-sm-and-down">Siguiente</p>
                     <v-icon>mdi-chevron-right</v-icon>
                 </v-btn>
             </v-col>

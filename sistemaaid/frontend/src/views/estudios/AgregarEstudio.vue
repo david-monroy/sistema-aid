@@ -44,7 +44,7 @@
               <FichaTecnica></FichaTecnica>
             </v-stepper-content>
             <v-stepper-content step="2" >
-              <h3>Proximamente</h3>
+              <MuestraPonderada></MuestraPonderada>
             </v-stepper-content>
             <v-stepper-content step="3" >
               <h3>Proximamente</h3>
@@ -65,6 +65,7 @@
 <script>
 
 import FichaTecnica from "../../components/estudios/FichaTecnica.vue";
+import MuestraPonderada from "../../components/estudios/MuestraPonderada.vue";
 import { EventBus } from "../../main.js";
 import swal from 'sweetalert'
 import Repository from "../../services/repositories/repositoryFactory";
@@ -75,7 +76,8 @@ export default {
     pasoActual: 1
   }),
   components: {
-    FichaTecnica
+    FichaTecnica,
+    MuestraPonderada
   },
 
   created() {

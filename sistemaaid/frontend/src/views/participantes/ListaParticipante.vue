@@ -251,6 +251,9 @@
         </v-data-table>
       </v-card>
     </v-col>
+    <div class="crud-buttons mx-auto mt-4">
+      <v-btn color="secondary" class="mx-4" @click="exportarCSV(csvData)">Exportar a CSV</v-btn>
+    </div>
   </v-row>
 </template>
 
@@ -339,7 +342,13 @@ name: "ParticipantesView",
             if (par_car.carrera == carrera.id) par_car.carrera = carrera.nombre
           });
         });
-      }
+      },
+      csvData() {
+      return this.participantes.map(item => ({
+        ...item,
+        colegio: item.colegio.nombre || null
+      }));
+    }
     },
     methods: {
         async getParticipantes(){
@@ -394,6 +403,23 @@ name: "ParticipantesView",
             console.log(err)
             swal("La consulta no pudo ser realizada", "", "error")
           }
+        },
+
+        exportarCSV(arrData){
+          let csvContent = "data:text/csv;charset=utf-8,";
+          csvContent += [
+            Object.keys(arrData[0]).join(";"),
+            ...arrData.map(item => Object.values(item).join(";"))
+          ]
+            .join("\n")
+            .replace(/(^\[)|(\]$)/gm, "");
+
+          const data = encodeURI(csvContent);
+          const link = document.createElement("a");
+          link.setAttribute("href", data);
+          link.setAttribute("download", "participantes.csv");
+          link.click();
+          console.log(arrData)
         },
 
         async limpiar(){

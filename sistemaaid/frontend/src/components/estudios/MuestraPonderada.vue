@@ -51,6 +51,14 @@
         </v-row>
       </v-form>
     </div>
+
+    <div>
+        <v-data-table
+      :items="muestraPonderada"
+      class="elevation-1"
+    >
+    </v-data-table>
+    </div>
 </div>
 </template>
 
@@ -59,13 +67,15 @@
 <script>
 import swal from 'sweetalert'
 import Repository from "../../services/repositories/repositoryFactory";
+import muestraPonderadaRepository from '../../services/repositories/Estudios/muestraPonderada.repository';
 const MuestraPonderadaRepository = Repository.get("MuestraPonderada");
 
 export default {
     data(){
         return {
             file: "",
-            valid:true
+            valid:true,
+            muestraPonderada: [],
         }
     },
     methods: {
@@ -73,7 +83,8 @@ export default {
             const formData = new FormData();
             formData.append('file', this.file)
             try{
-                await MuestraPonderadaRepository.cargarMuestra(formData);  
+                this.muestraPonderada = await MuestraPonderadaRepository.cargarMuestra(formData);
+                console.log (this.muestraPonderada)  
             }
             catch(err){
                 console.log(err)

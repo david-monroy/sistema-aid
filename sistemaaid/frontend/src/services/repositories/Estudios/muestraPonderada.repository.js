@@ -10,7 +10,7 @@ const headers =  {
 export default {
   async cargarMuestra(archivo) {
     let response = await conn.post(`/muestraPonderada/cargar`, archivo, headers);
-    return response;
+    return response.data;
   },
 
 };

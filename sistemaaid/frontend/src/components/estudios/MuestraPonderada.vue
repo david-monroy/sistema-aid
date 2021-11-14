@@ -7,7 +7,7 @@
         lazy-validation
       >
         <v-row class="pb-0 mb-0 form-row" >
-            <v-col md="12" cols="12" class="py-0">
+            <v-col md="10" cols="10" class="py-0">
                 <div class="form-group">
                     <v-file-input
                         v-model="file"
@@ -16,8 +16,29 @@
                     ></v-file-input>
                 </div>
             </v-col>
+            <v-col md="2" cols="2" align="end">
+                <v-btn
+                    :small="$vuetify.breakpoint.smAndDown"
+                    class="primary"
+                    @click="cargarCSV()"
+                    :disable=!valid
+                >
+                    <p class="mt-3 hidden-sm-and-down">Cargar</p>
+                    <v-icon>mdi-chevron-right</v-icon>
+                </v-btn>
+            </v-col>
         </v-row>
-        <v-row>
+            <div v-if="muestraPonderada.length > 0">
+                <v-data-table
+                :headers="getHeaders()"
+                :items="muestraPonderada"
+                hide-default-footer
+                :items-per-page="-1"
+                class="elevation-1"
+                >
+                </v-data-table>
+            </div>
+        <v-row class="mt-2">
             <v-col align="begin">
                 <v-btn
                     :small="$vuetify.breakpoint.smAndDown"
@@ -52,13 +73,7 @@
       </v-form>
     </div>
 
-    <div>
-        <v-data-table
-      :items="muestraPonderada"
-      class="elevation-1"
-    >
-    </v-data-table>
-    </div>
+   
 </div>
 </template>
 
@@ -67,7 +82,6 @@
 <script>
 import swal from 'sweetalert'
 import Repository from "../../services/repositories/repositoryFactory";
-import muestraPonderadaRepository from '../../services/repositories/Estudios/muestraPonderada.repository';
 const MuestraPonderadaRepository = Repository.get("MuestraPonderada");
 
 export default {
@@ -90,6 +104,17 @@ export default {
                 console.log(err)
                 swal("No se pudo procesar la muestra", "", "error")
             } 
+        },
+        getHeaders(){
+            var headers = []
+            for (var key in this.muestraPonderada[0]){      
+                var head = {
+                   text: key, 
+                   value: key
+                }
+                headers.push(head)
+            }
+            return headers
         },
         paso1() {
             let validatedForm = this.$refs.registerForm.validate();

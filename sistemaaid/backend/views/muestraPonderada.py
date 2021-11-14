@@ -22,7 +22,7 @@ def cargarMuestra(request):
         df['Porcentaje ' + df.columns.values[column]] = (df.iloc[:, column]/df['Total']*100).round()
         df['Muestra ' + df.columns.values[column]] = (df['Muestra Ponderada']*df['Porcentaje ' + df.columns.values[column]]/100).round()
 
-    return HttpResponse(df.to_dict(orient='records'))
+    return HttpResponse(df.to_json(orient="table"))
 
 def insertarMuestra (request):
     path = request.FILES['file']

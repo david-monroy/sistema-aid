@@ -43,7 +43,7 @@
                 <v-btn
                     :small="$vuetify.breakpoint.smAndDown"
                     class="primary"
-                    @click="paso1()"
+                    @click="pasoAnterior()"
                     :disable=!valid
                 >
                 <p class="mt-3 hidden-sm-and-down">Atrás</p>
@@ -62,7 +62,7 @@
                 <v-btn
                     :small="$vuetify.breakpoint.smAndDown"
                     class="primary"
-                    @click="cargarCSV()"
+                    @click="insertarInfo()"
                     :disable=!valid
                 >
                     <p class="mt-3 hidden-sm-and-down">Siguiente</p>
@@ -71,9 +71,7 @@
             </v-col>
         </v-row>
       </v-form>
-    </div>
-
-   
+    </div> 
 </div>
 </template>
 
@@ -82,6 +80,7 @@
 <script>
 import swal from 'sweetalert'
 import Repository from "../../services/repositories/repositoryFactory";
+import { EventBus } from "../../main.js";
 const MuestraPonderadaRepository = Repository.get("MuestraPonderada");
 
 export default {
@@ -98,7 +97,6 @@ export default {
             formData.append('file', this.file)
             try{
                 this.muestraPonderada = await MuestraPonderadaRepository.cargarMuestra(formData);
-                console.log (this.muestraPonderada)  
             }
             catch(err){
                 console.log(err)
@@ -116,32 +114,17 @@ export default {
             }
             return headers
         },
-        paso1() {
-            let validatedForm = this.$refs.registerForm.validate();
-
-            if (validatedForm){
-                if (this.form.fechaInicio > this.form.fechaFin){
-                    swal("La fecha fin del estudio debe ser mayor a la fecha de inicio", "", "error")
-                }
-                else {
-                    EventBus.$emit("paso2",this.form)
-                }
-            }   
+        pasoAnterior() {
+            EventBus.$emit("pasoAnterior",this.form)
         },  
-        paso3() {
-            let validatedForm = this.$refs.registerForm.validate();
-
-            if (validatedForm){
-                if (this.form.fechaInicio > this.form.fechaFin){
-                    swal("La fecha fin del estudio debe ser mayor a la fecha de inicio", "", "error")
-                }
-                else {
-                    EventBus.$emit("paso2",this.form)
-                }
-            }   
-        },  
+        pasoSiguiente() {
+            EventBus.$emit("pasoSiguiente",this.form)
+        }, 
         goRoute(route) {
             this.$router.push("/" + route);
+        },
+        async insertarInfo(){
+            EventBus.$emit("registrar",this.muestraPonderada)
         },
     },
 }

@@ -13,4 +13,9 @@ export default {
     return response.data;
   },
 
+  async insertarMuestra(data) {
+    let response = await conn.post(`/muestraPonderada/insertar`, data, headers);
+    return response;
+  },
+
 };

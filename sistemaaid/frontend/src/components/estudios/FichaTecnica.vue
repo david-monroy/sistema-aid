@@ -205,7 +205,7 @@
                 <v-btn
                     :small="$vuetify.breakpoint.smAndDown"
                     class="primary"
-                    @click="paso2()"
+                    @click="pasoSiguiente()"
                     :disable=!valid
                 >
                     <p class="mt-3 hidden-sm-and-down">Siguiente</p>
@@ -258,7 +258,7 @@ export default {
     },
     computed: {},
     methods: {
-        paso2() {
+        pasoSiguiente() {
             let validatedForm = this.$refs.registerForm.validate();
 
             if (validatedForm){
@@ -266,7 +266,7 @@ export default {
                     swal("La fecha fin del estudio debe ser mayor a la fecha de inicio", "", "error")
                 }
                 else {
-                    EventBus.$emit("paso2",this.form)
+                    EventBus.$emit("pasoSiguiente",this.form)
                 }
             }   
         },  

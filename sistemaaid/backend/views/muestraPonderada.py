@@ -2,6 +2,8 @@ from django.http import HttpResponse
 import pandas as pd
 from backend.models import MuestraPonderada, modelEdicion
 from django.views.decorators.csrf import csrf_exempt
+import json
+
 # Create your views here.
 @csrf_exempt
 def cargarMuestra(request):
@@ -24,26 +26,32 @@ def cargarMuestra(request):
 
     return HttpResponse(df.to_json(orient="table"))
 
+@csrf_exempt
 def insertarMuestra (request):
-    path = request.FILES['file']
-    df = pd.read_csv(path, header=0, encoding='ISO-8859-1', delimiter=',')
+    data = request.body.decode('utf8').replace("'", '"')
+    df = pd.DataFrame(json.loads(data))
     cantidadFilas = df.shape[0]
     cantidadColumnas = df.shape[1]
     muestras = []
+    for column in range (1,df.shape[1]):
+        if df.columns.values[column] == "Total":
+            cantidadColumnas = column 
+            break
+
     for row in range(cantidadFilas):
-        for column in range(1,cantidadColumnas):
-            MuestraPonderada(
-                    primeraCondicion = df.loc[row][0],
-                    segundaCondicion = df.columns.values[column],
-                    muestra = df.loc[row][column + 7],
-                    poblacion = df.loc[row][column],
-                    edicion = modelEdicion.Edicion.objects.get(pk=1)
-            )
-            muestras.append(MuestraPonderada)
+        for column in range(2,cantidadColumnas):
+            muestras.append(MuestraPonderada(
+                primeraCondicion=df.loc[row][1],
+                segundaCondicion=df.columns.values[column],
+                poblacion=df.loc[row][column], 
+                muestra = df.loc[row]['Muestra ' + df.columns.values[column]],
+                edicion = modelEdicion.Edicion.objects.get(pk=1)
+            ))
 
-
-    MuestraPonderada.objects.bulk_create(muestras)
-    return HttpResponse(df.to_json())
+    print(muestras)
+    
+    msj =  MuestraPonderada.objects.bulk_create(muestras)
+    return HttpResponse()
 
 
     

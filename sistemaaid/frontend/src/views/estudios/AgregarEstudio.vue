@@ -70,10 +70,13 @@ import { EventBus } from "../../main.js";
 import swal from 'sweetalert'
 import Repository from "../../services/repositories/repositoryFactory";
 const EstudiosRepository = Repository.get("Estudios");
+const MuestraPonderadaRepository = Repository.get("MuestraPonderada");
 
 export default {
   data: () => ({
-    pasoActual: 1
+    pasoActual: 1,
+    fichaTecnica: [],
+    muestra: []
   }),
   components: {
     FichaTecnica,
@@ -81,12 +84,22 @@ export default {
   },
 
   created() {
-    EventBus.$on("paso2", (data) => {
-        this.pasoActual += 1;  
-        console.log(data)
+    EventBus.$on("pasoSiguiente", (data) => { 
+        if (this.pasoActual == 1 ) {
+          this.fichaTecnica = data
+        }
+        if (this.pasoActual == 2){
+          this.muestra = data
+        }
+        this.pasoActual += 1; 
     }),
+
+    EventBus.$on("pasoAnterior", () => {
+        this.pasoActual -= 1;  
+    }),
+
     EventBus.$on("registrar", (data) => {
-        this.insertarEstudio(data);  
+        this.insertarMuestra(data);  
     })
   },
 
@@ -98,7 +111,17 @@ export default {
       }
       catch(err){
         console.log(err)
-          swal("El estudio no pudo ser agregado", "", "error")
+        swal("El estudio no pudo ser agregado", "", "error")
+      }
+    },
+    async insertarMuestra(data){
+      try{
+        await MuestraPonderadaRepository.insertarMuestra(data);
+        swal("La muestra ha sido agregada satisfactoriamente", "", "success")
+      }
+      catch(err){
+        console.log(err)
+        swal("La muestra no pudo ser agregada", "", "error")
       }
     }
 

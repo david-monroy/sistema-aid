@@ -35,6 +35,11 @@ def agregar_masivo(request):
                 correoUcab = row[6],
                 fechaNacimiento = row[7],
                 colegio = modelColegio.Colegio.objects.get(pk=row[8]),
+                instagram = row[12],
+                twitter = row[13],
+                facebook = row[14],
+                tiktok = row[15],
+                linkedin = row[16],
             )
 
             nuevo_participante_carrera = modelParticipanteCarrera.ParticipanteCarrera.objects.create(
@@ -92,6 +97,11 @@ def editar_masivo(request):
                 correoUcab = row[6],
                 fechaNacimiento = row[7],
                 colegio = modelColegio.Colegio.objects.get(pk=row[8]),
+                instagram = row[12],
+                twitter = row[13],
+                facebook = row[14],
+                tiktok = row[15],
+                linkedin = row[16],
             )
 
             nuevo_participante_carrera = modelParticipanteCarrera.ParticipanteCarrera.objects.create(

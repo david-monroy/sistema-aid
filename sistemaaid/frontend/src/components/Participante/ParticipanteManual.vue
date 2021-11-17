@@ -34,50 +34,7 @@
           </v-row>
 
           <v-row class="pb-0 mb-0 form-row" >
-            <v-col md="6" cols="12" class="py-0">
-                <div class="form-group">
-                    <v-text-field
-                        v-model="form.correo"
-                        label="Correo electrónico"
-                        required
-                        :rules='[rules.emailRules]'
-                    ></v-text-field>
-                </div>
-            </v-col>
-            <v-col md="6" cols="12" class="py-0">
-                <div class="form-group">
-                    <v-text-field
-                        v-model="form.correoUcab"
-                        label="Correo UCAB"
-                    ></v-text-field>
-                </div>
-            </v-col>
-          </v-row>
-        <v-row class="pb-0 mb-0 form-row" >
-            <v-col md="6" cols="12" class="py-0">
-                <div class="form-group">
-                    <v-text-field
-                        v-model="form.telfPrincipal"
-                        type="number"
-                        label="Teléfono primario"
-                        required
-                        :rules='[rules.required, rules.PhoneRules]'
-                    ></v-text-field>
-                </div>
-            </v-col>
-            <v-col md="6" cols="12" class="py-0">
-                <div class="form-group">
-                    <v-text-field
-                        v-model="form.telfSecundario"
-                        label="Teléfono secundario"
-                        type='number'
-                    ></v-text-field>
-                </div>
-            </v-col>
-          </v-row>
-
-          <v-row class="pb-0 mb-0 form-row" >
-                <v-col md="4" cols="12" class="py-0">
+            <v-col md="4" cols="12" class="py-0">
                     <v-menu
                         ref="menu1"
                         v-model="menu1"
@@ -108,7 +65,26 @@
                         ></v-date-picker>
                     </v-menu>
                 </v-col>
-              
+            <v-col md="4" cols="12" class="py-0">
+                <div class="form-group">
+                    <v-text-field
+                        v-model="form.correo"
+                        label="Correo electrónico"
+                        required
+                        :rules='[rules.emailRules]'
+                    ></v-text-field>
+                </div>
+            </v-col>
+            <v-col md="4" cols="12" class="py-0">
+                <div class="form-group">
+                    <v-text-field
+                        v-model="form.correoUcab"
+                        label="Correo UCAB"
+                    ></v-text-field>
+                </div>
+            </v-col>
+          </v-row>
+        <v-row class="pb-0 mb-0 form-row" >
             <v-col md="4" cols="12" class="py-0">
                 <div class="form-group" style="display: flex; justify-content: center; width: 100%">
                     <v-select
@@ -123,8 +99,47 @@
             <v-col md="4" cols="12" class="py-0">
                 <div class="form-group">
                     <v-text-field
-                        v-model="form.lugar"
+                        v-model="form.telfPrincipal"
+                        type="number"
+                        label="Teléfono primario"
+                        required
+                        :rules='[rules.required, rules.PhoneRules]'
+                    ></v-text-field>
+                </div>
+            </v-col>
+            <v-col md="4" cols="12" class="py-0">
+                <div class="form-group">
+                    <v-text-field
+                        v-model="form.telfSecundario"
+                        label="Teléfono secundario"
+                        type='number'
+                    ></v-text-field>
+                </div>
+            </v-col>
+          </v-row>
+
+          <v-row class="pb-0 mb-0 form-row" >
+            <v-col md="4" cols="12" class="py-0">
+                <div class="form-group">
+                    <v-text-field
+                        v-model="form.estado"
+                        label="Estado"
+                    ></v-text-field>
+                </div>
+            </v-col>
+            <v-col md="4" cols="12" class="py-0">
+                <div class="form-group">
+                    <v-text-field
+                        v-model="form.municipio"
                         label="Municipio"
+                    ></v-text-field>
+                </div>
+            </v-col>  
+            <v-col md="4" cols="12" class="py-0">
+                <div class="form-group">
+                    <v-text-field
+                        v-model="form.lugar"
+                        label="Dirección"
                     ></v-text-field>
                 </div>
             </v-col>
@@ -205,6 +220,12 @@
                         <v-text-field
                         v-model="form.facebook"
                         label="Facebook"
+                        ></v-text-field>
+                    </v-col>
+                    <v-col md="3" cols="12" class="py-0">
+                        <v-text-field
+                        v-model="form.linkedin"
+                        label="Linkedin"
                         ></v-text-field>
                     </v-col>
                     <v-col md="3" cols="12" class="py-0">

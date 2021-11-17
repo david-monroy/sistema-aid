@@ -7,23 +7,28 @@
       <div class="section">
           <div class="container">
 
-              <form
-               @submit.prevent="enviarCSV"
-               enctype="multipart/form-data">
-
-                <div class="field">
-                    <label for="file" class="label">Subir archivo</label>
-
-                    <input type="file"
-                    ref="file"
-                    @change="seleccionarCSV">
+            <v-row class="pb-0 mb-0 form-row" >
+            <v-col md="10" cols="10" class="py-0">
+                <div class="form-group">
+                    <v-file-input
+                        v-model="file"
+                        truncate-length="15"
+                        label="Carga el archivo con los participantes"
+                    ></v-file-input>
                 </div>
-
-              <div class="field">
-                  <button class="button is-info">Enviar</button>
-              </div>
-
-            </form>
+            </v-col>
+            <v-col md="2" cols="2" align="end">
+                <v-btn
+                    :small="$vuetify.breakpoint.smAndDown"
+                    class="primary"
+                    @click="cargarCSV()"
+                    :disable=!valid
+                >
+                    <p class="mt-3 hidden-sm-and-down">Enviar</p>
+                    <v-icon>mdi-chevron-right</v-icon>
+                </v-btn>
+            </v-col>
+        </v-row>
 
           </div>
       </div> 
@@ -53,7 +58,7 @@ export default {
         seleccionarCSV(){
             this.file = this.$refs.file.files[0]
         },
-        async enviarCSV(){
+        async cargarCSV(){
             const formData = new FormData();
             formData.append('file', this.file)
             try{

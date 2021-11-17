@@ -13,10 +13,13 @@ class Participante(models.Model):
     telfPrincipal = models.CharField(max_length=15)
     telfSecundario = models.CharField(max_length=15, null=True, blank=True)
     lugar = models.CharField(max_length=150, null=True, blank=True)
+    municipio = models.CharField(max_length=150, null=True, blank=True)
+    estado = models.CharField(max_length=150, null=True, blank=True)
     instagram = models.CharField(max_length=30, null=True, blank=True)
     twitter = models.CharField(max_length=30, null=True, blank=True)
     facebook = models.CharField(max_length=30, null=True, blank=True)
     tiktok = models.CharField(max_length=30, null=True, blank=True)
+    linkedin = models.CharField(max_length=30, null=True, blank=True)
     carreras = models.ManyToManyField(Carrera, through='ParticipanteCarrera')
     colegio = models.ForeignKey(Colegio, on_delete=models.SET_NULL, null=True, blank=True)
 

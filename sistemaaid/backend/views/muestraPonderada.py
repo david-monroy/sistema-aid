@@ -6,11 +6,10 @@ import json
 
 # Create your views here.
 @csrf_exempt
-def cargarMuestra(request):
+def cargarMuestra(request, tamanoMuestral):
     path = request.FILES['file']
     df = pd.read_csv(path, header=0, encoding='ISO-8859-1', delimiter=',')
     totalColumnas = df.shape[1]
-    tamanoMuestral = 1200
     poblacion = df.iloc[:, 1:df.shape[1]].sum()
     totalPoblacion = 0
     for i in poblacion.values.tolist():
@@ -27,7 +26,7 @@ def cargarMuestra(request):
     return HttpResponse(df.to_json(orient="table"))
 
 @csrf_exempt
-def insertarMuestra (request):
+def insertarMuestra (request, idEdicion):
     data = request.body.decode('utf8').replace("'", '"')
     df = pd.DataFrame(json.loads(data))
     cantidadFilas = df.shape[0]
@@ -45,11 +44,9 @@ def insertarMuestra (request):
                 segundaCondicion=df.columns.values[column],
                 poblacion=df.loc[row][column], 
                 muestra = df.loc[row]['Muestra ' + df.columns.values[column]],
-                edicion = modelEdicion.Edicion.objects.get(pk=1)
+                edicion = modelEdicion.Edicion.objects.get(pk=idEdicion)
             ))
 
-    print(muestras)
-    
     msj =  MuestraPonderada.objects.bulk_create(muestras)
     return HttpResponse()
 

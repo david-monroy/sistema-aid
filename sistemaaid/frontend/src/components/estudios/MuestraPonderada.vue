@@ -91,12 +91,15 @@ export default {
             muestraPonderada: [],
         }
     },
+    props: {
+        tamanoMuestral: String
+    },
     methods: {
         async cargarCSV(){
             const formData = new FormData();
             formData.append('file', this.file)
             try{
-                this.muestraPonderada = await MuestraPonderadaRepository.cargarMuestra(formData);
+                this.muestraPonderada = await MuestraPonderadaRepository.cargarMuestra(formData, this.tamanoMuestral);
             }
             catch(err){
                 console.log(err)

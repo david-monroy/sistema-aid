@@ -236,7 +236,7 @@ export default {
                 periodo:'',
                 fechaInicio: moment().format("YYYY-MM-DD"),
                 fechaFin:'',
-                idEstudio:'',
+                estudio:'',
                 vinculada: true,
                 totalMuestra: ''
             },

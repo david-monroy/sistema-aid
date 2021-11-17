@@ -21,8 +21,8 @@ urlpatterns = [
     path('participantes/leer', views.leer_csv),
     path('participantes/leer/actualizar', views.leer_csv_actualizar),
     path('participantes/participantecarreras/<int:id>', views.get_participantecarrera),
-    path('muestraPonderada/cargar', views.cargarMuestra),
-    path('muestraPonderada/insertar', views.insertarMuestra)
+    path('muestraPonderada/cargar/<int:tamanoMuestral>', views.cargarMuestra),
+    path('muestraPonderada/insertar/<int:idEdicion>', views.insertarMuestra)
 ]
 
 urlpatterns += router.urls

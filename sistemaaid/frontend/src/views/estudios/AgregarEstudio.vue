@@ -44,7 +44,7 @@
               <FichaTecnica></FichaTecnica>
             </v-stepper-content>
             <v-stepper-content step="2" >
-              <MuestraPonderada></MuestraPonderada>
+              <MuestraPonderada :tamanoMuestral="fichaTecnica.totalMuestra"></MuestraPonderada>
             </v-stepper-content>
             <v-stepper-content step="3" >
               <h3>Proximamente</h3>
@@ -71,12 +71,14 @@ import swal from 'sweetalert'
 import Repository from "../../services/repositories/repositoryFactory";
 const EstudiosRepository = Repository.get("Estudios");
 const MuestraPonderadaRepository = Repository.get("MuestraPonderada");
+const EdicionesRepository = Repository.get("Ediciones");
 
 export default {
   data: () => ({
     pasoActual: 1,
     fichaTecnica: [],
-    muestra: []
+    muestra: [],
+    idEdicion: 0
   }),
   components: {
     FichaTecnica,
@@ -99,15 +101,20 @@ export default {
     }),
 
     EventBus.$on("registrar", (data) => {
-        this.insertarMuestra(data);  
+        this.muestra = data
+        this.insertarEstudio(this.fichaTecnica)
     })
   },
 
   methods:{
     async insertarEstudio(data){
       try{
-        await EstudiosRepository.agregar(data);
+        var estudio = await EstudiosRepository.agregar(data);
+        data.estudio = estudio.id
+        var response = await EdicionesRepository.agregar(data);
+        this.idEdicion = response.id
         swal("El estudio ha sido agregado satisfactoriamente", "", "success")
+        this.insertarMuestra(this.muestra);  
       }
       catch(err){
         console.log(err)
@@ -116,7 +123,7 @@ export default {
     },
     async insertarMuestra(data){
       try{
-        await MuestraPonderadaRepository.insertarMuestra(data);
+        await MuestraPonderadaRepository.insertarMuestra(data, this.idEdicion);
         swal("La muestra ha sido agregada satisfactoriamente", "", "success")
       }
       catch(err){

@@ -8,13 +8,13 @@ const headers =  {
 }
 
 export default {
-  async cargarMuestra(archivo) {
-    let response = await conn.post(`/muestraPonderada/cargar`, archivo, headers);
+  async cargarMuestra(archivo, tamanoMuestral) {
+    let response = await conn.post(`/muestraPonderada/cargar/${tamanoMuestral}`, archivo, headers);
     return response.data;
   },
 
-  async insertarMuestra(data) {
-    let response = await conn.post(`/muestraPonderada/insertar`, data, headers);
+  async insertarMuestra(data, idEdicion) {
+    let response = await conn.post(`/muestraPonderada/insertar/${idEdicion}`, data, headers);
     return response;
   },
 

@@ -22,7 +22,9 @@ urlpatterns = [
     path('participantes/leer/actualizar', views.leer_csv_actualizar),
     path('participantes/participantecarreras/<int:id>', views.get_participantecarrera),
     path('muestraPonderada/cargar/<int:tamanoMuestral>', views.cargarMuestra),
-    path('muestraPonderada/insertar/<int:idEdicion>', views.insertarMuestra)
+    path('muestraPonderada/insertar/<int:idEdicion>', views.insertarMuestra),
+    path('estudios/validarCodigo', views.validarCodigo),
+    path('ediciones/validarCodigo', views.validarCodigo)
 ]
 
 urlpatterns += router.urls

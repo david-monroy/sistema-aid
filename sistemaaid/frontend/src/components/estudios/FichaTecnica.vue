@@ -103,7 +103,7 @@
                         <template v-slot:activator="{ on, attrs }">
                             <v-text-field
                             v-model="form.totalMuestra"
-                            label="Total de la muestra * "
+                            label="Tamaño muestral * "
                             required
                             type="number"
                             :rules='[rules.required,rules.muestra]'
@@ -222,7 +222,9 @@
 <script>
 import { EventBus } from "../../main.js";
 import moment from "moment";
-import swal from 'sweetalert'
+import swal from 'sweetalert';
+import Repository from "../../services/repositories/repositoryFactory";
+const EstudiosRepository = Repository.get("Estudios");
 
 export default {
     data(){
@@ -258,15 +260,19 @@ export default {
     },
     computed: {},
     methods: {
-        pasoSiguiente() {
+        async pasoSiguiente() {
             let validatedForm = this.$refs.registerForm.validate();
 
             if (validatedForm){
-                if (this.form.fechaInicio > this.form.fechaFin){
+                let estudioExistente = await EstudiosRepository.validarCodigo(this.form)
+                if (this.form.fechaInicio > this.form.fechaFin) {
                     swal("La fecha fin del estudio debe ser mayor a la fecha de inicio", "", "error")
                 }
+                else if (estudioExistente != '') {
+                    swal("Ya existe un estudio con el mismo código", "", "error")
+                }
                 else {
-                    EventBus.$emit("pasoSiguiente",this.form)
+                    EventBus.$emit("pasoSiguiente","Estudio",this.form)
                 }
             }   
         },  

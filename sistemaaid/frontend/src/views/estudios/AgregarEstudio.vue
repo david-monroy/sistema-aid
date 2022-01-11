@@ -44,7 +44,7 @@
               <FichaTecnica></FichaTecnica>
             </v-stepper-content>
             <v-stepper-content step="2" >
-              <MuestraPonderada :tamanoMuestral="fichaTecnica.totalMuestra"></MuestraPonderada>
+              <MuestraPonderada :tamanoMuestral="fichaTecnica.totalMuestra" :tipo="tipo"></MuestraPonderada>
             </v-stepper-content>
             <v-stepper-content step="3" >
               <h3>Proximamente</h3>
@@ -78,7 +78,8 @@ export default {
     pasoActual: 1,
     fichaTecnica: [],
     muestra: [],
-    idEdicion: 0
+    idEdicion: 0,
+    tipo: null
   }),
   components: {
     FichaTecnica,
@@ -86,9 +87,10 @@ export default {
   },
 
   created() {
-    EventBus.$on("pasoSiguiente", (data) => { 
+    EventBus.$on("pasoSiguiente", (tipo,data) => { 
         if (this.pasoActual == 1 ) {
           this.fichaTecnica = data
+          this.tipo = tipo
         }
         if (this.pasoActual == 2){
           this.muestra = data
@@ -100,7 +102,7 @@ export default {
         this.pasoActual -= 1;  
     }),
 
-    EventBus.$on("registrar", (data) => {
+    EventBus.$on("registrar-estudio", (data) => {
         this.muestra = data
         this.insertarEstudio(this.fichaTecnica)
     })
@@ -111,27 +113,14 @@ export default {
       try{
         var estudio = await EstudiosRepository.agregar(data);
         data.estudio = estudio.id
-        var response = await EdicionesRepository.agregar(data);
-        this.idEdicion = response.id
+        EventBus.$emit("registrar-edicion",this.muestraPonderada)
         swal("El estudio ha sido agregado satisfactoriamente", "", "success")
-        this.insertarMuestra(this.muestra);  
       }
       catch(err){
         console.log(err)
         swal("El estudio no pudo ser agregado", "", "error")
       }
-    },
-    async insertarMuestra(data){
-      try{
-        await MuestraPonderadaRepository.insertarMuestra(data, this.idEdicion);
-        swal("La muestra ha sido agregada satisfactoriamente", "", "success")
-      }
-      catch(err){
-        console.log(err)
-        swal("La muestra no pudo ser agregada", "", "error")
-      }
     }
-
   }
 };
 </script>

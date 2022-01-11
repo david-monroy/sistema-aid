@@ -9,6 +9,9 @@ export default {
   async consultar() {
     let response = await conn.get(`/estudios/`, jwt.getAuthHeaderToken());
     return response;
+  },
+  async validarCodigo(codigo) {
+    let response = await conn.post(`/estudios/validarCodigo`, codigo, jwt.getAuthHeaderToken());
+    return response;
   }
-
 };

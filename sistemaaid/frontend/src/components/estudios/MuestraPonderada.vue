@@ -12,7 +12,7 @@
                     <v-file-input
                         v-model="file"
                         truncate-length="15"
-                        label="Carga el archivo con la distribución de la población"
+                        label="Carga el archivo con la distribución de la población (Opcional)"
                     ></v-file-input>
                 </div>
             </v-col>
@@ -29,6 +29,7 @@
             </v-col>
         </v-row>
             <div v-if="muestraPonderada.length > 0">
+                <h4 class="mb-3">El tamaño muestral es: {{tamanoMuestral}}</h4>
                 <v-data-table
                 :headers="getHeaders()"
                 :items="muestraPonderada"
@@ -37,6 +38,14 @@
                 class="elevation-1"
                 >
                 </v-data-table>
+            </div>
+            <div v-else>
+                <p> A continuación puede cargar un archivo .csv para obtener la distribución de la población para este estudio.</p>
+                <p> Puede guiarse de esta tabla, puede agregar tantas columnas desee.</p>
+                <img
+                src="../../assets/tablademuestraponderada.png"
+                />
+                
             </div>
         <v-row class="mt-2">
             <v-col align="begin">
@@ -92,7 +101,8 @@ export default {
         }
     },
     props: {
-        tamanoMuestral: String
+        tamanoMuestral: String,
+        tipo:String
     },
     methods: {
         async cargarCSV(){
@@ -118,16 +128,33 @@ export default {
             return headers
         },
         pasoAnterior() {
-            EventBus.$emit("pasoAnterior",this.form)
+            if (this.tipo == "Estudio"){
+                EventBus.$emit("pasoAnterior",this.form)
+            }
+            else {
+                EventBus.$emit("pasoAnteriorEdi",this.form)
+            }
+
         },  
         pasoSiguiente() {
-            EventBus.$emit("pasoSiguiente",this.form)
+            if (this.tipo == "Edicion"){
+                EventBus.$emit("pasoSiguiente",this.form)
+            }
+            else {
+                EventBus.$emit("pasoSiguienteEdi",this.form)
+            }
         }, 
         goRoute(route) {
             this.$router.push("/" + route);
         },
         async insertarInfo(){
-            EventBus.$emit("registrar",this.muestraPonderada)
+            if (this.tipo == "Estudio"){
+                 EventBus.$emit("registrar-estudio",this.muestraPonderada)
+            }
+            else {
+                 EventBus.$emit("registrar-edicion",this.muestraPonderada)
+            }
+           
         },
     },
 }

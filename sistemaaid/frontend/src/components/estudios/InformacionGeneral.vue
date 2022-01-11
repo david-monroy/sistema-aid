@@ -12,6 +12,8 @@
                     <v-autocomplete
                         v-model="form.estudio"
                         :items="estudios"
+                        required
+                        :rules='[rules.required]'
                         label="Estudio al que se le agregará una nueva edición"
                         item-text="nombre"
                         item-value="id"
@@ -183,6 +185,7 @@ import moment from "moment";
 import swal from 'sweetalert';
 import Repository from "../../services/repositories/repositoryFactory";
 const EstudiosRepository = Repository.get("Estudios");
+const EdicionRepository = Repository.get("Ediciones");
 
 export default {
     data(){
@@ -211,15 +214,18 @@ export default {
     },
     computed: {},
     methods: {
-        enviarDatos() {
+        async enviarDatos() {
             let validatedForm = this.$refs.registerForm.validate();
-
             if (validatedForm){
-                if (this.form.fechaInicio > this.form.fechaFin){
-                    swal("La fecha fin del estudio debe ser mayor a la fecha de inicio", "", "error")
+                let estudioExistente = await EdicionRepository.validarCodigo(this.form)
+                if (this.form.fechaInicio > this.form.fechaFin) {
+                    swal("La fecha fin de la edición debe ser mayor a la fecha de inicio", "", "error")
+                }
+                else if (estudioExistente != '') {
+                    swal("Ya existe una edición con el mismo código", "", "error")
                 }
                 else {
-                    EventBus.$emit("informacion-general",this.form)
+                    EventBus.$emit("pasoSiguienteEdi","Edicion",this.form)
                 }
             }
                 

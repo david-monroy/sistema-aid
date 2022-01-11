@@ -37,4 +37,9 @@ class EdicionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Edicion
         fields = '__all__'
+
+class MuestraPonderadaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MuestraPonderada
+        fields = '__all__'
         

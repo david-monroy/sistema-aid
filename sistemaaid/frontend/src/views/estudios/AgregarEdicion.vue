@@ -46,7 +46,7 @@
             </v-stepper-content>
 
             <v-stepper-content step="2">
-              <InformacionGeneral></InformacionGeneral>
+              <MuestraPonderada :tamanoMuestral="fichaTecnica.totalMuestra" :tipo="tipo"></MuestraPonderada>
             </v-stepper-content>
           </v-stepper-items> 
         </v-stepper>
@@ -58,35 +58,69 @@
 <script>
 
 import InformacionGeneral from "../../components/estudios/InformacionGeneral.vue";
+import MuestraPonderada from "../../components/estudios/MuestraPonderada.vue";
 import { EventBus } from "../../main.js";
 import swal from 'sweetalert'
 import Repository from "../../services/repositories/repositoryFactory";
 const EdicionesRepository = Repository.get("Ediciones");
+const MuestraPonderadaRepository = Repository.get("MuestraPonderada");
+
 export default {
   data: () => ({
-    pasoActual: 1
+    pasoActual: 1,
+    fichaTecnica:[],
+    muestra:[],
+    tipo:"",
+    idEdicion:0
   }),
   components: {
-    InformacionGeneral
+    InformacionGeneral,
+    MuestraPonderada
   },
 
   created() {
-    EventBus.$on("informacion-general", (data) => {
-        this.insertarEdicion(data);  
-        
+    EventBus.$on("pasoSiguienteEdi", (tipo,data) => { 
+        if (this.pasoActual == 1 ) {
+          this.fichaTecnica = data
+          this.tipo = tipo
+        }
+        if (this.pasoActual == 2){
+          this.muestra = data
+        }
+        this.pasoActual += 1; 
+    }),
+
+    EventBus.$on("pasoAnteriorEdi", () => {
+        this.pasoActual -= 1;  
+    }),
+
+    EventBus.$on("registrar-edicion", (data) => {
+        this.muestra = data
+        this.insertarEdicion(this.fichaTecnica)
     })
   },
 
   methods:{
     async insertarEdicion(data){
-      try{
-                console.log('entro a insertaredicion')
-        await EdicionesRepository.agregar(data);
-        swal("La edición ha sido agregada satisfactoriamente", "", "success")
+      try{ 
+        var response = await EdicionesRepository.agregar(data);
+        console.log(response)
+        this.idEdicion = response.id
+        this.insertarMuestra(this.muestra);  
+        swal("El edición ha sido agregada satisfactoriamente", "", "success")
       }
       catch(err){
         console.log(err)
-          swal("La edición no se pudo agregar", "", "error")
+        swal("La edición no se pudo agregar", "", "error")
+      }
+    },
+    async insertarMuestra(data){
+      try{
+        await MuestraPonderadaRepository.insertarMuestra(data, this.idEdicion);
+      }
+      catch(err){
+        console.log(err)
+        swal("La muestra no pudo ser agregada", "", "error")
       }
     }
 

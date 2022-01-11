@@ -44,7 +44,7 @@
               <FichaTecnica></FichaTecnica>
             </v-stepper-content>
             <v-stepper-content step="2" >
-              <h3>Proximamente</h3>
+              <MuestraPonderada :tamanoMuestral="fichaTecnica.totalMuestra" :tipo="tipo"></MuestraPonderada>
             </v-stepper-content>
             <v-stepper-content step="3" >
               <h3>Proximamente</h3>
@@ -65,41 +65,62 @@
 <script>
 
 import FichaTecnica from "../../components/estudios/FichaTecnica.vue";
+import MuestraPonderada from "../../components/estudios/MuestraPonderada.vue";
 import { EventBus } from "../../main.js";
 import swal from 'sweetalert'
 import Repository from "../../services/repositories/repositoryFactory";
 const EstudiosRepository = Repository.get("Estudios");
+const MuestraPonderadaRepository = Repository.get("MuestraPonderada");
+const EdicionesRepository = Repository.get("Ediciones");
 
 export default {
   data: () => ({
-    pasoActual: 1
+    pasoActual: 1,
+    fichaTecnica: [],
+    muestra: [],
+    idEdicion: 0,
+    tipo: null
   }),
   components: {
-    FichaTecnica
+    FichaTecnica,
+    MuestraPonderada
   },
 
   created() {
-    EventBus.$on("paso2", (data) => {
-        this.pasoActual += 1;  
-        console.log(data)
+    EventBus.$on("pasoSiguiente", (tipo,data) => { 
+        if (this.pasoActual == 1 ) {
+          this.fichaTecnica = data
+          this.tipo = tipo
+        }
+        if (this.pasoActual == 2){
+          this.muestra = data
+        }
+        this.pasoActual += 1; 
     }),
-    EventBus.$on("registrar", (data) => {
-        this.insertarEstudio(data);  
+
+    EventBus.$on("pasoAnterior", () => {
+        this.pasoActual -= 1;  
+    }),
+
+    EventBus.$on("registrar-estudio", (data) => {
+        this.muestra = data
+        this.insertarEstudio(this.fichaTecnica)
     })
   },
 
   methods:{
     async insertarEstudio(data){
       try{
-        await EstudiosRepository.agregar(data);
+        var estudio = await EstudiosRepository.agregar(data);
+        data.estudio = estudio.id
+        EventBus.$emit("registrar-edicion",this.muestraPonderada)
         swal("El estudio ha sido agregado satisfactoriamente", "", "success")
       }
       catch(err){
         console.log(err)
-          swal("El estudio no pudo ser agregado", "", "error")
+        swal("El estudio no pudo ser agregado", "", "error")
       }
     }
-
   }
 };
 </script>

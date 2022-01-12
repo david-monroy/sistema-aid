@@ -14,6 +14,7 @@ class Participante(models.Model):
     telfPrincipal = models.CharField(max_length=15)
     telfSecundario = models.CharField(max_length=15, null=True, blank=True)
     lugar = models.ForeignKey(Lugar, on_delete=models.SET_NULL, null=True, blank=True)
+    direccion = models.CharField(max_length=100, null=True, blank=True)
     instagram = models.CharField(max_length=30, null=True, blank=True)
     twitter = models.CharField(max_length=30, null=True, blank=True)
     facebook = models.CharField(max_length=30, null=True, blank=True)

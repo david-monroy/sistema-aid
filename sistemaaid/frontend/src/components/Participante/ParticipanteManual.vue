@@ -144,7 +144,7 @@
             <v-col md="4" cols="12" class="py-0">
                 <div class="form-group">
                     <v-text-field
-                        v-model="form.lugar"
+                        v-model="form.direccion"
                         label="Dirección"
                     ></v-text-field>
                 </div>
@@ -214,29 +214,34 @@
                         <v-text-field
                         v-model="form.instagram"
                         label="Instagram"
+                        prepend-icon="fab fa-instagram"
                         ></v-text-field>
                     </v-col>
                     <v-col md="2" cols="12" class="py-0">
                         <v-text-field
                         v-model="form.twitter"
+                        prepend-icon="fab fa-twitter"
                         label="Twitter"
                         ></v-text-field>
                     </v-col>
                     <v-col md="2" cols="12" class="py-0">
                         <v-text-field
                         v-model="form.facebook"
+                        prepend-icon="fab fa-facebook"
                         label="Facebook"
                         ></v-text-field>
                     </v-col>
                     <v-col md="2" cols="12" class="py-0">
                         <v-text-field
                         v-model="form.linkedin"
+                        prepend-icon="fab fa-linkedin"
                         label="Linkedin"
                         ></v-text-field>
                     </v-col>
                     <v-col md="2" cols="12" class="py-0">
                         <v-text-field
                         v-model="form.tiktok"
+                        prepend-icon="fab fa-tiktok"
                         label="Tik Tok"
                         ></v-text-field>
                     </v-col>
@@ -291,6 +296,7 @@ export default {
                 participante_id: null,
                 estado_id: null,
                 municipio_id: null,
+                direccion: null,
                 lugar: '',
             },
             date: new Date().toISOString().substr(0, 10),

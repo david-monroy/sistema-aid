@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models.deletion import CASCADE
 from .modelCarrera import *
 from .modelColegio import *
+from .modelLugar import *
 
 class Participante(models.Model):
     nombre = models.CharField(max_length=50)
@@ -12,9 +13,7 @@ class Participante(models.Model):
     fechaNacimiento = models.DateField(null=True, blank=True)
     telfPrincipal = models.CharField(max_length=15)
     telfSecundario = models.CharField(max_length=15, null=True, blank=True)
-    lugar = models.CharField(max_length=150, null=True, blank=True)
-    municipio = models.CharField(max_length=150, null=True, blank=True)
-    estado = models.CharField(max_length=150, null=True, blank=True)
+    lugar = models.ForeignKey(Lugar, on_delete=models.SET_NULL, null=True, blank=True)
     instagram = models.CharField(max_length=30, null=True, blank=True)
     twitter = models.CharField(max_length=30, null=True, blank=True)
     facebook = models.CharField(max_length=30, null=True, blank=True)

@@ -1,7 +1,7 @@
 from rest_framework import routers, urlpatterns
 from . import views
 from django.urls import path
-from .viewsets import EstudioViewSet, ParticipanteViewSet, CarreraViewSet, SedeViewSet, ParticipanteCarreraViewSet, ColegioViewSet
+from .viewsets import EstudioViewSet, ParticipanteViewSet, CarreraViewSet, SedeViewSet, ParticipanteCarreraViewSet, ColegioViewSet, LugarViewSet
 from rest_framework_simplejwt import views as jwt_views
 
 router = routers.SimpleRouter()
@@ -11,6 +11,7 @@ router.register('sedes', SedeViewSet)
 router.register('colegios', ColegioViewSet)
 router.register('participantecarreras', ParticipanteCarreraViewSet)
 router.register('estudios', EstudioViewSet)
+router.register('lugares', LugarViewSet)
 
 urlpatterns = [
     path('login/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
@@ -19,6 +20,8 @@ urlpatterns = [
     path('participantes/editar_masivo/', views.editar_masivo),
     path('participantes/participantecarreras/', views.get_participantecarrera),
     path('participantes/filtrar/', views.participantes_filtrar),
+    path('lugares/estados/', views.get_estados),
+    path('lugares/municipios/', views.get_municipios),
 ]
 
 urlpatterns += router.urls

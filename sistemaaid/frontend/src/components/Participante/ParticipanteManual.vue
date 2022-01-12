@@ -121,18 +121,24 @@
           <v-row class="pb-0 mb-0 form-row" >
             <v-col md="4" cols="12" class="py-0">
                 <div class="form-group">
-                    <v-text-field
-                        v-model="form.estado"
+                    <v-select
+                        v-model="form.estado_id"
+                        :items="estados"
+                        item-text="nombre"
+                        item-value="id"
                         label="Estado"
-                    ></v-text-field>
+                        ></v-select>
                 </div>
             </v-col>
             <v-col md="4" cols="12" class="py-0">
                 <div class="form-group">
-                    <v-text-field
-                        v-model="form.municipio"
+                    <v-select
+                        v-model="form.municipio_id"
+                        :items="municipios()"
+                        item-text="nombre"
+                        item-value="id"
                         label="Municipio"
-                    ></v-text-field>
+                        ></v-select>
                 </div>
             </v-col>  
             <v-col md="4" cols="12" class="py-0">
@@ -203,32 +209,32 @@
                 Redes sociales (opcional)
             </v-expansion-panel-header>
             <v-expansion-panel-content>
-                <v-row class="pb-0 mb-0 form-row" >
-                    <v-col md="3" cols="12" class="py-0">
+                <v-row class="pb-0 mb-0 form-row d-flex" style="justify-content: space-around">
+                    <v-col md="2" cols="12" class="py-0">
                         <v-text-field
                         v-model="form.instagram"
                         label="Instagram"
                         ></v-text-field>
                     </v-col>
-                    <v-col md="3" cols="12" class="py-0">
+                    <v-col md="2" cols="12" class="py-0">
                         <v-text-field
                         v-model="form.twitter"
                         label="Twitter"
                         ></v-text-field>
                     </v-col>
-                    <v-col md="3" cols="12" class="py-0">
+                    <v-col md="2" cols="12" class="py-0">
                         <v-text-field
                         v-model="form.facebook"
                         label="Facebook"
                         ></v-text-field>
                     </v-col>
-                    <v-col md="3" cols="12" class="py-0">
+                    <v-col md="2" cols="12" class="py-0">
                         <v-text-field
                         v-model="form.linkedin"
                         label="Linkedin"
                         ></v-text-field>
                     </v-col>
-                    <v-col md="3" cols="12" class="py-0">
+                    <v-col md="2" cols="12" class="py-0">
                         <v-text-field
                         v-model="form.tiktok"
                         label="Tik Tok"
@@ -263,10 +269,13 @@ const ParticipanteCarrerasRepository = Repository.get("ParticipanteCarreras");
 const SedesRepository = Repository.get("Sedes");
 const CarrerasRepository = Repository.get("Carreras");
 const ColegiosRepository = Repository.get("Colegios");
+const LugaresRepository = Repository.get("Lugares");
 export default {
     data(){
         return {
             valid: false,
+            estados: [],
+            municipios_todos: [],
             form: {
                 nombre: '',
                 genero: '',
@@ -279,7 +288,10 @@ export default {
                 carrera_id: null,
                 sede_id: null,
                 colegio_id: null,
-                participante_id: null
+                participante_id: null,
+                estado_id: null,
+                municipio_id: null,
+                lugar: '',
             },
             date: new Date().toISOString().substr(0, 10),
             dateFormatted: this.formatDate(new Date().toISOString().substr(0, 10)),
@@ -338,8 +350,10 @@ export default {
         }
 
         return edad;
-      }
+      },
+
     },
+
     methods: {
         formatDate (date) {
             if (!date) return null
@@ -385,6 +399,17 @@ export default {
             }
         },
 
+        municipios() {
+            let id = this.form.estado_id;
+            let array = [];
+            this.municipios_todos.forEach(mun => {
+                if (mun.fk_lugar_id == id) {
+                    array.push(mun)
+                }
+            });
+            return array
+        },
+
         async getCarreras(){
             this.carreras = await CarrerasRepository.obtener();
         },
@@ -394,16 +419,22 @@ export default {
         async getColegios(){
             this.colegios = await ColegiosRepository.obtener();
         },
+        async getEstados(){
+            this.estados = await LugaresRepository.obtenerEstados();
+            this.municipios_todos = await LugaresRepository.obtenerMunicipios();
+        },
     },
     watch: {
       date () {
         this.fechaNacimiento = this.formatDate(this.date)
       },
+
     },
     mounted(){
         this.getCarreras();
         this.getSedes();
         this.getColegios();
+        this.getEstados();
     }
 }
 </script>

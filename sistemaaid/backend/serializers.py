@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Participante, Carrera, Sede, ParticipanteCarrera, Colegio, Estudio
+from .models import Participante, Carrera, Sede, ParticipanteCarrera, Colegio, Estudio, Lugar
 
 class CarreraSerializer(serializers.ModelSerializer):
     class Meta:
@@ -11,6 +11,11 @@ class ColegioSerializer(serializers.ModelSerializer):
         model = Colegio
         fields = '__all__'
 
+class LugarSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Lugar
+        fields = '__all__'
+
 class SedeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sede
@@ -19,6 +24,8 @@ class SedeSerializer(serializers.ModelSerializer):
 class ParticipanteSerializer(serializers.ModelSerializer):
     colegio = ColegioSerializer(read_only=True)
     colegio_id = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Colegio.objects.all(), source='colegio')
+    lugar = LugarSerializer(read_only=True)
+    lugar_id = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Lugar.objects.all(), source='lugar')
     class Meta:
         model = Participante
         fields = '__all__'

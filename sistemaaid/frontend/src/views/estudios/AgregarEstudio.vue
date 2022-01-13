@@ -47,7 +47,7 @@
               <MuestraPonderada :tamanoMuestral="fichaTecnica.totalMuestra" :tipo="tipo"></MuestraPonderada>
             </v-stepper-content>
             <v-stepper-content step="3" >
-              <h3>Proximamente</h3>
+              <Metodologia :tipo="tipo"></Metodologia>
             </v-stepper-content>
             <v-stepper-content step="4" >
               <h3>Proximamente</h3>
@@ -64,36 +64,43 @@
 
 <script>
 
+import Metodologia from "../../components/estudios/Metodologia.vue"
 import FichaTecnica from "../../components/estudios/FichaTecnica.vue";
 import MuestraPonderada from "../../components/estudios/MuestraPonderada.vue";
 import { EventBus } from "../../main.js";
 import swal from 'sweetalert'
 import Repository from "../../services/repositories/repositoryFactory";
 const EstudiosRepository = Repository.get("Estudios");
-const MuestraPonderadaRepository = Repository.get("MuestraPonderada");
 const EdicionesRepository = Repository.get("Ediciones");
+const MuestraPonderadaRepository = Repository.get("MuestraPonderada");
+const MetodologiaRepository = Repository.get("Metodologia")
 
 export default {
   data: () => ({
     pasoActual: 1,
     fichaTecnica: [],
     muestra: [],
+    metodologia:[],
     idEdicion: 0,
     tipo: null
   }),
   components: {
     FichaTecnica,
-    MuestraPonderada
+    MuestraPonderada,
+    Metodologia
   },
 
   created() {
-    EventBus.$on("pasoSiguiente", (tipo,data) => { 
+    EventBus.$on("pasoSiguiente", (data) => { 
         if (this.pasoActual == 1 ) {
           this.fichaTecnica = data
-          this.tipo = tipo
+          this.tipo = "Estudio"
         }
         if (this.pasoActual == 2){
           this.muestra = data
+        }
+        if (this.pasoActual == 3){
+          this.metodologia = data
         }
         this.pasoActual += 1; 
     }),
@@ -103,7 +110,7 @@ export default {
     }),
 
     EventBus.$on("registrar-estudio", (data) => {
-        this.muestra = data
+        this.metodologia = data
         this.insertarEstudio(this.fichaTecnica)
     })
   },
@@ -113,7 +120,11 @@ export default {
       try{
         var estudio = await EstudiosRepository.agregar(data);
         data.estudio = estudio.id
-        EventBus.$emit("registrar-edicion",this.muestraPonderada)
+        var response = await EdicionesRepository.agregar(data);
+        this.idEdicion = response.id  
+        this.metodologia.edicionId = response.id
+        await MuestraPonderadaRepository.insertarMuestra(this.muestra, this.idEdicion);
+        await MetodologiaRepository.insertarMetodologia (this.metodologia)
         swal("El estudio ha sido agregado satisfactoriamente", "", "success")
       }
       catch(err){

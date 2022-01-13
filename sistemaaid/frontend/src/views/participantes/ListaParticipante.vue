@@ -137,36 +137,82 @@
                     {{actualParticipanteEstudios.nombre}} ({{actualParticipanteEstudios.genero}})
                   </v-card-title>
 
-                  <v-card-text class="my-2  pb-0" style="display: flex; justify-content: space-between">
-                    <div>
+                  <v-card-text class="my-2  pb-0">
+                    <v-row>
+                      <v-col class="md-4">
+                        <div>
                           <strong>Cédula: </strong> <p>{{actualParticipanteEstudios.cedula}}</p>
                       </div>
-                      <div>
+                      </v-col>
+                      <v-col class="md-4">
+                        <div>
                           <strong>Correo: </strong> <p>{{actualParticipanteEstudios.correo}}</p>
                       </div>
-                      <div v-if="actualParticipanteEstudios.correoUcab">
+                      </v-col>
+                      <v-col class="md-4">
+                        <div v-if="actualParticipanteEstudios.correoUcab">
                           <strong>Correo UCAB: </strong> <p>{{actualParticipanteEstudios.correoUcab}}</p>
                       </div>
                       <div v-else>
                           <strong>Correo UCAB: </strong> <p class='text-center'>-</p>
                       </div>
-                      
-                      <div>
+                      </v-col>
+                    </v-row>
+
+                    <v-row>
+                      <v-col class="md-4">
+                        <div>
                           <strong>Fecha de nacimiento: </strong> <p>{{actualParticipanteEstudios.fechaNacimiento}}</p>
                       </div>
-                      <div>
+                      </v-col>
+                      <v-col class="md-4">
+                        <div>
                           <strong>Tlf. Principal: </strong> <p>{{actualParticipanteEstudios.telfPrincipal}}</p>
                       </div>
-                      <div v-if="actualParticipanteEstudios.telfSecundario">
+                      </v-col>
+                      <v-col class="md-4">
+                        <div v-if="actualParticipanteEstudios.telfSecundario">
                           <strong>Tlf. Secundario: </strong> <p>{{actualParticipanteEstudios.telfSecundario}}</p>
                       </div>
                       <div v-else>
                           <strong>Tlf. Secundario: </strong> <p class='text-center'>-</p>
                       </div>
-                    
+                      </v-col>
+                    </v-row>              
                   </v-card-text>
 
                   <v-expansion-panels focusable class="px-5 mb-2">
+
+                    <v-expansion-panel>
+                        <v-expansion-panel-header>Ubicación</v-expansion-panel-header>
+                        <v-expansion-panel-content>
+                            <v-simple-table max-height="240px">
+                                <template v-slot:default>
+                                <thead >
+                                    <tr>
+                                      <th class="text-center" v-if="actualParticipanteEstudios.lugar.estado">
+                                        Estado
+                                      </th>
+                                        <th class="text-center" v-if="actualParticipanteEstudios.lugar.municipio">
+                                        Municipio
+                                      </th>
+                                      <th class="text-center" v-if="actualParticipanteEstudios.direccion">
+                                          Dirección
+                                      </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                    <td v-if="actualParticipanteEstudios.lugar.estado" class="text-center">{{ actualParticipanteEstudios.lugar.estado }}</td>
+                                    <td v-if="actualParticipanteEstudios.lugar.municipio" class="text-center">{{ actualParticipanteEstudios.lugar.municipio }}</td>
+                                    <td v-if="actualParticipanteEstudios.direccion" class="text-center">{{ actualParticipanteEstudios.direccion }}</td>
+                                    </tr>
+                                </tbody>
+                                </template>
+                            </v-simple-table>
+                        </v-expansion-panel-content>
+                    </v-expansion-panel>
+
                     <v-expansion-panel>
                         <v-expansion-panel-header>Información académica</v-expansion-panel-header>
                         <v-expansion-panel-content>
@@ -199,6 +245,46 @@
                             </v-simple-table>
                         </v-expansion-panel-content>
                     </v-expansion-panel>
+
+                    <v-expansion-panel>
+                        <v-expansion-panel-header>Redes Sociales</v-expansion-panel-header>
+                        <v-expansion-panel-content>
+                            <v-simple-table max-height="240px">
+                                <template v-slot:default>
+                                <thead >
+                                    <tr>
+                                      <th class="text-center" v-if="actualParticipanteEstudios.instagram">
+                                        <v-icon>fab fa-instagram</v-icon>
+                                      </th>
+                                      <th class="text-center" v-if="actualParticipanteEstudios.twitter">
+                                          <v-icon>fab fa-twitter</v-icon>
+                                      </th>
+                                      <th class="text-center" v-if="actualParticipanteEstudios.facebook">
+                                          <v-icon>fab fa-facebook</v-icon>
+                                      </th>
+                                        <th class="text-center" v-if="actualParticipanteEstudios.linkedin">
+                                          <v-icon>fab fa-linkedin</v-icon>
+                                      </th>
+                                      <th class="text-center" v-if="actualParticipanteEstudios.tiktok">
+                                          <v-icon>fab fa-tiktok</v-icon>
+                                      </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                    <td v-if="actualParticipanteEstudios.instagram" class="text-center">{{ actualParticipanteEstudios.instagram }}</td>
+                                    <td v-if="actualParticipanteEstudios.twitter" class="text-center">{{ actualParticipanteEstudios.twitter }}</td>
+                                    <td v-if="actualParticipanteEstudios.facebook" class="text-center">{{ actualParticipanteEstudios.facebook }}</td>
+                                    <td v-if="actualParticipanteEstudios.linkedin" class="text-center">{{ actualParticipanteEstudios.linkedin }}</td>
+                                    <td v-if="actualParticipanteEstudios.tiktok" class="text-center">{{ actualParticipanteEstudios.tiktok }}</td>
+                                    </tr>
+                                </tbody>
+                                </template>
+                            </v-simple-table>
+                        </v-expansion-panel-content>
+                    </v-expansion-panel>
+
+
                   </v-expansion-panels>
 
                   <v-card-actions>
@@ -260,6 +346,7 @@
 <script>
 import swal from 'sweetalert';
 import Repository from "../../services/repositories/repositoryFactory";
+const LugaresRepository = Repository.get("Lugares");
 const ParticipantesRepository = Repository.get("Participantes");
 const ParticipanteCarrerasRepository = Repository.get("ParticipanteCarreras");
 const SedesRepository = Repository.get("Sedes");
@@ -299,6 +386,12 @@ name: "ParticipantesView",
               telfSecundario: 'Provicional',
               fechaNacimiento: 'Provicional',
               genero: 'Provicional',
+              actualEstado: "Provicional",
+              actualMunicipio: "Provicional",
+              lugar: {
+                estado: 'Provicional',
+                municipio: 'Provicional',
+              }
             },
             participante_carreras: null,
             actualParticipanteCarreras: [],
@@ -357,6 +450,10 @@ name: "ParticipantesView",
         async getParticipanteCarreras(){
             this.participante_carreras = await ParticipanteCarrerasRepository.obtener();
         },
+        async getLugares(){
+            this.estados = await LugaresRepository.obtenerEstados();
+            this.municipios = await LugaresRepository.obtenerMunicipios();
+        },
         mostrarEliminar(participanteID, participanteNombre){
           this.popupEliminar = true;
           this.participanteAEliminar = participanteID;
@@ -382,17 +479,37 @@ name: "ParticipantesView",
               }
           });
         },
+        setLugares(lugar_id){
+          this.estados.forEach(e => {
+              if (e.id == lugar_id){
+                  this.actualParticipanteEstudios.lugar.estado = e.nombre;
+              }
+          });
+          this.municipios.forEach(m => {
+              if (m.id == lugar_id){
+                  this.actualParticipanteEstudios.lugar.municipio = m.nombre;
+                  this.estados.forEach(e => {
+                    if(m.fk_lugar_id == e.id){
+                      this.actualParticipanteEstudios.lugar.estado = e.nombre;
+                    }
+                  });
+              }
+          });
+        },
 
         abrirEstudios(userID){
           this.actualParticipanteCarreras.splice(0, this.actualParticipanteCarreras.length)
           this.modalEstudios = true;
           this.participanteEstudios = userID;
+          var lugar_id;
           this.participantes.forEach(par => {
             if (par.id == this.participanteEstudios){
               this.actualParticipanteEstudios = par;
+              lugar_id = par.lugar.id
             }
           });
           this.setParticipanteCarreras(userID);
+          this.setLugares(lugar_id);
         },
 
         async filtrar(){
@@ -448,6 +565,7 @@ name: "ParticipantesView",
         this.getCarreras();
         this.getSedes();
         this.getColegios();
+        this.getLugares();
     }
 }
 </script>

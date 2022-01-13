@@ -85,6 +85,12 @@ const router = new Router({
       meta: { requiresAuth: true },
       component: () => import("../views/estudios/AgregarEdicion.vue")
     },
+    {
+      path: `/estudios/agregarListaCodigo`,
+      name: 'AgregarListaCodigo',
+      meta: { requiresAuth: true },
+      component: () => import("../views/estudios/AgregarListaCodigo.vue")
+    },
 
   ],
   mode: 'history',

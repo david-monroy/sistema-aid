@@ -71,7 +71,7 @@
                 <v-btn
                     :small="$vuetify.breakpoint.smAndDown"
                     class="primary"
-                    @click="insertarInfo()"
+                    @click="pasoSiguiente()"
                     :disable=!valid
                 >
                     <p class="mt-3 hidden-sm-and-down">Siguiente</p>
@@ -137,24 +137,15 @@ export default {
 
         },  
         pasoSiguiente() {
-            if (this.tipo == "Edicion"){
-                EventBus.$emit("pasoSiguiente",this.form)
+            if (this.tipo == "Estudio"){
+                EventBus.$emit("pasoSiguiente",this.muestraPonderada)
             }
             else {
-                EventBus.$emit("pasoSiguienteEdi",this.form)
+                EventBus.$emit("pasoSiguienteEdi",this.muestraPonderada)
             }
         }, 
         goRoute(route) {
             this.$router.push("/" + route);
-        },
-        async insertarInfo(){
-            if (this.tipo == "Estudio"){
-                 EventBus.$emit("registrar-estudio",this.muestraPonderada)
-            }
-            else {
-                 EventBus.$emit("registrar-edicion",this.muestraPonderada)
-            }
-           
         },
     },
 }

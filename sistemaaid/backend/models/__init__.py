@@ -6,3 +6,4 @@ from .modelParticipanteCarrera import *
 from .modelEstudio import *
 from .modelEdicion import *
 from .modelMuestraPonderada import *
+from .modelMetodologia import *

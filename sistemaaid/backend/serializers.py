@@ -43,3 +43,7 @@ class MuestraPonderadaSerializer(serializers.ModelSerializer):
         model = MuestraPonderada
         fields = '__all__'
         
+class MetodologiaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Metodologia
+        fields = '__all__'

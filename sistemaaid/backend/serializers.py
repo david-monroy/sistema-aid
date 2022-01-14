@@ -42,4 +42,14 @@ class MuestraPonderadaSerializer(serializers.ModelSerializer):
     class Meta:
         model = MuestraPonderada
         fields = '__all__'
+
+class ListaCodigoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ListaCodigo
+        fields = '__all__'
+
+class CategoriaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Categoria
+        fields = '__all__'
         

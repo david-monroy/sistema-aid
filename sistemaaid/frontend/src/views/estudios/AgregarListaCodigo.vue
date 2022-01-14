@@ -1,7 +1,7 @@
 <template>
 <div class="col-md-12 nav-separator pt-1">
     <div class="card card-container mt-0 form-card">
-      <h3 class="primary--text mx-auto mb-6 mt-0">Registrar nuevo participante</h3>
+      <h3 class="primary--text mx-auto mb-6 mt-0">Registrar lista de código</h3>
       <v-spacer></v-spacer>
       <v-form
         ref="registerForm"
@@ -9,35 +9,65 @@
         lazy-validation
       >
     <v-row class="pb-0 mb-0 form-row" >
-        <v-col md="10" cols="10" class="py-0">
+        <v-col md="12" cols="12" class="py-0">
+            <div class="form-group">
+                    <v-text-field
+                        v-model="form.nombre "
+                        label="Nombre *"
+                        required
+                        dense
+                        :rules='[rules.required]'
+                    ></v-text-field>
+                </div>
+        </v-col>
+    </v-row>
+    <v-row class="pb-0 mb-0 form-row" >
+        <v-col md="12" cols="12" class="py-0">
+            <div class="form-group">
+                     <v-textarea
+                    v-model="form.descripcion"
+                    dense
+                    label="Descripción"
+                    :rules='[rules.textos]'
+                    auto-grow
+                    counter
+                    rows="2"
+                    ></v-textarea>
+                </div>
+        </v-col>
+    </v-row>
+    <v-row class="pb-0 mb-0 form-row" >
+        <v-col md="12" cols="12" class="py-0">
             <div class="form-group">
                 <v-file-input
                         v-model="file"
                         truncate-length="15"
-                        label="Carga el archivo con la lista de código"
+                        label="Carga el archivo .csv con la lista de código"
+                        :rules='[rules.required]'
                 ></v-file-input>
             </div>
         </v-col>
-        <v-col md="2" cols="2" align="end">
+    </v-row>
+      </v-form>
+        <div>
+            <p>El archivo debe contener en la primera columna el código y en la segunda columna la descripción.</p>
+            <p>La primera fila puede ir vacía o tal como se muestra en la siguiente imagen</p>
+            <img
+                src="../../assets/tablaListaCodigo.png"
+            />  
+            <p> Por último siempre asegúrese de no dejar filas vacías al final del archivo</p>
+        </div>
+        <v-row justify="center">
             <v-btn
                     :small="$vuetify.breakpoint.smAndDown"
                     class="primary"
                     @click="cargarListaCodigo()"
                     :disable=!valid
             >
-            <p class="mt-3 hidden-sm-and-down">Cargar</p>
+            <p class="mt-3 hidden-sm-and-down"> Registrar </p>
             <v-icon>mdi-chevron-right</v-icon>
             </v-btn>
-        </v-col>
-    </v-row>
-      </v-form>
-        <div>
-            <p> A continuación puede cargar la lista de códgio desde un archivo .csv.</p>
-            <p> El archivo debe estar como se muestra a acontinuación</p>
-            <img
-                src="../../assets/tablademuestraponderada.png"
-            />  
-        </div>
+        </v-row>
     </div>
 </div>
 </template>
@@ -53,7 +83,18 @@ export default {
     data(){
         return {
             file: "",
-            valid:true
+            valid:true,
+            form:{
+                nombre:"",
+                descripcion:""
+            },
+            rules: {} = {
+                required: (value) =>
+                (!!value && value !== "" && value !== undefined) || "Este campo es requerido",
+                textos: (value) => 
+                (value.length <= 280) || "El texto es demasiado largo",
+
+            }
         }
     },
     props: {
@@ -63,14 +104,19 @@ export default {
     methods: {
         async cargarListaCodigo(){
             const formData = new FormData();
-            formData.append('file', this.file)
-            try{
-                await ListaCodigoRepository.cargarListaCodigo(formData);
+            let validatedForm = this.$refs.registerForm.validate();
+            if (validatedForm){
+                try{
+                    formData.append('file', this.file)
+                    var idLista = await ListaCodigoRepository.crear(this.form);
+                    await ListaCodigoRepository.cargarListaCodigo(formData, idLista.id);
+                }
+                catch(err){
+                    console.log(err)
+                    swal("No se pudo procesar la muestra", "", "error")
+                } 
             }
-            catch(err){
-                console.log(err)
-                swal("No se pudo procesar la muestra", "", "error")
-            } 
+            
         },
         goRoute(route) {
             this.$router.push("/" + route);

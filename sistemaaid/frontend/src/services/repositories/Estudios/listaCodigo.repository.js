@@ -13,8 +13,8 @@ export default {
     let response = await conn.post(`/listaCodigo/`, data, jwt.getAuthHeaderToken());
     return response;
   },
-  async cargarListaCodigo(archivo) {
-    let response = await conn.post(`/categoria/cargar/`, archivo, headers);
+  async cargarListaCodigo(archivo,idLista) {
+    let response = await conn.post(`/categoria/cargar/${idLista}`, archivo, headers);
     return response.data;
   }
 

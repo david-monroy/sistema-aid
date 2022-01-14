@@ -190,10 +190,10 @@
                                 <template v-slot:default>
                                 <thead >
                                     <tr>
-                                      <th class="text-center" v-if="actualParticipanteEstudios.lugar.estado">
+                                      <th class="text-center" v-if="actualParticipanteEstudios.estado">
                                         Estado
                                       </th>
-                                        <th class="text-center" v-if="actualParticipanteEstudios.lugar.municipio">
+                                        <th class="text-center" v-if="actualParticipanteEstudios.municipio">
                                         Municipio
                                       </th>
                                       <th class="text-center" v-if="actualParticipanteEstudios.direccion">
@@ -203,8 +203,8 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                    <td v-if="actualParticipanteEstudios.lugar.estado" class="text-center">{{ actualParticipanteEstudios.lugar.estado }}</td>
-                                    <td v-if="actualParticipanteEstudios.lugar.municipio" class="text-center">{{ actualParticipanteEstudios.lugar.municipio }}</td>
+                                    <td v-if="actualParticipanteEstudios.estado" class="text-center">{{ actualParticipanteEstudios.estado }}</td>
+                                    <td v-if="actualParticipanteEstudios.municipio" class="text-center">{{ actualParticipanteEstudios.municipio }}</td>
                                     <td v-if="actualParticipanteEstudios.direccion" class="text-center">{{ actualParticipanteEstudios.direccion }}</td>
                                     </tr>
                                 </tbody>
@@ -368,8 +368,8 @@ name: "ParticipantesView",
             { text: 'Cédula', value: 'cedula' },
             { text: 'Género', value: 'genero' },
             { text: 'Correo electrónico', value: 'correo' },
+            { text: 'Estado', value: 'estado' },
             { text: 'Tlf. Principal', value: 'telfPrincipal' },
-            { text: 'Tlf. Secundario', value: 'telfSecundario' },
             { text: 'Acciones', value: 'actions', sortable: false },
             ],
             participantes: [],
@@ -425,7 +425,8 @@ name: "ParticipantesView",
                 { nombre: '9no', id: 9},
                 { nombre: '10mo', id: 10},
             ],
-            lista_consultada: []
+            lista_consultada: [],
+            participantes_origen: []
         }
     },
     computed: {
@@ -445,7 +446,48 @@ name: "ParticipantesView",
     },
     methods: {
         async getParticipantes(){
-            this.participantes = await ParticipantesRepository.obtener();
+            this.participantes_origen = await ParticipantesRepository.obtener();
+            let estado
+            let municipio
+            let lugar_id;
+            this.participantes_origen.forEach(par => {
+              console.log(par)
+              lugar_id = par.lugar.id
+              this.estados.forEach(e => {
+                if (e.id == lugar_id){
+                    estado = e.nombre;
+                }
+              });
+              this.municipios.forEach(m => {
+                  if (m.id == lugar_id){
+                      municipio = m.nombre;
+                      this.estados.forEach(e => {
+                        if(m.fk_lugar_id == e.id){
+                          estado = e.nombre;
+                        }
+                      });
+                  }
+              });
+              this.participantes.push({
+                id: par.id,
+                nombre: par.nombre,
+                cedula: par.cedula,
+                correo: par.correo,
+                correoUcab: par.correoUcab,
+                telfPrincipal: par.telfPrincipal,
+                telfSecundario: par.telfSecundario,
+                fechaNacimiento: par.fechaNacimiento,
+                genero: par.genero,
+                estado: estado,
+                municipio: municipio,
+                direccion: par.direccion,
+                instagram: par.instagram,
+                twitter: par.twitter,
+                facebook: par.facebook,
+                linkedin: par.linkedin,
+                tiktok: par.tiktok,
+              })
+            });
         },
         async getParticipanteCarreras(){
             this.participante_carreras = await ParticipanteCarrerasRepository.obtener();
@@ -453,6 +495,7 @@ name: "ParticipantesView",
         async getLugares(){
             this.estados = await LugaresRepository.obtenerEstados();
             this.municipios = await LugaresRepository.obtenerMunicipios();
+            this.getParticipantes();
         },
         mostrarEliminar(participanteID, participanteNombre){
           this.popupEliminar = true;
@@ -479,37 +522,18 @@ name: "ParticipantesView",
               }
           });
         },
-        setLugares(lugar_id){
-          this.estados.forEach(e => {
-              if (e.id == lugar_id){
-                  this.actualParticipanteEstudios.lugar.estado = e.nombre;
-              }
-          });
-          this.municipios.forEach(m => {
-              if (m.id == lugar_id){
-                  this.actualParticipanteEstudios.lugar.municipio = m.nombre;
-                  this.estados.forEach(e => {
-                    if(m.fk_lugar_id == e.id){
-                      this.actualParticipanteEstudios.lugar.estado = e.nombre;
-                    }
-                  });
-              }
-          });
-        },
 
         abrirEstudios(userID){
+          console.log(userID)
           this.actualParticipanteCarreras.splice(0, this.actualParticipanteCarreras.length)
           this.modalEstudios = true;
           this.participanteEstudios = userID;
-          var lugar_id;
           this.participantes.forEach(par => {
             if (par.id == this.participanteEstudios){
               this.actualParticipanteEstudios = par;
-              lugar_id = par.lugar.id
             }
           });
           this.setParticipanteCarreras(userID);
-          this.setLugares(lugar_id);
         },
 
         async filtrar(){
@@ -560,12 +584,11 @@ name: "ParticipantesView",
     },
 
     mounted(){
-        this.getParticipantes();
+        this.getLugares();
         this.getParticipanteCarreras();
         this.getCarreras();
         this.getSedes();
         this.getColegios();
-        this.getLugares();
     }
 }
 </script>

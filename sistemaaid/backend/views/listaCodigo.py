@@ -2,6 +2,8 @@ from django.http import HttpResponse
 import pandas as pd
 from backend.models import modelCategoria, modelListaCodigo,Categoria
 from django.views.decorators.csrf import csrf_exempt
+import json
+from django.core.serializers.json import DjangoJSONEncoder
 
 # Create your views here.
 @csrf_exempt
@@ -28,5 +30,11 @@ def cargarListaCodigo(request,idLista):
 
     return HttpResponse()
 
+
+@csrf_exempt
+def obtenerCategorias(request,idLista):
+    Categorias = modelCategoria.Categoria.objects.filter(listaCodigo = idLista).values()
+    query_respuesta = json.dumps(list(Categorias), cls=DjangoJSONEncoder)
+    return HttpResponse(query_respuesta)
 
     

@@ -26,7 +26,8 @@ urlpatterns = [
     path('muestraPonderada/insertar/<int:idEdicion>', views.insertarMuestra),
     path('estudios/validarCodigo', views.validarCodigo),
     path('ediciones/validarCodigo', views.validarCodigo),
-    path('categoria/cargar/<int:idLista>', views.cargarListaCodigo)
+    path('categoria/cargar/<int:idLista>', views.cargarListaCodigo),
+    path('categoria/consultar/<int:idLista>', views.obtenerCategorias)
 ]
 
 urlpatterns += router.urls

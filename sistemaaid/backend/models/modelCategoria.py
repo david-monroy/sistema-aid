@@ -10,7 +10,7 @@ class Categoria(models.Model):
     fechaUltimaModificacion = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.nombre
+        return self.codigo
 
     class Meta:
         unique_together = ('codigo', 'listaCodigo',)

@@ -53,7 +53,7 @@
             <p>El archivo debe contener en la primera columna el código y en la segunda columna la descripción.</p>
             <p>La primera fila puede ir vacía o tal como se muestra en la siguiente imagen</p>
             <img
-                src="../../assets/tablaListaCodigo.png"
+                src="../../../assets/tablaListaCodigo.png"
             />  
             <p> Por último siempre asegúrese de no dejar filas vacías al final del archivo</p>
         </div>
@@ -76,7 +76,7 @@
 
 <script>
 import swal from 'sweetalert'
-import Repository from "../../services/repositories/repositoryFactory";
+import Repository from "../../../services/repositories/repositoryFactory";
 const ListaCodigoRepository = Repository.get("ListaCodigo");
 
 export default {
@@ -126,6 +126,6 @@ export default {
 </script>
 
 <style>
-@import "../../styles/main.css";
-@import "../../styles/components/participantes.css";
+@import "../../../styles/main.css";
+@import "../../../styles/components/participantes.css";
 </style>

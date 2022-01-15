@@ -40,6 +40,26 @@
           </div>
           <div class="form-group">
             <v-select
+              v-model="form.estado"
+              :items="estados"
+              item-text="nombre"
+              item-value="id"
+              label="Estado"
+              class="px-8 my-0 py-0"
+            ></v-select>
+          </div>
+          <div class="form-group">
+            <v-select
+              v-model="form.municipio"
+              :items="municipios()"
+              item-text="nombre"
+              item-value="id"
+              label="Municipio"
+              class="px-8 my-0 py-0"
+            ></v-select>
+          </div>
+          <div class="form-group">
+            <v-select
               v-model="form.sede"
               :items="sedes"
               item-text="nombre"
@@ -221,6 +241,9 @@
                                 <thead >
                                     <tr>
                                       <th class="text-center">
+                                        Colegio
+                                    </th>
+                                      <th class="text-center">
                                         Sede
                                     </th>
                                     <th class="text-center">
@@ -236,6 +259,7 @@
                                     v-for="(par_car,p) in actualParticipanteCarreras"
                                     :key="p"
                                     >
+                                    <td class="text-center">{{ par_car.colegio }}</td>
                                     <td class="text-center">{{ par_car.sede.nombre }}</td>
                                     <td class="text-center">{{ par_car.carrera.nombre }}</td>
                                     <td class="text-center">{{ par_car.semestre }}</td>
@@ -402,7 +426,9 @@ name: "ParticipantesView",
               sede: null,
               colegio: null,
               semestre: null,
-              carrera: null
+              carrera: null,
+              estado: null,
+              municipio: null
             },
             carreras: [],
             sedes: [],
@@ -426,7 +452,9 @@ name: "ParticipantesView",
                 { nombre: '10mo', id: 10},
             ],
             lista_consultada: [],
-            participantes_origen: []
+            participantes_origen: [],
+            estados: [],
+            municipios_todos: []
         }
     },
     computed: {
@@ -451,6 +479,8 @@ name: "ParticipantesView",
             let municipio
             let lugar_id;
             this.participantes_origen.forEach(par => {
+              estado = null,
+              municipio = null,
               console.log(par)
               lugar_id = par.lugar.id
               this.estados.forEach(e => {
@@ -458,7 +488,7 @@ name: "ParticipantesView",
                     estado = e.nombre;
                 }
               });
-              this.municipios.forEach(m => {
+              this.municipios_todos.forEach(m => {
                   if (m.id == lugar_id){
                       municipio = m.nombre;
                       this.estados.forEach(e => {
@@ -478,6 +508,7 @@ name: "ParticipantesView",
                 telfSecundario: par.telfSecundario,
                 fechaNacimiento: par.fechaNacimiento,
                 genero: par.genero,
+                colegio: par.colegio.nombre,
                 estado: estado,
                 municipio: municipio,
                 direccion: par.direccion,
@@ -489,13 +520,26 @@ name: "ParticipantesView",
               })
             });
         },
+        setParticipantes(){
+
+        },
         async getParticipanteCarreras(){
             this.participante_carreras = await ParticipanteCarrerasRepository.obtener();
         },
         async getLugares(){
             this.estados = await LugaresRepository.obtenerEstados();
-            this.municipios = await LugaresRepository.obtenerMunicipios();
+            this.municipios_todos = await LugaresRepository.obtenerMunicipios();
             this.getParticipantes();
+        },
+        municipios() {
+            let id = this.form.estado;
+            let array = [];
+            this.municipios_todos.forEach(mun => {
+                if (mun.fk_lugar_id == id) {
+                    array.push(mun)
+                }
+            });
+            return array
         },
         mostrarEliminar(participanteID, participanteNombre){
           this.popupEliminar = true;
@@ -518,6 +562,11 @@ name: "ParticipantesView",
         setParticipanteCarreras(id){
           this.participante_carreras.forEach(p => {
               if (p.participante.id == id){
+                this.participantes.forEach(par => {
+                  if (par.id == id){
+                    p.colegio = par.colegio
+                  }
+                });
                   this.actualParticipanteCarreras.push(p);
               }
           });
@@ -565,6 +614,7 @@ name: "ParticipantesView",
 
         async limpiar(){
           this.$refs.registerForm.reset();
+          this.participantes = [];
           this.getParticipantes();
         },
         

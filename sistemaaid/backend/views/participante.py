@@ -125,8 +125,14 @@ def participantes_filtrar(request):
     carrera = consulta_dict["carrera"]
     sede = consulta_dict["sede"]
     semestre = consulta_dict["semestre"]
+    estado = consulta_dict["estado"]
+    municipio = consulta_dict["municipio"]
 
     filtro = {}
+    filtroLugar = {}
+    query_participante_estado = []
+
+    lista_municipios_de_estado = []
 
     if nombre:
         filtro["nombre__contains"] = nombre
@@ -148,9 +154,21 @@ def participantes_filtrar(request):
 
     if semestre:
         filtro["participantecarrera__semestre"] = semestre
+
+    if municipio:
+        filtro["lugar"] = municipio
+    elif estado:
+        filtro["lugar"] = estado
+        filtroLugar["fk_lugar"] = estado
+        query_lugar = modelLugar.Lugar.objects.filter(**filtroLugar).values()
+        dict_municipios = query_lugar.filter(fk_lugar=estado).values('id').distinct()
+        
+        for l in list(dict_municipios):
+            lista_municipios_de_estado.append(int(l['id']))
+        query_participante_estado = modelParticipante.Participante.objects.filter(lugar__in = lista_municipios_de_estado).values()
     
     query_participante = modelParticipante.Participante.objects.filter(**filtro).values()
     
-    query_respuesta = json.dumps(list(query_participante), cls=DjangoJSONEncoder) # Convierte el query retornado en un JSON para enviar a Vue
+    query_respuesta = json.dumps(list(query_participante) + list(query_participante_estado), cls=DjangoJSONEncoder) # Convierte el query retornado en un JSON para enviar a Vue
 
     return HttpResponse(query_respuesta)

@@ -22,13 +22,6 @@
               ></v-text-field>
           </div>
           <div class="form-group">
-              <v-text-field
-                  class="px-8 my-0 py-0"
-                  v-model="form.cedula"
-                  label="Cédula"
-              ></v-text-field>
-          </div>
-          <div class="form-group">
             <v-select
               v-model="form.genero"
               :items="generos"
@@ -520,9 +513,6 @@ name: "ParticipantesView",
               })
             });
         },
-        setParticipantes(){
-
-        },
         async getParticipanteCarreras(){
             this.participante_carreras = await ParticipanteCarrerasRepository.obtener();
         },
@@ -587,7 +577,52 @@ name: "ParticipantesView",
 
         async filtrar(){
           try{
-            this.participantes = await ParticipantesRepository.filtrar(this.form);
+            this.participantes_origen = await ParticipantesRepository.filtrar(this.form);
+            this.participantes = [];
+            let estado
+            let municipio
+            let lugar_id;
+            this.participantes_origen.forEach(par => {
+              estado = null,
+              municipio = null,
+              console.log(par)
+              lugar_id = par.lugar_id
+              this.estados.forEach(e => {
+                if (e.id == lugar_id){
+                    estado = e.nombre;
+                }
+              });
+              this.municipios_todos.forEach(m => {
+                  if (m.id == lugar_id){
+                      municipio = m.nombre;
+                      this.estados.forEach(e => {
+                        if(m.fk_lugar_id == e.id){
+                          estado = e.nombre;
+                        }
+                      });
+                  }
+              });
+              this.participantes.push({
+                id: par.id,
+                nombre: par.nombre,
+                cedula: par.cedula,
+                correo: par.correo,
+                correoUcab: par.correoUcab,
+                telfPrincipal: par.telfPrincipal,
+                telfSecundario: par.telfSecundario,
+                fechaNacimiento: par.fechaNacimiento,
+                genero: par.genero,
+                colegio: par.colegio_id,
+                estado: estado,
+                municipio: municipio,
+                direccion: par.direccion,
+                instagram: par.instagram,
+                twitter: par.twitter,
+                facebook: par.facebook,
+                linkedin: par.linkedin,
+                tiktok: par.tiktok,
+              })
+            });
           }
           catch(err){
             console.log(err)

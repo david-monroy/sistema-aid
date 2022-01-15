@@ -170,5 +170,4 @@ def participantes_filtrar(request):
     query_participante = modelParticipante.Participante.objects.filter(**filtro).values()
     
     query_respuesta = json.dumps(list(query_participante) + list(query_participante_estado), cls=DjangoJSONEncoder) # Convierte el query retornado en un JSON para enviar a Vue
-
     return HttpResponse(query_respuesta)

@@ -48,6 +48,8 @@ CORS_ALLOW_METHODS = [
 'GET',
 'OPTIONS',
 'POST',
+'DELETE',
+'PUT'
 ]
 
 # Application definition
@@ -123,7 +125,8 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': 'admin',
         'HOST': '127.0.0.1',
-        'PORT': '5432'
+        'PORT': '5432',
+        'ATOMIC_REQUEST': True
     }
 }
 

@@ -14,7 +14,7 @@
                 <div class="form-group">
                     <v-text-field
                         v-model="form.nombre"
-                        label="Nombre y apellido"
+                        label="Nombre y apellido *"
                         required
                         :rules='[rules.required]'
                     ></v-text-field>
@@ -24,10 +24,10 @@
                 <div class="form-group">
                     <v-text-field
                         v-model="form.cedula"
-                        label="Cédula"
+                        label="Cédula *"
                         name="cedula"
                         required
-                        :rules='[rules.required]'
+                        :rules='[rules.required, rules.CedulaRules]'
                     ></v-text-field>
                 </div>
             </v-col>
@@ -47,7 +47,7 @@
                         <template v-slot:activator="{ on, attrs }">
                             <v-text-field
                                 v-model="date"
-                                label="Fecha"
+                                label="Fecha de nacimiento *"
                                 hint="AAAA-MM-DD"
                                 persistent-hint
                                 prepend-icon="fa-calendar"
@@ -69,7 +69,7 @@
                 <div class="form-group">
                     <v-text-field
                         v-model="form.correo"
-                        label="Correo electrónico"
+                        label="Correo electrónico *"
                         required
                         :rules='[rules.emailRules]'
                     ></v-text-field>
@@ -101,7 +101,7 @@
                     <v-text-field
                         v-model="form.telfPrincipal"
                         type="number"
-                        label="Teléfono primario"
+                        label="Teléfono primario *"
                         required
                         :rules='[rules.required, rules.PhoneRules]'
                     ></v-text-field>
@@ -255,7 +255,7 @@
                 class="btn success btn-block w-50 my-2 mx-auto  d-none d-sm-flex">
                 Registrar
             </v-btn>
-            <v-btn @click="goRoute(back)"
+            <v-btn @click="goRoute('participantes')"
                 class="btn-block accent1 w-25 mx-auto  mb-0 d-none d-sm-flex">
                 Regresar
             </v-btn>
@@ -335,6 +335,8 @@ export default {
                 (v) => /.+@.+\..+\..+\../.test(v) || "Dirección de correo UCAB inválida",
                 PhoneRules: 
                 (v) => (v && v.length == 11) || "Número de teléfono debe tener 11 dígitos",
+                CedulaRules: 
+                (v) => (v && v.length > 6) || "Número de cédula debe tener 7 o más dígitos",
                 
             },
             informacion_academica: []
@@ -389,6 +391,7 @@ export default {
                             this.registrarParticipanteCarrera()
                         }
                         swal("Participante creado satisfactoriamente", "", "success")
+                        this.goRoute('participantes')
                     }
                     catch(err){
                         console.log(err)
@@ -417,6 +420,10 @@ export default {
                 }
             });
             return array
+        },
+
+        goRoute(route) {
+            this.$router.push("/" + route);
         },
 
         async getCarreras(){

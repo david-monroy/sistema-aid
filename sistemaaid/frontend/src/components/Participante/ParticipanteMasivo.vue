@@ -58,12 +58,16 @@ export default {
         seleccionarCSV(){
             this.file = this.$refs.file.files[0]
         },
+        goRoute(route) {
+            this.$router.push("/" + route);
+        },
         async cargarCSV(){
             const formData = new FormData();
             formData.append('file', this.file)
             try{
                 await ParticipantesRepository.agregarMasivo(formData);
                 swal("Participantes creados satisfactoriamente", "", "success")
+                this.goRoute('participantes')
             }
             catch(err){
               console.log(err)

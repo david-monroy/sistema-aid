@@ -14,7 +14,7 @@
                 <div class="form-group">
                     <v-text-field
                         v-model="form.nombre"
-                        label="Nombre y apellido"
+                        label="Nombre y apellido *"
                         required
                         :rules='[rules.required]'
                     ></v-text-field>
@@ -24,7 +24,7 @@
                 <div class="form-group">
                     <v-text-field
                         v-model="form.cedula"
-                        label="Cédula"
+                        label="Cédula *"
                         name="cedula"
                         required
                         :rules='[rules.required]'
@@ -47,7 +47,7 @@
                         <template v-slot:activator="{ on, attrs }">
                             <v-text-field
                                 v-model="date"
-                                label="Fecha"
+                                label="Fecha de nacimiento *"
                                 hint="AAAA-MM-DD"
                                 persistent-hint
                                 prepend-icon="fa-calendar"
@@ -69,7 +69,7 @@
                 <div class="form-group">
                     <v-text-field
                         v-model="form.correo"
-                        label="Correo electrónico"
+                        label="Correo electrónico *"
                         required
                         :rules='[rules.emailRules]'
                     ></v-text-field>
@@ -101,7 +101,7 @@
                     <v-text-field
                         v-model="form.telfPrincipal"
                         type="number"
-                        label="Teléfono primario"
+                        label="Teléfono primario *"
                         required
                         :rules='[rules.required, rules.PhoneRules]'
                     ></v-text-field>
@@ -386,7 +386,7 @@ export default {
                                 location.reload()
                             }
                             swal("Participante actualizado satisfactoriamente", "", "success")
-                            location.reload()
+                            this.goRoute('participantes')
                         }
                         catch(err){
                             console.log(err)
@@ -405,6 +405,9 @@ export default {
                     swal("El participante no pudo ser creado", "", "error")
                 }
             },
+        goRoute(route) {
+            this.$router.push("/" + route);
+        },
 
             async agregarParticipanteCarrera() {
                 this.informacion_academica.participante_id = this.participante_id

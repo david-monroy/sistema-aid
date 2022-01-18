@@ -19,12 +19,24 @@ def agregar_masivo(request):
     
     row_iter = df.iterrows()
 
-    df['Fecha nacimiento'] = pd.to_datetime(df['Fecha nacimiento'])
-    df['Telefono secundario']=df['Telefono secundario'].fillna('')
-    df['Correo ucab']=df['Correo ucab'].fillna('')
+    df['Fecha de nacimiento'] = pd.to_datetime(df['Fecha de nacimiento'])
+    df['Telf. Secundario']=df['Telf. Secundario'].fillna('')
+    df['Correo UCAB']=df['Correo UCAB'].fillna('')
+    df['Municipio']=df['Municipio'].fillna('')
+    lugar = ''
+    estado = ''
     
     for index, row in row_iter:
 
+            if (row[9]):
+                estado = modelLugar.Lugar.objects.filter(nombre=row[8], tipo = 'ESTADO').values('id').distinct()
+                for l in list(estado):
+                    print(type(l))
+                    lugar = modelLugar.Lugar.objects.get(nombre=row[9], fk_lugar = int(l['id']))
+                    
+            else:
+                lugar = modelLugar.Lugar.objects.get(nombre=row[8], tipo = 'ESTADO')
+            
             nuevo_participante = modelParticipante.Participante.objects.create(
                 nombre = row[0],
                 cedula  = row[1],
@@ -34,19 +46,21 @@ def agregar_masivo(request):
                 correo = row[5],
                 correoUcab = row[6],
                 fechaNacimiento = row[7],
-                colegio = modelColegio.Colegio.objects.get(pk=row[8]),
-                instagram = row[12],
-                twitter = row[13],
-                facebook = row[14],
-                tiktok = row[15],
-                linkedin = row[16],
+                lugar = lugar,
+                direccion = row[10],
+                colegio = modelColegio.Colegio.objects.get(nombre=row[11]),
+                instagram = row[15],
+                twitter = row[16],
+                facebook = row[17],
+                tiktok = row[18],
+                linkedin = row[19],
             )
 
             nuevo_participante_carrera = modelParticipanteCarrera.ParticipanteCarrera.objects.create(
                 participante = nuevo_participante,
-                sede  = modelSede.Sede.objects.get(pk=row[9]),
-                carrera = modelCarrera.Carrera.objects.get(pk=row[10]),
-                semestre = row[11],
+                sede  = modelSede.Sede.objects.get(nombre=row[12]),
+                carrera = modelCarrera.Carrera.objects.get(nombre=row[13]),
+                semestre = row[14],
             )
 
     return HttpResponse(df)

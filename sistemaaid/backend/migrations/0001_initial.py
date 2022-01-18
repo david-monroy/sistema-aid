@@ -88,4 +88,17 @@ class Migration(migrations.Migration):
             name='colegio',
             field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='backend.colegio'),
         ),
+        migrations.CreateModel(
+            name='Edicion',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('codigo', models.CharField(max_length=10, unique=True)),
+                ('fechaInicio', models.DateField()),
+                ('fechaFin', models.DateField()),
+                ('periodo', models.CharField(blank=True, max_length=10, null=True)),
+                ('vinculada', models.BooleanField()),
+                ('totalMuestra', models.IntegerField()),
+                ('estudio', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='backend.estudio')),
+            ],
+        ),
     ]

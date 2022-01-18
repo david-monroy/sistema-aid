@@ -6,7 +6,6 @@ class Estudio(models.Model):
     poblacionObjetivo = models.CharField(max_length=50)
     antecedentes = models.CharField(max_length=280, null=True, blank=True)
     objetivoNegocio = models.CharField(max_length=280)
-    objetivoOrganizacion = models.CharField(max_length=280)
 
     def __str__(self):
         return self.nombre

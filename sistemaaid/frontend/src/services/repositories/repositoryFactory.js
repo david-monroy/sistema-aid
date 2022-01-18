@@ -1,5 +1,7 @@
 import AutorizacionRepository from "./autenticacion.repository";
-import estudiosRepository from "./estudios.repository";
+import EstudiosRepository from "./Estudios/estudios.repository";
+import EdicionesRepository from "./Estudios/ediciones.repository";
+import MuestraPonderadaRepository from "./Estudios/muestraPonderada.repository";
 import ParticipantesRepository from "./participantes.repository";
 import SedesRepository from "./sedes.repository";
 import ColegiosRepository from "./colegios.repository";
@@ -9,13 +11,16 @@ import ParticipanteCarrerasRepository from "./participante_carreras.repository";
 
 const repositories = {
     Autorizacion: AutorizacionRepository,
-    Estudios: estudiosRepository,
+    Estudios: EstudiosRepository,
+    Ediciones: EdicionesRepository,
+    MuestraPonderada: MuestraPonderadaRepository,
+    Autorizacion: AutorizacionRepository,
     Participantes: ParticipantesRepository,
     Sedes: SedesRepository,
     Carreras: CarrerasRepository,
     ParticipanteCarreras: ParticipanteCarrerasRepository,
     Colegios: ColegiosRepository,
-    Lugares: LugaresRepository,
+    Lugares: LugaresRepository
 };
 
 export default {

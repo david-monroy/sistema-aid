@@ -44,7 +44,6 @@ const actions = {
   async authorize({ commit }, payload) {
     try {
       const response = await AutorizacionRepository.login(payload);
-      console.log(response)
       jwt.saveToken(response.access);
       commit("set_user", payload);
     } catch (e) {

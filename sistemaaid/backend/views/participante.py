@@ -31,7 +31,6 @@ def agregar_masivo(request):
             if (row[9]):
                 estado = modelLugar.Lugar.objects.filter(nombre=row[8], tipo = 'ESTADO').values('id').distinct()
                 for l in list(estado):
-                    print(type(l))
                     lugar = modelLugar.Lugar.objects.get(nombre=row[9], fk_lugar = int(l['id']))
                     
             else:
@@ -74,12 +73,22 @@ def editar_masivo(request):
     
     row_iter = df.iterrows()
 
-    df['Fecha nacimiento'] = pd.to_datetime(df['Fecha nacimiento'])
-    df['Telefono secundario']=df['Telefono secundario'].fillna('')
-    df['Correo ucab']=df['Correo ucab'].fillna('')
+    df['Fecha de nacimiento'] = pd.to_datetime(df['Fecha de nacimiento'])
+    df['Telf. Secundario']=df['Telf. Secundario'].fillna('')
+    df['Correo UCAB']=df['Correo UCAB'].fillna('')
+    df['Municipio']=df['Municipio'].fillna('')
+    lugar = ''
+    estado = ''
 
     for index, row in row_iter:
         existe_participante = modelParticipante.Participante.objects.filter(cedula=row[1])
+        if (row[9]):
+            estado = modelLugar.Lugar.objects.filter(nombre=row[8], tipo = 'ESTADO').values('id').distinct()
+            for l in list(estado):
+                lugar = modelLugar.Lugar.objects.get(nombre=row[9], fk_lugar = int(l['id']))
+                    
+        else:
+            lugar = modelLugar.Lugar.objects.get(nombre=row[8], tipo = 'ESTADO')
 
         if (existe_participante):
             par = modelParticipante.Participante.objects.get(cedula=row[1])
@@ -89,18 +98,28 @@ def editar_masivo(request):
             par.telfSecundario = row[4]
             par.correo = row[5]
             par.correoUcab = row[6]
-            par.colegio = modelColegio.Colegio.objects.get(pk=row[8])
+            par.colegio = modelColegio.Colegio.objects.get(nombre=row[11])
+            par.fechaNacimiento = row[7]
+            par.lugar = lugar
+            par.direccion = row[10]
+            par.instagram = row[15]
+            par.twitter = row[16]
+            par.facebook = row[17]
+            par.tiktok = row[18]
+            par.linkedin = row[19]
             par.save()
 
             existe_par_car = modelParticipanteCarrera.ParticipanteCarrera.objects.filter(participante=par.id)
 
             if (existe_par_car):
                 par_car = modelParticipanteCarrera.ParticipanteCarrera.objects.get(participante=par.id)
-                par_car.sede  = modelSede.Sede.objects.get(pk=row[9])
-                par_car.carrera = modelCarrera.Carrera.objects.get(pk=row[10])
-                par_car.semestre = row[11]
+                par_car.sede  = modelSede.Sede.objects.get(nombre=row[12])
+                par_car.carrera = modelCarrera.Carrera.objects.get(nombre=row[13])
+                par_car.semestre = row[14]
                 par_car.save()
+
         else:
+
             nuevo_participante = modelParticipante.Participante.objects.create(
                 nombre = row[0],
                 cedula  = row[1],
@@ -110,19 +129,21 @@ def editar_masivo(request):
                 correo = row[5],
                 correoUcab = row[6],
                 fechaNacimiento = row[7],
-                colegio = modelColegio.Colegio.objects.get(pk=row[8]),
-                instagram = row[12],
-                twitter = row[13],
-                facebook = row[14],
-                tiktok = row[15],
-                linkedin = row[16],
+                lugar = lugar,
+                direccion = row[10],
+                colegio = modelColegio.Colegio.objects.get(nombre=row[11]),
+                instagram = row[15],
+                twitter = row[16],
+                facebook = row[17],
+                tiktok = row[18],
+                linkedin = row[19],
             )
 
             nuevo_participante_carrera = modelParticipanteCarrera.ParticipanteCarrera.objects.create(
                 participante = nuevo_participante,
-                sede  = modelSede.Sede.objects.get(pk=row[9]),
-                carrera = modelCarrera.Carrera.objects.get(pk=row[10]),
-                semestre = row[11],
+                sede  = modelSede.Sede.objects.get(nombre=row[12]),
+                carrera = modelCarrera.Carrera.objects.get(nombre=row[13]),
+                semestre = row[14],
             )
 
     return HttpResponse(df)

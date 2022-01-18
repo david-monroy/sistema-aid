@@ -31,3 +31,12 @@ class ParticipanteCarreraViewSet(viewsets.ModelViewSet):
 class EstudioViewSet(viewsets.ModelViewSet):
     queryset = Estudio.objects.all()
     serializer_class = EstudioSerializer
+
+
+class EdicionViewSet(viewsets.ModelViewSet):
+    queryset = Edicion.objects.all()
+    serializer_class = EdicionSerializer
+
+class MuestraPonderadaViewSet(viewsets.ModelViewSet):
+    queryset = MuestraPonderada.objects.all()
+    serializer_class = MuestraPonderadaSerializer

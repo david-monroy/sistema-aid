@@ -40,3 +40,11 @@ class MuestraPonderadaViewSet(viewsets.ModelViewSet):
 class MetodologiaViewSet(viewsets.ModelViewSet):
     queryset = Metodologia.objects.all()
     serializer_class = MetodologiaSerializer
+class ListaCodigoViewSet(viewsets.ModelViewSet):
+    queryset = ListaCodigo.objects.all()
+    serializer_class = ListaCodigoSerializer
+
+class CategoriaViewSet(viewsets.ModelViewSet):
+    queryset = Categoria.objects.all()
+    serializer_class = CategoriaSerializer
+    

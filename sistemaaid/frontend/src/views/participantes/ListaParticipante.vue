@@ -196,7 +196,7 @@
 
                   <v-expansion-panels focusable class="px-5 mb-2">
 
-                    <v-expansion-panel>
+                    <v-expansion-panel v-if='actualParticipanteEstudios.estado || actualParticipanteEstudios.municipio || actualParticipanteEstudios.direccion'>
                         <v-expansion-panel-header>Ubicación</v-expansion-panel-header>
                         <v-expansion-panel-content>
                             <v-simple-table max-height="240px">
@@ -226,44 +226,41 @@
                         </v-expansion-panel-content>
                     </v-expansion-panel>
 
-                    <v-expansion-panel>
+                    <v-expansion-panel v-if='actualParticipanteCarreras.length > 0'>
                         <v-expansion-panel-header>Información académica</v-expansion-panel-header>
                         <v-expansion-panel-content>
                             <v-simple-table max-height="240px">
                                 <template v-slot:default>
                                 <thead >
                                     <tr>
-                                      <th class="text-center">
+                                      <th class="text-center" v-if="actualParticipanteCarreras[0].colegio">
                                         Colegio
                                     </th>
-                                      <th class="text-center">
+                                      <th class="text-center" v-if="actualParticipanteCarreras[0].sede">
                                         Sede
                                     </th>
-                                    <th class="text-center">
+                                    <th class="text-center" v-if="actualParticipanteCarreras[0].carrera">
                                         Carrera
                                     </th>
-                                    <th class="text-center">
+                                    <th class="text-center" v-if="actualParticipanteCarreras[0].semestre">
                                         Semestre
                                     </th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr
-                                    v-for="(par_car,p) in actualParticipanteCarreras"
-                                    :key="p"
-                                    >
-                                    <td class="text-center">{{ par_car.colegio }}</td>
-                                    <td class="text-center">{{ par_car.sede.nombre }}</td>
-                                    <td class="text-center">{{ par_car.carrera.nombre }}</td>
-                                    <td class="text-center">{{ par_car.semestre }}</td>
-                                    </tr>
+                                  <tr>
+                                    <td class="text-center" v-if="actualParticipanteCarreras[0].colegio">{{ actualParticipanteCarreras[0].colegio }}</td>
+                                    <td class="text-center" v-if="actualParticipanteCarreras[0].sede">{{ actualParticipanteCarreras[0].sede.nombre }}</td>
+                                    <td class="text-center" v-if="actualParticipanteCarreras[0].carrera">{{ actualParticipanteCarreras[0].carrera.nombre }}</td>
+                                    <td class="text-center" v-if="actualParticipanteCarreras[0].semestre">{{ actualParticipanteCarreras[0].semestre }}</td>
+                                  </tr>
                                 </tbody>
                                 </template>
                             </v-simple-table>
                         </v-expansion-panel-content>
                     </v-expansion-panel>
 
-                    <v-expansion-panel>
+                    <v-expansion-panel v-if='actualParticipanteEstudios.instagram || actualParticipanteEstudios.twitter || actualParticipanteEstudios.facebook || actualParticipanteEstudios.linkedin || actualParticipanteEstudios.tiktok'>
                         <v-expansion-panel-header>Redes Sociales</v-expansion-panel-header>
                         <v-expansion-panel-content>
                             <v-simple-table max-height="240px">
@@ -470,12 +467,15 @@ name: "ParticipantesView",
             this.participantes_origen = await ParticipantesRepository.obtener();
             let estado
             let municipio
-            let lugar_id;
+            let lugar_id
+            let colegio
             this.participantes_origen.forEach(par => {
-              estado = null,
-              municipio = null,
-              console.log(par)
-              lugar_id = par.lugar.id
+              estado = null
+              municipio = null
+              colegio = null
+              lugar_id = 0
+              if (par.lugar) lugar_id = par.lugar.id
+              if (par.colegio) colegio = par.colegio.nombre
               this.estados.forEach(e => {
                 if (e.id == lugar_id){
                     estado = e.nombre;
@@ -501,7 +501,7 @@ name: "ParticipantesView",
                 telfSecundario: par.telfSecundario,
                 fechaNacimiento: par.fechaNacimiento,
                 genero: par.genero,
-                colegio: par.colegio.nombre,
+                colegio: colegio,
                 estado: estado,
                 municipio: municipio,
                 direccion: par.direccion,
@@ -550,6 +550,8 @@ name: "ParticipantesView",
           this.goRoute(`participantes/${id}/editar`);
         },
         setParticipanteCarreras(id){
+          let par_car = {}
+          let existe = false
           this.participante_carreras.forEach(p => {
               if (p.participante.id == id){
                 this.participantes.forEach(par => {
@@ -557,13 +559,23 @@ name: "ParticipantesView",
                     p.colegio = par.colegio
                   }
                 });
-                  this.actualParticipanteCarreras.push(p);
+                this.actualParticipanteCarreras.push(p);
+                existe = true
               }
           });
+          if (!existe) {
+            this.participantes.forEach(par => {
+              if (par.id == id){
+                if (par.colegio){
+                  par_car.colegio = par.colegio
+                  this.actualParticipanteCarreras.push(par_car)
+                }
+              }
+            });
+          }
         },
 
         abrirEstudios(userID){
-          console.log(userID)
           this.actualParticipanteCarreras.splice(0, this.actualParticipanteCarreras.length)
           this.modalEstudios = true;
           this.participanteEstudios = userID;

@@ -423,6 +423,14 @@ export default {
         async getParticipante(id){
             this.participante_id = id;
             let res = await ParticipantesRepository.obtenerPorId(id);
+
+            if (res.lugar.fk_lugar) {
+                this.form.municipio_id = res.lugar.id
+                this.form.estado_id = res.lugar.fk_lugar
+            } else{
+                this.form.estado_id = res.lugar.id
+            }
+
             this.form.nombre = res.nombre
             this.form.genero = res.genero
             this.form.cedula = res.cedula
@@ -438,8 +446,6 @@ export default {
             this.form.tiktok = res.tiktok
             this.form.linkedin = res.linkedin
             this.form.direccion = res.direccion
-            this.form.municipio = res.lugar.id
-            this.form.estado = res.lugar.fk_lugar_id
             this.date = res.fechaNacimiento
         },
         async getParticipanteCarreras(id){

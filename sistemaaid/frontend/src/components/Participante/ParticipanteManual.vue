@@ -376,9 +376,9 @@ export default {
         async registrarParticipante() {
             let validatedForm = this.$refs.registerForm.validate();
             this.form.fechaNacimiento = this.fechaNacimiento;
+            
             if (this.form.municipio_id) this.form.lugar_id = this.form.municipio_id
             else this.form.lugar_id = this.form.estado_id
-
 
             if (validatedForm){
                 if (this.edad_calculada < 11) {

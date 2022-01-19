@@ -29,6 +29,16 @@
                 </v-btn>
             </v-col>
         </v-row>
+            <div>
+                <p> A continuación puede cargar un archivo .csv para registrar participantes.</p>
+                <p> La estructura debe ser como la siguiente imagen, puede agregar tantas filas como desee.</p>
+                <p> Es importante mantener el nombre de las cabeceras tal como se indica, tomando en cuenta las mayúsculas y minúsculas.</p>
+                <p class='secondary--text' style="font-size: 14px"><i>Pase el cursor por la imagen para hacer zoom.</i></p>
+                <img
+                class="img-zoom"
+                src="../../assets/Tabladeparticipantes.png"
+                />
+            </div>
 
           </div>
       </div> 
@@ -84,4 +94,11 @@ export default {
 <style>
 @import "../../styles/main.css";
 @import "../../styles/components/participantes.css";
+.img-zoom{
+    max-width: 100%;
+    transition: transform .2s; /* Animation */
+}
+.img-zoom:hover{
+    transform: scale(1.5);
+}
 </style>

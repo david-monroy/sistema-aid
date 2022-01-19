@@ -22,10 +22,10 @@ class SedeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ParticipanteSerializer(serializers.ModelSerializer):
-    colegio = ColegioSerializer(read_only=True)
-    colegio_id = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Colegio.objects.all(), source='colegio')
-    lugar = LugarSerializer(read_only=True)
-    lugar_id = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Lugar.objects.all(), source='lugar')
+    colegio = ColegioSerializer(read_only=True, required=False, allow_null=True)
+    colegio_id = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Colegio.objects.all(), source='colegio',required=False, allow_null=True)
+    lugar = LugarSerializer(read_only=True, required=False, allow_null=True)
+    lugar_id = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Lugar.objects.all(), source='lugar',required=False, allow_null=True)
     class Meta:
         model = Participante
         fields = '__all__'

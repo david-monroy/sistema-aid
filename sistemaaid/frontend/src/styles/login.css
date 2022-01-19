@@ -1,0 +1,36 @@
+.login-card label {
+    display: block;
+    margin-top: 2px;
+  }
+  
+  .login-card-container.login-card {
+    max-width: 400px !important;
+    padding: 30px 40px;
+  }
+  
+  .login-card {
+    background-color: #f7f7f7 !important;
+    padding: 20px 25px 30px;
+    margin: 0 auto 25px;
+    -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+  }
+  
+  .login-logo {
+    width: 90%;
+    margin: 0 auto 10px;
+    display: block;
+  }
+
+  .login-background{
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100%;
+    background-image: url('../assets/aid-background.jpg');
+    background-size: cover;
+  }
+
+  .rounded-card{
+      border-radius: 12px;
+  }

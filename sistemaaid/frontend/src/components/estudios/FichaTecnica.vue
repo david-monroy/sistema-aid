@@ -103,7 +103,7 @@
                         <template v-slot:activator="{ on, attrs }">
                             <v-text-field
                             v-model="form.totalMuestra"
-                            label="Total de la muestra * "
+                            label="Tamaño muestral * "
                             required
                             type="number"
                             :rules='[rules.required,rules.muestra]'
@@ -205,10 +205,10 @@
                 <v-btn
                     :small="$vuetify.breakpoint.smAndDown"
                     class="primary"
-                    @click="paso2()"
+                    @click="pasoSiguiente()"
                     :disable=!valid
                 >
-                    <p class="mt-3 hidden-sm-and-down">Muestra</p>
+                    <p class="mt-3 hidden-sm-and-down">Siguiente</p>
                     <v-icon>mdi-chevron-right</v-icon>
                 </v-btn>
             </v-col>
@@ -222,7 +222,9 @@
 <script>
 import { EventBus } from "../../main.js";
 import moment from "moment";
-import swal from 'sweetalert'
+import swal from 'sweetalert';
+import Repository from "../../services/repositories/repositoryFactory";
+const EstudiosRepository = Repository.get("Estudios");
 
 export default {
     data(){
@@ -236,7 +238,7 @@ export default {
                 periodo:'',
                 fechaInicio: moment().format("YYYY-MM-DD"),
                 fechaFin:'',
-                idEstudio:'',
+                estudio:'',
                 vinculada: true,
                 totalMuestra: ''
             },
@@ -258,15 +260,19 @@ export default {
     },
     computed: {},
     methods: {
-        paso2() {
+        async pasoSiguiente() {
             let validatedForm = this.$refs.registerForm.validate();
 
             if (validatedForm){
-                if (this.form.fechaInicio > this.form.fechaFin){
+                let estudioExistente = await EstudiosRepository.validarCodigo(this.form)
+                if (this.form.fechaInicio > this.form.fechaFin) {
                     swal("La fecha fin del estudio debe ser mayor a la fecha de inicio", "", "error")
                 }
+                else if (estudioExistente != '') {
+                    swal("Ya existe un estudio con el mismo código", "", "error")
+                }
                 else {
-                    EventBus.$emit("paso2",this.form)
+                    EventBus.$emit("pasoSiguiente",this.form)
                 }
             }   
         },  

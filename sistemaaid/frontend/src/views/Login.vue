@@ -1,6 +1,11 @@
 <template>
-    <div class="col-md-12 nav-separator pt-1">
-      <div class="card card-container mt-0 form-card">
+  <div class="d-flex login-background">
+    <div class="col-md-12 pt-1">
+      <div class="login-card login-card-container rounded-card">
+        <div class="w-100 d-flex mb-8" style="justify-content: center">
+          <img src="../assets/logo_AID.png" alt="Logo Controlca" class="login-logo ma-0">
+        </div>
+
         <v-form
         ref="registerForm"
         v-model="valid"
@@ -19,14 +24,16 @@
             </v-col>
           </v-row>
 
-          <v-row class="pb-0 mb-0 form-row" >
+          <v-row class="pb-0 mb-0 form-row" style="margin-top: -10px !important">
             <v-col md="12" cols="12" class="py-0">
               <div class="form-group">
                 <v-text-field
                   v-model="form.password"
-                  type="password"
                   label="Contraseña"
                   required
+                  :append-icon="show ? 'fa-eye' : 'fa-eye-slash'"
+                  :type="show ? 'text' : 'password'"
+                  @click:append="show = !show"
                   :rules='[rules.required]'
                 ></v-text-field>
               </div>
@@ -34,12 +41,14 @@
           </v-row>
 
           <v-btn @click="login()"
-                class="btn-block accent1 w-25 mx-auto  mb-0 d-none d-sm-flex">
+                class="btn-block success w-75 mx-auto  mb-0 d-none d-sm-flex"
+                :disabled="loading">
                 Iniciar Sesión
             </v-btn>
         </v-form>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -51,6 +60,8 @@ export default {
             username:'',
             password:''
           },
+          loading: false,
+          show: false,
           valid:true,
           rules: {} = {
                 required: (value) =>
@@ -79,5 +90,5 @@ export default {
 
 <style>
 @import "../styles/main.css";
-@import "../styles/forms.css";
+@import "../styles/login.css";
 </style>

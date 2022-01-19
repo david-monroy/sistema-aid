@@ -46,7 +46,11 @@
             </v-stepper-content>
 
             <v-stepper-content step="2">
-              <InformacionGeneral></InformacionGeneral>
+              <MuestraPonderada :tamanoMuestral="fichaTecnica.totalMuestra" :tipo="tipo"></MuestraPonderada>
+            </v-stepper-content>
+
+            <v-stepper-content step="3">
+              <Metodologia :tipo="tipo"></Metodologia>
             </v-stepper-content>
           </v-stepper-items> 
         </v-stepper>
@@ -58,37 +62,71 @@
 <script>
 
 import InformacionGeneral from "../../components/estudios/InformacionGeneral.vue";
+import MuestraPonderada from "../../components/estudios/MuestraPonderada.vue";
+import Metodologia from "../../components/estudios/Metodologia.vue"
 import { EventBus } from "../../main.js";
 import swal from 'sweetalert'
 import Repository from "../../services/repositories/repositoryFactory";
 const EdicionesRepository = Repository.get("Ediciones");
+const MuestraPonderadaRepository = Repository.get("MuestraPonderada");
+const MetodologiaRepository = Repository.get("Metodologia")
+
 export default {
   data: () => ({
-    pasoActual: 1
+    pasoActual: 1,
+    fichaTecnica:[],
+    muestra:[],
+    metodologia:[],
+    tipo:"",
+    idEdicion:0
   }),
   components: {
-    InformacionGeneral
+    InformacionGeneral,
+    MuestraPonderada,
+    Metodologia
   },
 
   created() {
-    EventBus.$on("informacion-general", (data) => {
-        this.insertarEdicion(data);  
-        
+    EventBus.$on("pasoSiguienteEdi", (data) => { 
+        if (this.pasoActual == 1 ) {
+          this.fichaTecnica = data
+          this.tipo = "Edicion"
+        }
+        if (this.pasoActual == 2){
+          this.muestra = data
+        }
+        if (this.pasoActual == 3){
+          this.metodologia = data
+        }
+        this.pasoActual += 1; 
+    }),
+
+    EventBus.$on("pasoAnteriorEdi", () => {
+        this.pasoActual -= 1;  
+    }),
+
+    EventBus.$on("registrar-edicion", (data) => {
+        this.metodologia = data
+        this.insertarEdicion()
     })
   },
 
   methods:{
-    async insertarEdicion(data){
-      try{
-                console.log('entro a insertaredicion')
-        await EdicionesRepository.agregar(data);
-        swal("La edición ha sido agregada satisfactoriamente", "", "success")
+    async insertarEdicion(){
+      try{ 
+        var response = await EdicionesRepository.agregar(this.fichaTecnica);
+        this.idEdicion = response.id  
+        this.metodologia.edicionId = response.id
+        
+        await MuestraPonderadaRepository.insertarMuestra(this.muestra, this.idEdicion);
+        await MetodologiaRepository.insertarMetodologia (this.metodologia)
+        swal("El edición ha sido agregada satisfactoriamente", "", "success")
       }
       catch(err){
         console.log(err)
-          swal("La edición no se pudo agregar", "", "error")
+        swal("La edición no se pudo agregar", "", "error")
       }
-    }
+    },
 
   }
 };

@@ -10,7 +10,7 @@ const repositories = {
     Estudios: EstudiosRepository,
     Ediciones: EdicionesRepository,
     MuestraPonderada: MuestraPonderadaRepository,
-    Metodologia:MetodologiaRepository
+    Metodologia:MetodologiaRepository,
     ListaCodigo: ListaCodigoRepository
 };
 

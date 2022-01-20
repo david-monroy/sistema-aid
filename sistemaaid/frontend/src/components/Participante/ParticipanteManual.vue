@@ -184,6 +184,7 @@
                         <v-autocomplete
                         v-model="form.carrera_id"
                         :items="carreras"
+                        :disabled="!form.sede_id"
                         label="Carrera"
                         item-text="nombre"
                         item-value="id"
@@ -194,6 +195,7 @@
                         <v-select
                         v-model="form.semestre"
                         :items="semestres"
+                        :disabled="!form.carrera_id"
                         item-text="nombre"
                         item-value="id"
                         label="Semestre"
@@ -281,6 +283,7 @@ export default {
             valid: false,
             estados: [],
             municipios_todos: [],
+            habilitado: false,
             form: {
                 nombre: '',
                 genero: '',

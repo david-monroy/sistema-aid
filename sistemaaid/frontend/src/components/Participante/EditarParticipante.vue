@@ -183,6 +183,7 @@
                         <v-autocomplete
                         v-model="informacion_academica.carrera_id"
                         :items="carreras"
+                        :disabled="!informacion_academica.sede_id"
                         label="Carrera"
                         item-text="nombre"
                         item-value="id"
@@ -192,6 +193,7 @@
                     <v-col md="4" cols="12" class="py-0">
                         <v-select
                         v-model="informacion_academica.semestre"
+                        :disabled="!informacion_academica.carrera_id"
                         :items="semestres"
                         item-text="nombre"
                         item-value="id"
@@ -298,6 +300,8 @@ export default {
             menu1: false,
             back:'participantes',
             participante_id: null,
+            estado_original: null,
+            municipio_original: null,
             carreras: [],
             sedes: [],
             colegios: [],
@@ -367,10 +371,15 @@ export default {
         async guardarCambios(id) {
 
             let validatedForm = this.$refs.registerForm.validate();
-            this.form.fechaNacimiento = this.dateFormatted;
+            this.form.fechaNacimiento = this.fechaNacimiento;
 
-            if (this.form.municipio_id) this.form.lugar_id = this.form.municipio_id
-            else this.form.lugar_id = this.form.estado_id
+            if (this.estado_original != this.form.estado_id) {
+                if (this.form.municipio_id != this.municipio_original) this.form.lugar_id = this.form.municipio_id
+                else this.form.lugar_id = this.form.estado_id
+            } else {
+                if (this.form.municipio_id != this.municipio_original) this.form.lugar_id = this.form.municipio_id
+                else this.form.lugar_id = this.form.estado_id
+            }
 
                 if (validatedForm){
                     if (this.edad_calculada < 11) {
@@ -383,7 +392,7 @@ export default {
                                 else this.agregarParticipanteCarrera()
                             } else {
                                 swal("Participante actualizado satisfactoriamente", "", "success")
-                                location.reload()
+                                this.goRoute('participantes')
                             }
                             swal("Participante actualizado satisfactoriamente", "", "success")
                             this.goRoute('participantes')
@@ -430,6 +439,9 @@ export default {
             } else{
                 this.form.estado_id = res.lugar.id
             }
+
+            this.estado_original = this.form.estado_id
+            this.municipio_original = this.form.municipio_id
 
             this.form.nombre = res.nombre
             this.form.genero = res.genero
@@ -480,7 +492,7 @@ export default {
     },
     watch: {
       date () {
-        this.dateFormatted = this.formatDate(this.date)
+        this.fechaNacimiento = this.formatDate(this.date)
       },
     },
     mounted(){

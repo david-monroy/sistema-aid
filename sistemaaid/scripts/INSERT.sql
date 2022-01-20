@@ -362,4 +362,4 @@ INSERT INTO backend_lugar(
 	('Simón Bolívar','MUNICIPIO', 23),
 	('Sucre','MUNICIPIO', 23),
 	('Valmore Rodríguez','MUNICIPIO', 23),
-	('Libertador', 'MUNICIPIO',24),
+	('Libertador', 'MUNICIPIO',24)

@@ -26,8 +26,8 @@ export default {
     let response = await conn.post(`/participantes/filtrar/`, data, jwt.getAuthHeaderToken());
     return response;
   },
-  async agregarMasivo(data){
-    let response = await conn.post(`/participantes/agregar_masivo/`, data, {
+  async cargaMasiva(data){
+    let response = await conn.post(`/participantes/carga_masiva/`, data, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }

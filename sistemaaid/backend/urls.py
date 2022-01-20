@@ -25,7 +25,7 @@ urlpatterns = [
     path('estudios/validarCodigo', views.validarCodigo),
     path('ediciones/validarCodigo', views.validarCodigo),
     path('participantes/agregar_masivo/', views.agregar_masivo),
-    path('participantes/editar_masivo/', views.editar_masivo),
+    path('participantes/carga_masiva/', views.carga_masiva),
     path('participantes/participantecarreras/', views.get_participantecarrera),
     path('participantes/filtrar/', views.participantes_filtrar),
     path('lugares/estados/', views.get_estados),

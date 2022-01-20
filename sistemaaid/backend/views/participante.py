@@ -65,7 +65,7 @@ def agregar_masivo(request):
     return HttpResponse(df)
 
 @csrf_exempt
-def editar_masivo(request):
+def carga_masiva(request):
 
     path = request.FILES['file']
 

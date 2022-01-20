@@ -35,6 +35,7 @@
                 <p> Es importante mantener el nombre de las cabeceras tal como se indica, tomando en cuenta las mayúsculas y minúsculas.</p>
                 <p> El formato para la fecha de nacimiento debe ser <b>día/mes/año</b>.</p>
                 <p> Los campos marcados en <b><span class="red--text">rojo</span></b> son <b>obligatorios.</b></p>
+                <p> Los participantes deben ser <b>mayores de 11 años.</b></p>
                 <p class='secondary--text' style="font-size: 14px"><i>Pase el cursor por la imagen para hacer zoom.</i></p>
                 <img
                 class="img-zoom"

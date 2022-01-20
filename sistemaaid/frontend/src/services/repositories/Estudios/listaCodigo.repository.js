@@ -37,4 +37,9 @@ export default {
     return response;
   },
 
+  async crearCategoria(data) {
+    let response = await conn.post(`/categoria/`, data, jwt.getAuthHeaderToken());
+    return response;
+  },
+
 };

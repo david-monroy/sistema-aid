@@ -30,11 +30,11 @@
     </v-col>
     <v-col cols="6" sm="6" class="mt-4">
       <v-card class="mx-auto p-3 mb-0" tile>
-        <div v-if="categorias.length<1">
+        <div v-if="!listaCodigo.id">
           Selecciona una lista de códigos para ver sus categorías.
         </div>
         <div v-else>
-          <v-card-title><span class="secondary--text">{{ actualListaDeCodigo }}</span></v-card-title>
+          <v-card-title><span class="secondary--text">{{ listaCodigo.nombre }}</span></v-card-title>
         <v-card-title> <span class="primary--text">Categorías</span>
           <v-spacer></v-spacer>
           <v-text-field
@@ -78,7 +78,7 @@
                         <v-col md="2" cols="12" class="py-0">
                             <div class="form-group">
                                 <v-text-field
-                                    v-model="form.codigo"
+                                    v-model="formEditar.codigo"
                                     label="Código"
                                     required
                                 ></v-text-field>
@@ -87,7 +87,7 @@
                         <v-col md="10" cols="12" class="py-0">
                             <div class="form-group">
                                 <v-text-field
-                                    v-model="form.descripcion"
+                                    v-model="formEditar.descripcion"
                                     label="Descripción"
                                     required
                                 ></v-text-field>
@@ -103,6 +103,44 @@
                   </v-card-actions>
                 </v-card>
               </v-dialog>
+
+              <v-dialog v-model="modalAgregar" max-width="700px">
+                <v-card>
+                  <v-card-title class="body-1 mx-auto text-center">Agregar categoría a <b class="secondary--text"> {{ listaCodigo.nombre}}</b></v-card-title>
+                  <v-form
+                    ref="formAgregar"
+                    v-model="validAgregar"
+                    lazy-validation
+                  >
+                      <v-row class="form-row px-6 mx-0 mt-2" >
+                        <v-col md="2" cols="12" class="py-0">
+                            <div class="form-group">
+                                <v-text-field
+                                    v-model="formAgregar.codigo"
+                                    label="Código"
+                                    required
+                                ></v-text-field>
+                            </div>
+                        </v-col>
+                        <v-col md="10" cols="12" class="py-0">
+                            <div class="form-group">
+                                <v-text-field
+                                    v-model="formAgregar.descripcion"
+                                    label="Descripción"
+                                    required
+                                ></v-text-field>
+                            </div>
+                        </v-col>
+                      </v-row>
+                  </v-form>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn class="error--text" text @click="modalAgregar=false">Cancelar</v-btn>
+                    <v-btn color="success" text @click="agregarCategoria()">Agregar</v-btn>
+                    <v-spacer></v-spacer>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
           </template>
 
           <template v-slot:[`item.actions`]="{ item }">
@@ -112,7 +150,7 @@
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-icon small v-bind="attrs" v-on="on"
-                @click="editarCategoria(item.id, item.codigo, item.descripcion)" class="mr-2">fa-pen</v-icon>
+                @click="editarCategoria(item.id, item.codigo, item.descripcion, item.listaCodigo_id)" class="mr-2">fa-pen</v-icon>
               </template>
               <span>Editar</span>
             </v-tooltip>
@@ -129,7 +167,10 @@
             </v-tooltip>
           </template>
         </v-data-table>
-        </div>   
+        <v-row class="d-flex" style="justify-content: center">
+          <v-btn color="accent2" class="mx-4 my-6" @click="modalAgregar = true">Agregar categoria</v-btn>
+        </v-row>
+        </div>
       </v-card>
     </v-col>
   </v-row>
@@ -154,18 +195,28 @@ export default {
             { text: 'Acciones', value: 'actions', sortable: false, align:'center'},
             ],
             listasDeCodigo: [],
-            listaCodigo:"",
+            listaCodigo: {
+              id: null,
+              nombre: null,
+            },
             categorias: [],
             actualListaDeCodigo: null,
             modalEliminar: false,
             modalEditar: false,
+            modalAgregar: false,
             categoriaAEliminar: "",
             categoriaAEliminarCodigo: "",
-            form: {
+            formEditar: {
               id: null,
               codigo: null,
               descripcion: null,
-              fechaUltimaModificacion: null,
+              listaCodigo: null,
+            },
+            formAgregar: {
+              id: null,
+              codigo: null,
+              descripcion: null,
+              listaCodigo: null,
             },
             date: new Date().toISOString().substr(0, 10),
         }
@@ -185,7 +236,7 @@ export default {
         },
         async seleccionar(id){
           this.listasDeCodigo.forEach(ls => {
-            if (ls.id == id) this.actualListaDeCodigo = ls.nombre
+            if (ls.id == id) this.listaCodigo = ls
           });
           this.categorias = await ListaCodigoRepository.obtenerCategorias(id)
         },
@@ -212,26 +263,39 @@ export default {
           }
         },
 
-        editarCategoria(id, codigo, descripcion){
-          console.log(this.date)
-          this.form = {
+        editarCategoria(id, codigo, descripcion, listaCodigo){
+          this.formEditar = {
             id: id,
             codigo: codigo,
             descripcion: descripcion,
-            listaCodigo: 1
+            listaCodigo: listaCodigo
           }
           this.modalEditar = true
         },
 
         async guardarCambios(){
           try{
-            await ListaCodigoRepository.editarCategoria(this.form.id, this.form)
+            await ListaCodigoRepository.editarCategoria(this.formEditar.id, this.formEditar)
             swal("Categoría editada exitosamente", "", "success")
             location.reload()
           }
           catch(err){
             console.log(err)
             swal("La categoría no pudo ser editada", "", "error")
+          }
+        },
+
+        async agregarCategoria(){
+          this.formAgregar.listaCodigo = this.listaCodigo.id
+          
+          try{
+            await ListaCodigoRepository.crearCategoria(this.formAgregar)
+            swal("Categoría agregada exitosamente", "", "success")
+            location.reload()
+          }
+          catch(err){
+            console.log(err)
+            swal("La categoría no pudo ser creada", "", "error")
           }
         }
     },

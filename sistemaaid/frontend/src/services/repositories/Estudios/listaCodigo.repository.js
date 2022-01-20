@@ -7,7 +7,6 @@ const headers =  {
     Authorization: `Bearer ${jwt.getToken()}`
 }
 
-
 export default {
   async crear(data) {
     let response = await conn.post(`/listaCodigo/`, data, jwt.getAuthHeaderToken());
@@ -25,6 +24,16 @@ export default {
 
   async obtenerCategorias(idLista) {
     let response = await conn.get(`/categoria/consultar/${idLista}`, jwt.getAuthHeaderToken());
+    return response;
+  },
+
+  async eliminarCategoria(id) {
+    let response = await conn.delete(`/categoria/${id}/`, jwt.getAuthHeaderToken());
+    return response;
+  },
+
+  async editarCategoria(id, data) {
+    let response = await conn.put(`/categoria/${id}/`, data, jwt.getAuthHeaderToken());
     return response;
   },
 

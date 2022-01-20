@@ -48,6 +48,8 @@ CORS_ALLOW_METHODS = [
 'GET',
 'OPTIONS',
 'POST',
+'PUT',
+'DELETE'
 ]
 
 # Application definition

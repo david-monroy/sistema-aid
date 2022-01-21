@@ -272,7 +272,7 @@ export default {
                     swal("Ya existe un estudio con el mismo código", "", "error")
                 }
                 else {
-                    EventBus.$emit("pasoSiguiente","Estudio",this.form)
+                    EventBus.$emit("pasoSiguiente",this.form)
                 }
             }   
         },  

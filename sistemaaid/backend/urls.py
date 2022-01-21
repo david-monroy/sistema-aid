@@ -13,6 +13,7 @@ router.register('participantecarreras', ParticipanteCarreraViewSet)
 router.register('estudios', EstudioViewSet)
 router.register('ediciones', EdicionViewSet)
 router.register('muestraPonderada',MuestraPonderadaViewSet)
+router.register('metodologia',MetodologiaViewSet)
 
 router.register('lugares', LugarViewSet)
 

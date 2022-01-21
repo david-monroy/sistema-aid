@@ -7,3 +7,4 @@ from .modelEstudio import *
 from .modelEdicion import *
 from .modelMuestraPonderada import *
 from .modelLugar import *
+from .modelMetodologia import *

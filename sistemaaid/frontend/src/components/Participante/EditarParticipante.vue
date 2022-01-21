@@ -433,11 +433,13 @@ export default {
             this.participante_id = id;
             let res = await ParticipantesRepository.obtenerPorId(id);
 
-            if (res.lugar.fk_lugar) {
-                this.form.municipio_id = res.lugar.id
-                this.form.estado_id = res.lugar.fk_lugar
-            } else{
-                this.form.estado_id = res.lugar.id
+            if (res.lugar){
+                if (res.lugar.fk_lugar) {
+                    this.form.municipio_id = res.lugar.id
+                    this.form.estado_id = res.lugar.fk_lugar
+                } else{
+                    this.form.estado_id = res.lugar.id
+                }
             }
 
             this.estado_original = this.form.estado_id

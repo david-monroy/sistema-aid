@@ -4,12 +4,16 @@ import pandas as pd
 from backend.models import * 
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
+import json
+from django.core.serializers.json import DjangoJSONEncoder
 
 @csrf_exempt
 def get_participantecarrera(request):
 
-    print(request)
-    participanteCarreras = modelParticipante.Participante.objects.filter(id=request.id)
-    print(participanteCarreras)
+    id = int(request.body)
 
-    return participanteCarreras
+    participanteCarreras = modelParticipanteCarrera.ParticipanteCarrera.objects.filter(participante_id=id).values()
+
+    query_respuesta = json.dumps(list(participanteCarreras), cls=DjangoJSONEncoder) # Convierte el query retornado en un JSON para enviar a Vue
+    print(query_respuesta)
+    return HttpResponse(query_respuesta)

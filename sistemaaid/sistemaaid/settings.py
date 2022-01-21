@@ -48,6 +48,8 @@ CORS_ALLOW_METHODS = [
 'GET',
 'OPTIONS',
 'POST',
+'DELETE',
+'PUT'
 ]
 
 # Application definition
@@ -121,9 +123,10 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'SistemaAID',
         'USER': 'postgres',
-        'PASSWORD': '209fadfc',
+        'PASSWORD': 'admin',
         'HOST': '127.0.0.1',
-        'PORT': '5432'
+        'PORT': '5432',
+        'ATOMIC_REQUEST': True
     }
 }
 

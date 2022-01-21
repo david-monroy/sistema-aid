@@ -10,6 +10,10 @@ class ColegioViewSet(viewsets.ModelViewSet):
     queryset = Colegio.objects.all()
     serializer_class = ColegioSerializer
 
+class LugarViewSet(viewsets.ModelViewSet):
+    queryset = Lugar.objects.all()
+    serializer_class = LugarSerializer
+
 class SedeViewSet(viewsets.ModelViewSet):
     queryset = Sede.objects.all()
     serializer_class = SedeSerializer

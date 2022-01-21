@@ -1,2 +1,5 @@
 env/
 sistemaaid/backend/migrations/
+sistemaaid/backend/models/__pycache__/
+sistemaaid/backend/views/__pycache__/
+sistemaaid/backend/__pycache__/

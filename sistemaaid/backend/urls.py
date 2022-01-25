@@ -32,6 +32,7 @@ urlpatterns = [
     path('lugares/municipios/', views.get_municipios),
     path('usuarios/agregar/', views.agregar_usuario),
     path('usuarios/', views.obtener_usuarios),
+    path('usuarios/grupos/', views.obtener_grupos),
 ]
 
 urlpatterns += router.urls

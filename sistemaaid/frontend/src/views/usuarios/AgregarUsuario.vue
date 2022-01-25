@@ -10,7 +10,7 @@
         lazy-validation
       >
           <v-row class="pb-0 mb-0 form-row" >
-            <v-col md="4" cols="12" class="py-0">
+            <v-col md="3" cols="12" class="py-0">
                 <div class="form-group">
                     <v-text-field
                         v-model="form.first_name"
@@ -20,7 +20,7 @@
                     ></v-text-field>
                 </div>
             </v-col>
-            <v-col md="4" cols="12" class="py-0">
+            <v-col md="3" cols="12" class="py-0">
                 <div class="form-group">
                     <v-text-field
                         v-model="form.last_name"
@@ -31,7 +31,7 @@
                     ></v-text-field>
                 </div>
             </v-col>
-            <v-col md="4" cols="12" class="py-0">
+            <v-col md="3" cols="12" class="py-0">
                 <div class="form-group">
                     <v-text-field
                         v-model="form.email"
@@ -41,6 +41,15 @@
                     ></v-text-field>
                 </div>
             </v-col>
+            <v-col md="3" cols="12" class="py-0">
+                        <v-select
+                        v-model="form.group"
+                        :items="grupos"
+                        label="Permisos"
+                        item-text="name"
+                        item-value="id"
+                        ></v-select>
+                    </v-col>
           </v-row>
           <v-row class="pb-0 mb-0 form-row" >
               <v-col md="4" cols="12" class="py-0">
@@ -110,17 +119,18 @@ export default {
             show: false,
             show2: false,
             form: {
-                nombre: '',
-                apellido: '',
+                first_name: '',
+                last_name: '',
                 username: '',
                 password: null,
                 confirmPassword: '',
-                email: ''
+                email: '',
+                group: null
             },
+            grupos: [],
             rules: {} = {
                 required: (value) =>
                 (!!value && value !== "" && value !== undefined) || "Este campo es requerido",
-                
             },
         }
     },
@@ -130,6 +140,7 @@ export default {
     methods: {
         async registrarUsuario() {
             let validatedForm = this.$refs.registerForm.validate();
+            console.log(this.form)
 
             if (validatedForm){
                 if (this.form.password == this.form.confirmPassword) {
@@ -152,6 +163,9 @@ export default {
         goRoute(route) {
             this.$router.push("/" + route);
         },
+        async getGrupos(){
+            this.grupos = await UsuariosRepository.obtenerGrupos();
+        },
     },
     watch: {
       date () {
@@ -160,6 +174,7 @@ export default {
 
     },
     mounted(){
+        this.getGrupos();
     }
 }
 </script>

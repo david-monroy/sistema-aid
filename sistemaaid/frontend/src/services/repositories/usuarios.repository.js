@@ -3,11 +3,15 @@ import jwt from "../../common/jwt.service";
 
 export default {
   async agregar(data){
-    let response = await conn.post(`/usuarios/`, data, jwt.getAuthHeaderToken());
+    let response = await conn.post(`/usuarios/agregar/`, data, jwt.getAuthHeaderToken());
     return response;
   },
   async obtener(){
     let response = await conn.get(`/usuarios/`, jwt.getAuthHeaderToken());
+    return response;
+  },
+  async obtenerGrupos(){
+    let response = await conn.get(`/usuarios/grupos/`, jwt.getAuthHeaderToken());
     return response;
   },
   async obtenerPorId(id){

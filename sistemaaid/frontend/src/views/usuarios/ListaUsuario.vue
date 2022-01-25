@@ -82,7 +82,7 @@ import swal from 'sweetalert';
 import Repository from "../../services/repositories/repositoryFactory";
 const UsuariosRepository = Repository.get("Usuarios");
 export default {
-name: "ParticipantesView",
+name: "UsuariosView",
   data() {
         return {
             valid: false,

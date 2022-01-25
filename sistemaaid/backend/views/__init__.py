@@ -5,3 +5,4 @@ from .muestraPonderada import *
 from .estudios import *
 from .edicion import *
 from .lugar import *
+from .usuario import *

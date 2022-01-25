@@ -19,7 +19,7 @@
                 <router-link to="#" class="nav-link">Reportes</router-link>
             </li>
             <li class="nav-item">
-                <router-link to="#" class="nav-link">Configuración</router-link>
+                <router-link to="/configuracion" class="nav-link">Configuración</router-link>
             </li>
 
             <li class="nav-item">

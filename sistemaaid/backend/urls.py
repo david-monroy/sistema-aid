@@ -30,8 +30,8 @@ urlpatterns = [
     path('participantes/filtrar/', views.participantes_filtrar),
     path('lugares/estados/', views.get_estados),
     path('lugares/municipios/', views.get_municipios),
-    path('usuarios/', views.agregar_usuario),
-    path('usuarios/', include('django.contrib.auth.urls')),
+    path('usuarios/agregar/', views.agregar_usuario),
+    path('usuarios/', views.obtener_usuarios),
 ]
 
 urlpatterns += router.urls

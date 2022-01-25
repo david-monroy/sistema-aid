@@ -351,9 +351,20 @@
         </v-data-table>
       </v-card>
     </v-col>
-    <div class="crud-buttons mx-auto mt-4">
-      <v-btn color="secondary" class="mx-4" @click="exportarCSV(csvData)">Exportar a CSV</v-btn>
-    </div>
+    <v-div style="display: flex; flex-direction: column" class="mx-auto mt-4">
+      <div class="crud-buttons mx-auto mt-4">
+        <v-btn color="secondary" class="mx-4"
+            @click="exportarCSV(csvData)">
+            Exportar a CSV
+        </v-btn>
+      </div>
+      <div class="crud-buttons mx-auto mt-4">
+        <v-btn @click="goRoute('inicio')"
+            class="btn-block accent1 mx-auto  mb-0 d-none d-sm-flex">
+            Regresar
+        </v-btn>
+      </div>
+    </v-div>
   </v-row>
 </template>
 

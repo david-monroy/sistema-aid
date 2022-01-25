@@ -23,3 +23,12 @@ def agregar_usuario(request):
     user.save()
 
     return HttpResponse(user)
+
+@csrf_exempt
+def obtener_usuarios(request):
+
+    usuarios = User.objects.filter().values()
+    usuariosJSON = json.dumps(list(usuarios), cls=DjangoJSONEncoder) # Convierte el query retornado en un JSON para enviar a Vue
+    print(usuariosJSON)
+
+    return HttpResponse(usuariosJSON)

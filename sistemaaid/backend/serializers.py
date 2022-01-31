@@ -49,9 +49,12 @@ class EstudioSerializer(serializers.ModelSerializer):
 
 
 class EdicionSerializer(serializers.ModelSerializer):
+    estudio = serializers.SerializerMethodField()
     class Meta:
         model = Edicion
-        fields = '__all__'
+        fields = ['codigo','fechaInicio', 'fechaFin', 'periodo', 'vinculada', 'totalMuestra', 'estudio']
+    def get_estudio(self, obj):
+        return obj.estudio.nombre, obj.estudio.codigo
 
 class MuestraPonderadaSerializer(serializers.ModelSerializer):
     class Meta:

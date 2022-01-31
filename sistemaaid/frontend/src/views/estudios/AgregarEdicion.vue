@@ -117,7 +117,6 @@ export default {
         var response = await EdicionesRepository.agregar(this.fichaTecnica);
         this.idEdicion = response.id  
         this.metodologia.edicionId = response.id
-        
         await MuestraPonderadaRepository.insertarMuestra(this.muestra, this.idEdicion);
         await MetodologiaRepository.insertarMetodologia (this.metodologia)
         swal("El edición ha sido agregada satisfactoriamente", "", "success")
@@ -126,8 +125,7 @@ export default {
         console.log(err)
         swal("La edición no se pudo agregar", "", "error")
       }
-    },
-
+    }
   }
 };
 </script>

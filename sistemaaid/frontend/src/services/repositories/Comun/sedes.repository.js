@@ -1,5 +1,5 @@
-import conn from "../api-connector";
-import jwt from "../../common/jwt.service";
+import conn from "../../api-connector";
+import jwt from "../../../common/jwt.service";
 
 export default {
   async obtener(){

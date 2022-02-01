@@ -12,7 +12,7 @@
         <v-col md="12" cols="12" class="py-0">
             <div class="form-group">
                     <v-text-field
-                        v-model="form.nombre "
+                        v-model="form.nombre"
                         label="Nombre *"
                         required
                         dense
@@ -109,11 +109,12 @@ export default {
                 try{
                     formData.append('file', this.file)
                     var idLista = await ListaCodigoRepository.crear(this.form);
+                    
                     await ListaCodigoRepository.cargarListaCodigo(formData, idLista.id);
                 }
                 catch(err){
                     console.log(err)
-                    swal("No se pudo procesar la muestra", "", "error")
+                    swal("No se pudo procesar el archivo", "", "error")
                 } 
             }
             

@@ -13,7 +13,7 @@
           ></v-text-field>
         </v-card-title>
         <v-data-table
-          
+          sort-by='nombre'
           :headers="headersLista"
           :items="listasDeCodigo"
           :hide-default-footer="false"
@@ -51,6 +51,7 @@
           :hide-default-footer="false"
           :items-per-page="5"
           :search="search"
+          sort-by='codigo'
         >
 
         <template v-slot:top>

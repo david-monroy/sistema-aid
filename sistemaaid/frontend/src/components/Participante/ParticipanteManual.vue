@@ -14,7 +14,7 @@
                 <div class="form-group">
                     <v-text-field
                         v-model="form.nombre"
-                        label="Nombre y apellido"
+                        label="Nombre y apellido *"
                         required
                         :rules='[rules.required]'
                     ></v-text-field>
@@ -24,60 +24,17 @@
                 <div class="form-group">
                     <v-text-field
                         v-model="form.cedula"
-                        label="Cédula"
+                        label="Cédula *"
                         name="cedula"
                         required
-                        :rules='[rules.required]'
+                        :rules='[rules.required, rules.CedulaRules]'
                     ></v-text-field>
                 </div>
             </v-col>
           </v-row>
 
           <v-row class="pb-0 mb-0 form-row" >
-            <v-col md="6" cols="12" class="py-0">
-                <div class="form-group">
-                    <v-text-field
-                        v-model="form.correo"
-                        label="Correo electrónico"
-                        required
-                        :rules='[rules.emailRules]'
-                    ></v-text-field>
-                </div>
-            </v-col>
-            <v-col md="6" cols="12" class="py-0">
-                <div class="form-group">
-                    <v-text-field
-                        v-model="form.correoUcab"
-                        label="Correo UCAB"
-                    ></v-text-field>
-                </div>
-            </v-col>
-          </v-row>
-        <v-row class="pb-0 mb-0 form-row" >
-            <v-col md="6" cols="12" class="py-0">
-                <div class="form-group">
-                    <v-text-field
-                        v-model="form.telfPrincipal"
-                        type="number"
-                        label="Teléfono primario"
-                        required
-                        :rules='[rules.required, rules.PhoneRules]'
-                    ></v-text-field>
-                </div>
-            </v-col>
-            <v-col md="6" cols="12" class="py-0">
-                <div class="form-group">
-                    <v-text-field
-                        v-model="form.telfSecundario"
-                        label="Teléfono secundario"
-                        type='number'
-                    ></v-text-field>
-                </div>
-            </v-col>
-          </v-row>
-
-          <v-row class="pb-0 mb-0 form-row" >
-                <v-col md="4" cols="12" class="py-0">
+            <v-col md="4" cols="12" class="py-0">
                     <v-menu
                         ref="menu1"
                         v-model="menu1"
@@ -90,7 +47,7 @@
                         <template v-slot:activator="{ on, attrs }">
                             <v-text-field
                                 v-model="date"
-                                label="Fecha"
+                                label="Fecha de nacimiento *"
                                 hint="AAAA-MM-DD"
                                 persistent-hint
                                 prepend-icon="fa-calendar"
@@ -108,18 +65,26 @@
                         ></v-date-picker>
                     </v-menu>
                 </v-col>
-                <v-col md="4" cols="12" class="py-0">
+            <v-col md="4" cols="12" class="py-0">
                 <div class="form-group">
                     <v-text-field
-                        v-model="edad_calculada"
-                        label="Edad"
+                        v-model="form.correo"
+                        label="Correo electrónico *"
                         required
-                        readonly
+                        :rules='[rules.emailRules]'
                     ></v-text-field>
                 </div>
             </v-col>
-
-              
+            <v-col md="4" cols="12" class="py-0">
+                <div class="form-group">
+                    <v-text-field
+                        v-model="form.correoUcab"
+                        label="Correo UCAB"
+                    ></v-text-field>
+                </div>
+            </v-col>
+          </v-row>
+        <v-row class="pb-0 mb-0 form-row" >
             <v-col md="4" cols="12" class="py-0">
                 <div class="form-group" style="display: flex; justify-content: center; width: 100%">
                     <v-select
@@ -131,53 +96,106 @@
                         ></v-select>
                 </div>
             </v-col>
+            <v-col md="4" cols="12" class="py-0">
+                <div class="form-group">
+                    <v-text-field
+                        v-model="form.telfPrincipal"
+                        type="number"
+                        label="Teléfono primario *"
+                        required
+                        :rules='[rules.required, rules.PhoneRules]'
+                    ></v-text-field>
+                </div>
+            </v-col>
+            <v-col md="4" cols="12" class="py-0">
+                <div class="form-group">
+                    <v-text-field
+                        v-model="form.telfSecundario"
+                        label="Teléfono secundario"
+                        type='number'
+                    ></v-text-field>
+                </div>
+            </v-col>
+          </v-row>
+
+          <v-row class="pb-0 mb-0 form-row" >
+            <v-col md="4" cols="12" class="py-0">
+                <div class="form-group">
+                    <v-select
+                        v-model="form.estado_id"
+                        :items="estados"
+                        item-text="nombre"
+                        item-value="id"
+                        label="Estado"
+                        ></v-select>
+                </div>
+            </v-col>
+            <v-col md="4" cols="12" class="py-0">
+                <div class="form-group">
+                    <v-select
+                        v-model="form.municipio_id"
+                        :items="municipios()"
+                        item-text="nombre"
+                        item-value="id"
+                        label="Municipio"
+                        ></v-select>
+                </div>
+            </v-col>  
+            <v-col md="4" cols="12" class="py-0">
+                <div class="form-group">
+                    <v-text-field
+                        v-model="form.direccion"
+                        label="Dirección"
+                    ></v-text-field>
+                </div>
+            </v-col>
           </v-row>
 
           <v-expansion-panels class="my-6">
             <v-expansion-panel>
             <v-expansion-panel-header>
-                Estudios (opcional)
+                Información académica (opcional)
             </v-expansion-panel-header>
             <v-expansion-panel-content>
                 <v-row class="pb-0 mb-0 form-row" >
-                    <v-col md="6" cols="12" class="py-0">
+                    <v-col cols="12" class="py-0">
                         <v-autocomplete
-                        v-model="form.colegio"
+                        v-model="form.colegio_id"
                         :items="colegios"
                         label="Colegio"
                         item-text="nombre"
                         item-value="id"
                         ></v-autocomplete>
                     </v-col>
+                </v-row>
+                <v-row class="pb-0 mb-0 form-row">
 
-                    <v-col md="6" cols="12" class="py-0">
+                    <v-col md="4" cols="12" class="py-0">
                         <v-select
-                        v-model="form.sede"
+                        v-model="form.sede_id"
                         :items="sedes"
                         item-text="nombre"
                         item-value="id"
-                        label="Sede"
+                        label="Sede UCAB"
                         ></v-select>
                     </v-col>
 
-                </v-row>
-
-                <v-row class="pb-0 mb-0 form-row" >
-
-                    <v-col md="6" cols="12" class="py-0">
+                    <v-col md="4" cols="12" class="py-0">
                         <v-autocomplete
-                        v-model="form.carrera"
+                        v-model="form.carrera_id"
                         :items="carreras"
+                        :disabled="!form.sede_id"
                         label="Carrera"
                         item-text="nombre"
                         item-value="id"
                         ></v-autocomplete>
                     </v-col>
 
-                    <v-col md="6" cols="12" class="py-0">
+                    <v-col md="4" cols="12" class="py-0">
                         <v-select
                         v-model="form.semestre"
                         :items="semestres"
+                        :disabled="!form.carrera_id"
                         item-text="nombre"
                         item-value="id"
                         label="Semestre"
@@ -187,14 +205,59 @@
                 </v-row>
             </v-expansion-panel-content>
             </v-expansion-panel>
+
+            <v-expansion-panel>
+            <v-expansion-panel-header>
+                Redes sociales (opcional)
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+                <v-row class="pb-0 mb-0 form-row d-flex" style="justify-content: space-around">
+                    <v-col md="2" cols="12" class="py-0">
+                        <v-text-field
+                        v-model="form.instagram"
+                        label="Instagram"
+                        prepend-icon="fab fa-instagram"
+                        ></v-text-field>
+                    </v-col>
+                    <v-col md="2" cols="12" class="py-0">
+                        <v-text-field
+                        v-model="form.twitter"
+                        prepend-icon="fab fa-twitter"
+                        label="Twitter"
+                        ></v-text-field>
+                    </v-col>
+                    <v-col md="2" cols="12" class="py-0">
+                        <v-text-field
+                        v-model="form.facebook"
+                        prepend-icon="fab fa-facebook"
+                        label="Facebook"
+                        ></v-text-field>
+                    </v-col>
+                    <v-col md="2" cols="12" class="py-0">
+                        <v-text-field
+                        v-model="form.linkedin"
+                        prepend-icon="fab fa-linkedin"
+                        label="Linkedin"
+                        ></v-text-field>
+                    </v-col>
+                    <v-col md="2" cols="12" class="py-0">
+                        <v-text-field
+                        v-model="form.tiktok"
+                        prepend-icon="fab fa-tiktok"
+                        label="Tik Tok"
+                        ></v-text-field>
+                    </v-col>
+                </v-row>
+            </v-expansion-panel-content>
+            </v-expansion-panel>
         </v-expansion-panels>
 
             <v-btn @click="registrarParticipante"
                 :disabled="!valid"
-                class="btn secondary btn-block w-50 my-2 mx-auto  d-none d-sm-flex">
+                class="btn success btn-block w-50 my-2 mx-auto  d-none d-sm-flex">
                 Registrar
             </v-btn>
-            <v-btn @click="goRoute(back)"
+            <v-btn @click="goRoute('participantes')"
                 class="btn-block accent1 w-25 mx-auto  mb-0 d-none d-sm-flex">
                 Regresar
             </v-btn>
@@ -206,26 +269,38 @@
 
 
 <script>
-import axios from 'axios'
-import swal from 'sweetalert'
-
+import swal from 'sweetalert';
+import Repository from "../../services/repositories/repositoryFactory";
+const ParticipantesRepository = Repository.get("Participantes");
+const ParticipanteCarrerasRepository = Repository.get("ParticipanteCarreras");
+const SedesRepository = Repository.get("Sedes");
+const CarrerasRepository = Repository.get("Carreras");
+const ColegiosRepository = Repository.get("Colegios");
+const LugaresRepository = Repository.get("Lugares");
 export default {
     data(){
         return {
+            valid: false,
+            estados: [],
+            municipios_todos: [],
+            habilitado: false,
             form: {
                 nombre: '',
                 genero: '',
                 cedula: '',
                 fechaNacimiento: null,
-                edad: null,
                 correo: '',
-                correoUcab: '',
+                correoUcab: null,
                 telfPrincipal: '',
                 telfSecundario: null,
-                carrera: null,
-                sede: null,
-                colegio: null,
-                participante: null
+                carrera_id: null,
+                sede_id: null,
+                colegio_id: null,
+                participante_id: null,
+                estado_id: null,
+                municipio_id: null,
+                direccion: null,
+                lugar: '',
             },
             date: new Date().toISOString().substr(0, 10),
             dateFormatted: this.formatDate(new Date().toISOString().substr(0, 10)),
@@ -263,8 +338,11 @@ export default {
                 (v) => /.+@.+\..+\..+\../.test(v) || "Dirección de correo UCAB inválida",
                 PhoneRules: 
                 (v) => (v && v.length == 11) || "Número de teléfono debe tener 11 dígitos",
+                CedulaRules: 
+                (v) => (v && v.length > 6) || "Número de cédula debe tener 7 o más dígitos",
                 
-            }
+            },
+            informacion_academica: []
         }
     },
     computed: {
@@ -283,10 +361,11 @@ export default {
         }
 
         return edad;
-      }
-    },
-    methods: {
+      },
 
+    },
+
+    methods: {
         formatDate (date) {
             if (!date) return null
             const [year, month, day] = date.split('-')
@@ -298,82 +377,83 @@ export default {
             return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
         },
         async registrarParticipante() {
-
             let validatedForm = this.$refs.registerForm.validate();
             this.form.fechaNacimiento = this.fechaNacimiento;
-            this.form.edad = this.edad_calculada;
-            const participante_path = 'http://localhost:8000/api/v1/participantes/'
+            
+            if (this.form.municipio_id) this.form.lugar_id = this.form.municipio_id
+            else this.form.lugar_id = this.form.estado_id
 
             if (validatedForm){
-
-                if (this.form.edad < 11) {
+                if (this.edad_calculada < 11) {
                     swal("El participante debe ser mayor de 11 años", "", "error") 
                 } else {
-                    
-                await axios.post(participante_path, this.form).then((response) => {
-                    this.form.participante = response.data.id
-
-                    if (this.form.carrera && this.form.sede) {
-                        this.registrarParticipanteCarrera()
+                    try{
+                        let res = await ParticipantesRepository.agregar(this.form);
+                        this.form.participante_id = res.id;
+                        if (this.form.carrera_id && this.form.sede_id) {
+                            this.registrarParticipanteCarrera()
+                        }
+                        swal("Participante creado satisfactoriamente", "", "success")
+                        this.goRoute('participantes')
                     }
-                    swal("Participante creado satisfactoriamente", "", "success")
-                })
-                .catch((err) => {
-                    console.log(err)
-                    swal("Participante no pudo ser creado", "", "error")
-                })
-                //this.$refs.registerForm.reset();
+                    catch(err){
+                        console.log(err)
+                        swal("El participante no pudo ser creado", "", "error")
+                    }
                 }
             }
-                
         },
 
         async registrarParticipanteCarrera() {
-            const participantecarrera_path = 'http://localhost:8000/api/v1/participantecarreras/'
-            await axios.post(participantecarrera_path, this.form).then((response) => {})
-                .catch((err) => {
-                    console.log(err)
-                    swal("Participante no pudo ser creado", "", "error")
-                })
+            try{
+                await ParticipanteCarrerasRepository.agregar(this.form);
+            }
+            catch(err){
+                console.log(err)
+                swal("El participante no pudo ser creado", "", "error")
+            }
         },
 
-        getCarreras(){
-            const path = 'http://localhost:8000/api/v1/carreras/'
-            axios.get(path).then((response) => {
-                this.carreras = response.data
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+        municipios() {
+            let id = this.form.estado_id;
+            let array = [];
+            this.municipios_todos.forEach(mun => {
+                if (mun.fk_lugar_id == id) {
+                    array.push(mun)
+                }
+            });
+            return array
         },
-        getSedes(){
-            const path = 'http://localhost:8000/api/v1/sedes/'
-            axios.get(path).then((response) => {
-                this.sedes = response.data
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+
+        goRoute(route) {
+            this.$router.push("/" + route);
         },
-        getColegios(){
-            const path = 'http://localhost:8000/api/v1/colegios/'
-            axios.get(path).then((response) => {
-                this.colegios = response.data
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+
+        async getCarreras(){
+            this.carreras = await CarrerasRepository.obtener();
+        },
+        async getSedes(){
+            this.sedes = await SedesRepository.obtener();
+        },
+        async getColegios(){
+            this.colegios = await ColegiosRepository.obtener();
+        },
+        async getEstados(){
+            this.estados = await LugaresRepository.obtenerEstados();
+            this.municipios_todos = await LugaresRepository.obtenerMunicipios();
         },
     },
     watch: {
       date () {
         this.fechaNacimiento = this.formatDate(this.date)
       },
+
     },
     mounted(){
         this.getCarreras();
         this.getSedes();
         this.getColegios();
+        this.getEstados();
     }
 }
 </script>

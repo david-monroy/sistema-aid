@@ -32,25 +32,19 @@ const router = new Router({
       component: () => import("../views/participantes/ListaParticipante.vue")
     },
     {
-      path: '/participantes/agregar',
-      name: 'AgregarParticipante',
-      meta: { requiresAuth: true },
-      component: () => import("../views/participantes/AgregarParticipante.vue")
-    },
-    {
       path: '/participantes/:id/editar',
       name: 'EditarParticipante',
       meta: { requiresAuth: true },
       component: () => import("../components/Participante/EditarParticipante.vue")
     },
     {
-      path: `/participantes/agregar/manual`,
+      path: `/participantes/agregar`,
       name: 'ParticipanteManual',
       meta: { requiresAuth: true },
       component: () => import("../components/Participante/ParticipanteManual.vue")
     },
     {
-      path: `/participantes/agregar/masivo`,
+      path: `/participantes/masivo`,
       name: 'ParticipanteMasivo',
       meta: { requiresAuth: true },
       component: () => import("../components/Participante/ParticipanteMasivo.vue")

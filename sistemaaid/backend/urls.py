@@ -14,22 +14,26 @@ router.register('estudios', EstudioViewSet)
 router.register('ediciones', EdicionViewSet)
 router.register('muestraPonderada',MuestraPonderadaViewSet)
 router.register('metodologia',MetodologiaViewSet)
-
 router.register('listaCodigo',ListaCodigoViewSet)
 router.register('categoria',CategoriaViewSet)
+router.register('lugares', LugarViewSet)
 
 urlpatterns = [
     path('login/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('login/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
-    path('participantes/leer', views.leer_csv),
-    path('participantes/leer/actualizar', views.leer_csv_actualizar),
     path('participantes/participantecarreras/<int:id>', views.get_participantecarrera),
     path('muestraPonderada/cargar/<int:tamanoMuestral>', views.cargarMuestra),
     path('muestraPonderada/insertar/<int:idEdicion>', views.insertarMuestra),
     path('estudios/validarCodigo', views.validarCodigo),
     path('ediciones/validarCodigo', views.validarCodigo),
     path('categoria/cargar/<int:idLista>', views.cargarListaCodigo),
-    path('categoria/consultar/<int:idLista>', views.obtenerCategorias)
+    path('categoria/consultar/<int:idLista>', views.obtenerCategorias),
+    path('participantes/agregar_masivo/', views.agregar_masivo),
+    path('participantes/carga_masiva/', views.carga_masiva),
+    path('participantes/participantecarreras/', views.get_participantecarrera),
+    path('participantes/filtrar/', views.participantes_filtrar),
+    path('lugares/estados/', views.get_estados),
+    path('lugares/municipios/', views.get_municipios),
 ]
 
 urlpatterns += router.urls

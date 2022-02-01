@@ -20,12 +20,88 @@
           :items-per-page="5"
           :search="search"
         >
-            <template v-slot:[`item.actions`]="{ item }">
+        <template v-slot:top>
+          <v-dialog v-model="modalEliminarLista" max-width="700px">
+                <v-card>
+                  <v-card-title class="body-1 mx-auto text-center">¿Seguro que desea eliminar la lista {{listaAEliminarNombre}}?</v-card-title>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn class="secondary--text" text @click="modalEliminarLista=false">Cancelar</v-btn>
+                    <v-btn color="blue darken-1" text @click="eliminarLista()">Sí, eliminar</v-btn>
+                    <v-spacer></v-spacer>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+
+              <v-dialog v-model="modalEditarLista" max-width="700px">
+                <v-card>
+                  <v-card-title class="body-1 mx-auto text-center">Editar lista de código</v-card-title>
+                  <v-form
+                    ref="form"
+                    v-model="valid"
+                    lazy-validation
+                  >
+                      <v-row class="form-row px-6 mx-0 mt-2" >
+                        <v-col md="2" cols="12" class="py-0">
+                            <div class="form-group">
+                                <v-text-field
+                                    v-model="formEditarLista.nombre"
+                                    label="Nombre"
+                                    required
+                                ></v-text-field>
+                            </div>
+                        </v-col>
+                        <v-col md="10" cols="12" class="py-0">
+                            <div class="form-group">
+                                <v-text-field
+                                    v-model="formEditarLista.descripcion"
+                                    label="Descripción"
+                                    required
+                                ></v-text-field>
+                            </div>
+                        </v-col>
+                      </v-row>
+                  </v-form>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn class="error--text" text @click="modalEditarLista=false">Cancelar</v-btn>
+                    <v-btn color="success" text @click="guardarCambiosLista()">Guardar Cambios</v-btn>
+                    <v-spacer></v-spacer>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+        </template>
+            <template v-slot:[`item.categorias`]="{ item }">
                 <v-icon small v-bind="attrs" v-on="on"
                 @click="seleccionar(item.id)" class="mr-2">far fa-arrow-alt-circle-right</v-icon>
             </template>
-        </v-data-table>
+            <template v-slot:[`item.actions`]="{ item }">
+            <v-tooltip
+                top 
+                style="display: inline"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon small v-bind="attrs" v-on="on"
+                @click="editarLista(item.id, item.nombre, item.descripcion)" class="mr-2">fa-pen</v-icon>
+              </template>
+              <span>Editar</span>
+            </v-tooltip>
 
+            <v-tooltip
+                top 
+                style="display: inline"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon small v-bind="attrs" v-on="on"
+                @click="mostrarEliminarLista(item.id, item.nombre)" class="red--text">fa-trash</v-icon>
+              </template>
+              <span>Eliminar</span>
+            </v-tooltip>
+          </template>
+        </v-data-table>
+        <v-row class="d-flex" style="justify-content: center">
+          <v-btn color="accent2" class="mx-4 my-6" @click="goRoute('estudios/agregarListaCodigo')">Agregar lista de código</v-btn>
+        </v-row>
       </v-card>
     </v-col>
     <v-col cols="6" sm="6" class="mt-4">
@@ -188,7 +264,8 @@ export default {
             headersLista: [
             { text: 'Nombre', value: 'nombre' },
             { text: 'Descripción', value: 'descripcion' },
-            { text: 'Seleccionar', value: 'actions', sortable: false, align:'center'},
+            { text: 'Ver categorías', value: 'categorias', sortable: false, align:'center'},
+            { text: 'Acciones', value: 'actions', sortable: false, align:'center'},
             ],
              headersCategoria: [
             { text: 'Código', value: 'codigo' },
@@ -204,7 +281,12 @@ export default {
             actualListaDeCodigo: null,
             modalEliminar: false,
             modalEditar: false,
+            modalEliminarLista: false,
+            modalEditarLista: false,
             modalAgregar: false,
+            listaCodigoSeleccionada: null,
+            listaAEliminar: '',
+            listaAEliminarNombre: "",
             categoriaAEliminar: "",
             categoriaAEliminarCodigo: "",
             formEditar: {
@@ -212,6 +294,11 @@ export default {
               codigo: null,
               descripcion: null,
               listaCodigo: null,
+            },
+            formEditarLista: {
+              id: null,
+              nombre: null,
+              descripcion: null,
             },
             formAgregar: {
               id: null,
@@ -237,8 +324,11 @@ export default {
         },
         async seleccionar(id){
           this.listasDeCodigo.forEach(ls => {
-            if (ls.id == id) this.listaCodigo = ls
+            if (ls.id == id) {
+              this.listaCodigo = ls
+            }
           });
+          this.listaCodigoSeleccionada = id
           this.categorias = await ListaCodigoRepository.obtenerCategorias(id)
         },
         mostrarEliminar(categoriaID, categoriaCodigo){
@@ -246,9 +336,15 @@ export default {
           this.categoriaAEliminar = categoriaID;
           this.categoriaAEliminarCodigo = categoriaCodigo;
         },
+        mostrarEliminarLista(id, nombre){
+          this.modalEliminarLista = true;
+          this.listaAEliminar = id;
+          this.listaAEliminarNombre = nombre;
+        },
 
         cerrarEliminar(){
           this.modalEliminar = false;
+          this.modalEliminarLista = false;
         },
 
         async eliminarCategoria(){
@@ -256,11 +352,26 @@ export default {
             await ListaCodigoRepository.eliminarCategoria(this.categoriaAEliminar)
             // location.href = '/participantes'
             swal("Categoría eliminada", "", "success")
-            location.reload()
+            this.seleccionar(this.listaCodigoSeleccionada)
+            this.modalEliminar = false
           }
           catch(err){
             console.log(err)
             swal("La categoría no pudo ser eliminada", "", "error")
+          }
+        },
+
+        async eliminarLista(){
+          try{
+            await ListaCodigoRepository.eliminar(this.listaAEliminar)
+            // location.href = '/participantes'
+            swal("Lista de códigos eliminada", "", "success")
+            this.modalEliminarLista = false
+            this.getListasDeCodigo()
+          }
+          catch(err){
+            console.log(err)
+            swal("La lista no pudo ser eliminada", "", "error")
           }
         },
 
@@ -274,15 +385,36 @@ export default {
           this.modalEditar = true
         },
 
+        editarLista(id, nombre, descripcion){
+          this.formEditarLista = {
+            id: id,
+            nombre: nombre,
+            descripcion: descripcion,
+          }
+          this.modalEditarLista = true
+        },
+
         async guardarCambios(){
           try{
             await ListaCodigoRepository.editarCategoria(this.formEditar.id, this.formEditar)
             swal("Categoría editada exitosamente", "", "success")
-            location.reload()
+            this.seleccionar(this.listaCodigoSeleccionada)
+            this.modalEditar = false
           }
           catch(err){
             console.log(err)
             swal("La categoría no pudo ser editada", "", "error")
+          }
+        },
+        async guardarCambiosLista(){
+          try{
+            await ListaCodigoRepository.editar(this.formEditarLista.id, this.formEditarLista)
+            swal("Lista editada exitosamente", "", "success")
+            this.modalEditarLista = false
+          }
+          catch(err){
+            console.log(err)
+            swal("La lista no pudo ser editada", "", "error")
           }
         },
 
@@ -292,13 +424,17 @@ export default {
           try{
             await ListaCodigoRepository.crearCategoria(this.formAgregar)
             swal("Categoría agregada exitosamente", "", "success")
-            location.reload()
+            this.seleccionar(this.listaCodigoSeleccionada)
+            this.modalAgregar = false
           }
           catch(err){
             console.log(err)
             swal("La categoría no pudo ser creada", "", "error")
           }
-        }
+        },
+        goRoute(route) {
+            this.$router.push("/" + route);
+        },
     },
 
     mounted(){

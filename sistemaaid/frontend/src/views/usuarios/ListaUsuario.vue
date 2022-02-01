@@ -67,7 +67,7 @@
       </v-card>
     </v-col>
     <div style="display: flex; flex-direction: column" class="mx-auto mt-4">
-      <div class="crud-buttons mx-auto mt-4">
+      <div class="crud-buttons mx-auto mt-2">
         <v-btn @click="goRoute('configuracion')"
             class="btn-block accent1 mx-auto  mb-0 d-none d-sm-flex">
             Regresar

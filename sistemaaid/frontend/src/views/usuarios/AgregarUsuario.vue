@@ -148,7 +148,7 @@ export default {
                     try{
                         let res = await UsuariosRepository.agregar(this.form);
                         swal("Usuario creado satisfactoriamente", "", "success")
-                        this.goRoute('inicio')
+                        this.goRoute('usuarios')
                     }
                     catch(err){
                         console.log(err)

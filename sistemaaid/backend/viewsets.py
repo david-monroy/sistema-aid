@@ -52,3 +52,11 @@ class PreguntaViewSet(viewsets.ModelViewSet):
 class PreguntaEdicionViewSet(viewsets.ModelViewSet):
     queryset = PreguntaEdicion.objects.all()
     serializer_class = PreguntaEdicionSerializer
+class ListaCodigoViewSet(viewsets.ModelViewSet):
+    queryset = ListaCodigo.objects.all()
+    serializer_class = ListaCodigoSerializer
+
+class CategoriaViewSet(viewsets.ModelViewSet):
+    queryset = Categoria.objects.all()
+    serializer_class = CategoriaSerializer
+    

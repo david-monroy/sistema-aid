@@ -1,3 +1,52 @@
+INSERT INTO public.backend_colegio(
+	nombre, codigo)
+	VALUES ('San Agustín El Paraíso', 1),
+	('Santa Rosa de Lima', 2),
+	('La Concepción', 3);
+
+INSERT INTO public.backend_carrera(
+	nombre, codigo, "estaEnUCAB")
+	VALUES ('Letras', 1, true),
+	('Psicología', 2, true),
+	('Derecho', 3, true),
+	('Comunicación Social', 4, true),
+	('Contaduría', 5, true),
+	('Administración', 6, true),
+	('Economía', 7, true)
+
+INSERT INTO public.backend_sede(
+	nombre)
+	VALUES ('Caracas'),
+	('Guayana');
+
+INSERT INTO public.backend_listacodigo(
+	nombre, descripcion, "fechaCreacion", "fechaUltimaModificacion")
+	VALUES ('Colegios', 'Opciones de colegio', '1-1-2022', '1-1-2022'),
+	('Empresas', 'Empresa ideal para trabajar', '1-1-2022', '1-1-2022'),
+	('Vivienda', 'Tipo de vivienda', '1-1-2022', '1-1-2022'),
+	('Universidades', 'Opciones de universidades', '1-1-2022', '1-1-2022');
+
+INSERT INTO public.backend_categoria(
+	codigo, descripcion, "fechaCreacion", "fechaUltimaModificacion", "listaCodigo_id")
+	VALUES (1, 'Academia Merici', '1-1-2022', '1-1-2022', 1),
+	(2, 'Agustín Codazzi', '1-1-2022', '1-1-2022', 1),
+	(3, 'Academia Washington', '1-1-2022', '1-1-2022', 1),
+	(4, 'CFI 12 de febrero', '1-1-2022', '1-1-2022', 1),
+	(5, 'Cristo Rey', '1-1-2022', '1-1-2022', 1),
+	(1, 'Empresas agropecuarias', '1-1-2022', '1-1-2022', 2),
+	(2, 'Empresas mineras', '1-1-2022', '1-1-2022', 2),
+	(3, 'Empresas comerciales', '1-1-2022', '1-1-2022', 2),
+	(4, 'Empresas servicios', '1-1-2022', '1-1-2022', 2),
+	(1, 'Rancho', '1-1-2022', '1-1-2022', 3),
+	(2, 'Casa', '1-1-2022', '1-1-2022', 3),
+	(3, 'Apartamento', '1-1-2022', '1-1-2022', 3),
+	(4, 'Quinta', '1-1-2022', '1-1-2022', 3),
+	(1, 'UCAB', '1-1-2022', '1-1-2022', 4),
+	(2, 'UCV', '1-1-2022', '1-1-2022', 4),
+	(3, 'USB', '1-1-2022', '1-1-2022', 4),
+	(4, 'UNIMET', '1-1-2022', '1-1-2022', 4),
+	(5, 'USM', '1-1-2022', '1-1-2022', 4)
+
 ALTER SEQUENCE backend_lugar_id_seq RESTART WITH 1
 
 INSERT INTO backend_lugar(

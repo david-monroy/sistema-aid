@@ -1,5 +1,5 @@
 <template>
-  <v-row align="center" class="list px-3 mx-auto nav-separator container">
+  <v-row align="center" class="list px-3 mx-auto nav-separator container" style="display: flex; align-items: flex-start">
     <v-col cols="6" sm="6" class="mt-4">
       <v-card class="mx-auto p-3" tile>
         <v-card-title> <span class="primary--text">Listas de Código</span>
@@ -42,7 +42,7 @@
                     lazy-validation
                   >
                       <v-row class="form-row px-6 mx-0 mt-2" >
-                        <v-col md="2" cols="12" class="py-0">
+                        <v-col md="6" cols="12" class="py-0">
                             <div class="form-group">
                                 <v-text-field
                                     v-model="formEditarLista.nombre"
@@ -51,7 +51,7 @@
                                 ></v-text-field>
                             </div>
                         </v-col>
-                        <v-col md="10" cols="12" class="py-0">
+                        <v-col md="6" cols="12" class="py-0">
                             <div class="form-group">
                                 <v-text-field
                                     v-model="formEditarLista.descripcion"
@@ -183,7 +183,7 @@
 
               <v-dialog v-model="modalAgregar" max-width="700px">
                 <v-card>
-                  <v-card-title class="body-1 mx-auto text-center">Agregar categoría a <b class="secondary--text"> {{ listaCodigo.nombre}}</b></v-card-title>
+                  <v-card-title class="body-1 mx-auto text-center"><span>Agregar categoría a <b class="secondary--text"> {{ listaCodigo.nombre}}</b></span></v-card-title>
                   <v-form
                     ref="formAgregar"
                     v-model="validAgregar"
@@ -368,6 +368,7 @@ export default {
             swal("Lista de códigos eliminada", "", "success")
             this.modalEliminarLista = false
             this.getListasDeCodigo()
+            this.categorias = []
           }
           catch(err){
             console.log(err)
@@ -423,13 +424,17 @@ export default {
           
           try{
             await ListaCodigoRepository.crearCategoria(this.formAgregar)
-            swal("Categoría agregada exitosamente", "", "success")
             this.seleccionar(this.listaCodigoSeleccionada)
+            swal("Categoría creada exitosamente", "", "success")
             this.modalAgregar = false
+            this.formAgregar.id = null
+            this.formAgregar.codigo = null
+            this.formAgregar.descripcion = null
+            this.formAgregar.listaCodigo = null
           }
           catch(err){
             console.log(err)
-            swal("La categoría no pudo ser creada", "", "error")
+            swal("El código de la categoría ya existe", "", "error")
           }
         },
         goRoute(route) {

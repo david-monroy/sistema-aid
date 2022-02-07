@@ -4,4 +4,5 @@ from backend.models import *
 from .muestraPonderada import *
 from .estudios import *
 from .edicion import *
+from .listaCodigo import *
 from .lugar import *

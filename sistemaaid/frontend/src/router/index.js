@@ -79,6 +79,18 @@ const router = new Router({
       meta: { requiresAuth: true },
       component: () => import("../views/estudios/AgregarEdicion.vue")
     },
+    {
+      path: `/estudios/agregarListaCodigo`,
+      name: 'AgregarListaCodigo',
+      meta: { requiresAuth: true },
+      component: () => import("../views/estudios/listasDeCodigo/AgregarListaCodigo.vue")
+    },
+    {
+      path: `/estudios/ListasCodigos`,
+      name: 'ListasDeCodigos',
+      meta: { requiresAuth: true },
+      component: () => import("../views/estudios/listasDeCodigo/ListasDeCodigos.vue")
+    },
 
   ],
   mode: 'history',

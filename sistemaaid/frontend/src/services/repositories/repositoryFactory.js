@@ -9,19 +9,21 @@ import LugaresRepository from "./lugares.repository";
 import CarrerasRepository from "./carreras.repository";
 import ParticipanteCarrerasRepository from "./participante_carreras.repository";
 import MetodologiaRepository from "./Estudios/metodologia.repository";
+import ListaCodigoRepository from "./Estudios/listaCodigo.repository";
 
 const repositories = {
     Autorizacion: AutorizacionRepository,
     Estudios: EstudiosRepository,
     Ediciones: EdicionesRepository,
     MuestraPonderada: MuestraPonderadaRepository,
+    Metodologia:MetodologiaRepository,
+    ListaCodigo: ListaCodigoRepository,
     Participantes: ParticipantesRepository,
     Sedes: SedesRepository,
     Carreras: CarrerasRepository,
     ParticipanteCarreras: ParticipanteCarrerasRepository,
     Colegios: ColegiosRepository,
     Lugares: LugaresRepository,
-    Metodologia:MetodologiaRepository
 };
 
 export default {

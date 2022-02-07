@@ -8,3 +8,5 @@ from .modelEdicion import *
 from .modelMuestraPonderada import *
 from .modelLugar import *
 from .modelMetodologia import *
+from .modelPregunta import * 
+from .modelPreguntaEdicion import * 

@@ -14,8 +14,9 @@ router.register('estudios', EstudioViewSet)
 router.register('ediciones', EdicionViewSet)
 router.register('muestraPonderada',MuestraPonderadaViewSet)
 router.register('metodologia',MetodologiaViewSet)
-
+router.register('pregunta',PreguntaViewSet)
 router.register('lugares', LugarViewSet)
+router.register('preguntaEdicion', PreguntaEdicionViewSet)
 
 urlpatterns = [
     path('login/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),

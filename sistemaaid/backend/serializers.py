@@ -49,12 +49,17 @@ class EstudioSerializer(serializers.ModelSerializer):
 
 
 class EdicionSerializer(serializers.ModelSerializer):
-    estudio = serializers.SerializerMethodField()
+    estudio = EstudioSerializer(read_only=True)
+    estudio_id = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Estudio.objects.all(), source='estudio')
     class Meta:
-        model = Edicion
-        fields = ['codigo','fechaInicio', 'fechaFin', 'periodo', 'vinculada', 'totalMuestra', 'estudio']
-    def get_estudio(self, obj):
-        return obj.estudio.nombre, obj.estudio.codigo
+        model = Estudio
+        fields = '__all__'
+    # estudio = serializers.SerializerMethodField()
+    # class Meta:
+    #     model = Edicion
+    #     fields = ['codigo','fechaInicio', 'fechaFin', 'periodo', 'vinculada', 'totalMuestra', 'estudio']
+    # def get_estudio(self, obj):
+    #     return obj.estudio.nombre, obj.estudio.codigo
 
 class MuestraPonderadaSerializer(serializers.ModelSerializer):
     class Meta:

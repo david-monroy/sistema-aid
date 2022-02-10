@@ -20,21 +20,88 @@
           :items-per-page="10"
           :search="search"
         >
+            <template v-slot:top>
+            <v-dialog v-model="modalEstudio" max-width="650px">
+                <v-card class="project-dialog">
+                  <v-card-title class="headline grey lighten-2">
+                    {{actualEstudio.nombre}}
+                  </v-card-title>
+
+                  <v-card-text class="my-2  pb-0">
+                    <v-row>
+                      <v-col class="md-6">
+                        <div>
+                          <strong>Código: </strong> <p>{{actualEstudio.codigo}}</p>
+                      </div>
+                      </v-col>
+                      <v-col class="md-6">
+                        <div>
+                          <strong>Nombre: </strong> <p>{{actualEstudio.nombre}}</p>
+                      </div>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col class="md-6">
+                        <div>
+                          <strong>Población objetivo: </strong> <p>{{actualEstudio.poblacionObjetivo}}</p>
+                      </div>
+                      </v-col>
+                        <v-col class="md-6">
+                        <div v-if="actualEstudio.correoUcab">
+                          <strong>Antecedentes: </strong> <p>{{actualEstudio.antecedentes}}</p>
+                      </div>
+                      <div v-else>
+                          <strong>Antecedentes: </strong> <p class='text-center'>-</p>
+                      </div>
+                      </v-col>
+                    </v-row>
+                    <v-row>       
+                      <v-col class="md-6">
+                        <div>
+                          <strong>Objetivo de negocio: </strong> <p>{{actualEstudio.objetivoNegocio}}</p>
+                      </div>
+                      </v-col>
+                    </v-row>              
+                  </v-card-text>
+
+                  <v-card-actions>
+                    <v-btn
+                      color="primary"
+                      text
+                      @click="modalEstudio = false"
+                    >
+                      Cerrar
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+          </template>
             <template v-slot:[`item.ediciones`]="{ item }">
                 <v-icon small v-bind="attrs" v-on="on"
                 @click="seleccionar(item.id)" class="mr-2">far fa-arrow-alt-circle-right</v-icon>
             </template>
             <template v-slot:[`item.actions`]="{ item }">
-            <v-tooltip
-                top 
-                style="display: inline"
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <v-icon small v-bind="attrs" v-on="on"
-                @click="editarEstudio(item)" class="mr-2">fa-pen</v-icon>
-              </template>
-              <span>Editar</span>
-            </v-tooltip>
+                <v-tooltip
+                    top 
+                    style="display: inline"
+                >
+                <template v-slot:activator="{ on, attrs }">
+                    <v-icon small v-bind="attrs" v-on="on"
+                    @click="editarEstudio(item)" class="mr-2">fa-pen</v-icon>
+                </template>
+                <span>Editar</span>
+                </v-tooltip>
+
+                <v-tooltip
+                    top 
+                    style="display: inline"
+                >
+                <template v-slot:activator="{ on, attrs }">
+                    <v-icon small v-bind="attrs" v-on="on"
+                    @click="mostrarInformacion(item.id)" class="mr-2 secondary--text">fa-info-circle</v-icon>
+                </template>
+                <span>Información</span>
+                </v-tooltip>
             </template>
         </v-data-table>
         <v-row class="d-flex" style="justify-content: center">
@@ -102,7 +169,7 @@ export default {
             { text: 'Código', value: 'codigo' },
             { text: 'Nombre', value: 'nombre' },
             { text: 'Ediciones', value: 'ediciones', sortable: false, align:'center'},
-            { text: 'Acciones', value: 'acciones', sortable: false, align:'center'},
+            { text: 'Acciones', value: 'actions', sortable: false, align:'center'},
             ],
             headerEdiciones: [
             { text: 'Código', value: 'codigo' },
@@ -118,7 +185,14 @@ export default {
             },
             modalEliminarEstudio: false,
             modalEditarEstudio: false,
-            actualEstudio: null,
+            modalEstudio: false,
+            actualEstudio: {
+                nombre: null,
+                codigo: null,
+                poblacionObjetivo: null,
+                antecedentes: null,
+                objetivoNegocio: null
+            },
             estudioSeleccionado: null,
             estudioAEliminar: '',
             estudioAEliminarNombre: "",
@@ -129,6 +203,7 @@ export default {
         async getEstudios(){
             try{
                 this.estudios = await EstudiosRepository.consultar();
+                console.log(this.estudios)
             }
             catch(err){
                 console.log(err)
@@ -159,6 +234,16 @@ export default {
         },
         editarEdicion(item){
             console.log(item);
+        },
+        mostrarInformacion(id){
+          this.modalEstudio = true;
+          let estudio = id;
+          console.log(estudio)
+          this.estudios.forEach(est => {
+            if (est.id == estudio){
+              this.actualEstudio = est;
+            }
+          });
         },
         async eliminarEstudio(){
           try{

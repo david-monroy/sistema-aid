@@ -82,6 +82,7 @@ export default {
     muestra: [],
     metodologia:[],
     idEdicion: 0,
+    estudio_id: null,
     tipo: null
   }),
   components: {

@@ -1,41 +1,73 @@
 <template>
-  <v-row align="center" class="list px-3 mx-auto nav-separator container">
-    
-
-    <!-- BOTONES -->
-    <div class="crud-buttons mx-auto">
-      <v-btn color="accent2" class="mx-4" @click="goRoute('estudios/agregar')">Agregar estudio</v-btn>
-      <v-btn color="accent1" class="mx-4" @click="buscador = true">Filtrar</v-btn>
-    </div>
-
-    <!-- TABLA -->
-    <v-col cols="12" sm="12" class="mt-4">
+  <v-row align="center" class="list px-3 mx-auto nav-separator container" style="display: flex; align-items: flex-start">
+    <v-col cols="6" sm="6" class="mt-4">
       <v-card class="mx-auto p-3" tile>
-        <v-card-title> <span class="primary--text">Estudios con sus ediciones</span>
+        <v-card-title> <span class="primary--text">Estudios</span>
           <v-spacer></v-spacer>
+          <v-text-field
+            v-model="search"
+            append-icon="fa-search"
+            label="Buscar"
+            single-line
+            hide-details
+          ></v-text-field>
         </v-card-title>
         <v-data-table
-          :headers="headers"
-          :items="ediciones"
+          sort-by='codigo'
+          :headers="headersEstudios"
+          :items="estudios"
           :hide-default-footer="false"
-          :items-per-page="5"
+          :items-per-page="10"
           :search="search"
         >
-          <template v-slot:top>
-              <v-dialog v-model="popupEliminar" max-width="700px">
-                <v-card>
-                  <v-card-title class="body-1 mx-auto text-center">¿Seguro que desea eliminar el estudio?</v-card-title>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn class="secondary--text" text @click="popupEliminar = false">Cancelar</v-btn>
-                    <v-btn color="blue darken-1" text @click="eliminarParticipante()">Sí, eliminar</v-btn>
-                    <v-spacer></v-spacer>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-          </template>
-
-          <template v-slot:[`item.actions`]="{ item }">
+            <template v-slot:[`item.ediciones`]="{ item }">
+                <v-icon small v-bind="attrs" v-on="on"
+                @click="seleccionar(item.id)" class="mr-2">far fa-arrow-alt-circle-right</v-icon>
+            </template>
+            <template v-slot:[`item.actions`]="{ item }">
+            <v-tooltip
+                top 
+                style="display: inline"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon small v-bind="attrs" v-on="on"
+                @click="editarEstudio(item)" class="mr-2">fa-pen</v-icon>
+              </template>
+              <span>Editar</span>
+            </v-tooltip>
+            </template>
+        </v-data-table>
+        <v-row class="d-flex" style="justify-content: center">
+          <v-btn color="accent2" class="mx-4 my-6" @click="goRoute('estudios/agregarEstudio')">Agregar estudio</v-btn>
+        </v-row>
+      </v-card>
+    </v-col>
+    <v-col cols="6" sm="6" class="mt-4">
+      <v-card class="mx-auto p-3 mb-0" tile>
+        <div v-if="!estudio.id">
+          Selecciona un estudio para ver sus ediciones.
+        </div>
+        <div v-else>
+          <v-card-title><span class="secondary--text">{{ estudio.nombre }}</span></v-card-title>
+        <v-card-title> <span class="primary--text">Ediciones</span>
+          <v-spacer></v-spacer>
+          <v-text-field
+            v-model="search"
+            append-icon="fa-search"
+            label="Buscar"
+            single-line
+            hide-details
+          ></v-text-field>
+        </v-card-title>
+        <v-data-table
+          :headers="headerEdiciones"
+          :items="ediciones"
+          :hide-default-footer="false"
+          :items-per-page="10"
+          :search="search"
+          sort-by='codigo'
+        >
+            <template v-slot:[`item.actions`]="{ item }">
             <v-tooltip
                 top 
                 style="display: inline"
@@ -46,151 +78,108 @@
               </template>
               <span>Editar</span>
             </v-tooltip>
-
-            <v-tooltip
-                top 
-                style="display: inline"
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <v-icon small v-bind="attrs" v-on="on"
-                @click="abrirEstudios(item.id)" class="mr-2 secondary--text">fa-info-circle</v-icon>
-              </template>
-              <span>Información</span>
-            </v-tooltip>
-
-            <v-tooltip
-                top 
-                style="display: inline"
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <v-icon small v-bind="attrs" v-on="on"
-                @click="mostrarEliminar(item.id, item.nombre)" class="red--text">fa-trash</v-icon>
-              </template>
-              <span>Eliminar</span>
-            </v-tooltip>
           </template>
         </v-data-table>
+        <v-row class="d-flex" style="justify-content: center">
+          <v-btn color="accent2" class="mx-4 my-6" @click="goRoute('estudios/agregarEdicion')">Agregar edición</v-btn>
+        </v-row>
+        </div>
       </v-card>
     </v-col>
-    <div class="crud-buttons mx-auto mt-4">
-      <v-btn color="secondary" class="mx-4" @click="exportarCSV(csvData)">Exportar a CSV</v-btn>
-    </div>
   </v-row>
 </template>
 
 <script>
-import swal from 'sweetalert';
+import swal from 'sweetalert'
 import Repository from "../../services/repositories/repositoryFactory";
-const EdicionRepository = Repository.get("Ediciones");
+const EstudiosRepository = Repository.get("Estudios");
+const EdicionesRepository = Repository.get("Ediciones");
 export default {
-  data: () => ({
-            valid: false,
-            buscador: false,
+    data() {
+        return {
             search: '',
-            headers: [
-            {
-                text: 'Código del Estudio',
-                align: 'start',
-                value: 'estudio[1]',
-            },
-            {text: 'Nombre del estudio',value: 'estudio[0]'},
-            { text: 'Edición', value: 'codigo' },
-            { text: 'Inicio', value: 'fechaInicio' },
-            { text: 'Fin ', value: 'fechaFin' },
-            { text: 'Período', value: 'periodo' },
-            { text: 'Acciones', value: 'actions', sortable: false },
+            headersEstudios: [
+            { text: 'Código', value: 'codigo' },
+            { text: 'Nombre', value: 'nombre' },
+            { text: 'Ediciones', value: 'ediciones', sortable: false, align:'center'},
+            { text: 'Acciones', value: 'acciones', sortable: false, align:'center'},
             ],
-            ediciones: [],
-            popupEliminar: false,
-            participanteAEliminar: "",
-            participanteAEliminarNombre: "",
-            modalEstudios: false,
-            actualParticipanteEstudios: {
-              nombre: 'Provicional',
-              cedula: 'Provicional',
-              correo: 'Provicional',
-              correoUcab: 'Provicional',
-              telfPrincipal: 'Provicional',
-              telfSecundario: 'Provicional',
-              fechaNacimiento: 'Provicional',
-              genero: 'Provicional',
-              actualEstado: "Provicional",
-              actualMunicipio: "Provicional",
-              lugar: {
-                estado: 'Provicional',
-                municipio: 'Provicional',
-              }
+            headerEdiciones: [
+            { text: 'Código', value: 'codigo' },
+            { text: 'Fecha Inicio', value: 'fechaInicio' },
+            { text: 'Fecha Fin', value: 'fechaFin' },
+            { text: 'Período', value: 'periodo' },
+            { text: 'Acciones', value: 'actions', sortable: false, align:'center'},
+            ],
+            estudios: [],
+            estudio: {
+              id: null,
+              nombre: null,
             },
-            lista_consultada: [],
-            participantes_origen: []
-        }),
+            modalEliminarEstudio: false,
+            modalEditarEstudio: false,
+            actualEstudio: null,
+            estudioSeleccionado: null,
+            estudioAEliminar: '',
+            estudioAEliminarNombre: "",
+            date: new Date().toISOString().substr(0, 10),
+        }
+    },
     methods: {
-        async getEdiciones(){
+        async getEstudios(){
+            try{
+                this.estudios = await EstudiosRepository.consultar();
+            }
+            catch(err){
+                console.log(err)
+                swal("No se pudo obtener los estudios", "", "error")
+            }
+        },
+        async seleccionar(id){
+          this.estudios.forEach(est => {
+            if (est.id == id) {
+              this.estudio = est
+            }
+          });
+          this.estudioSeleccionado = id
+          this.ediciones = await EstudiosRepository.obtenerEdiciones(id)
+          console.log(id)
+        },
+        mostrarEliminarEstudio(id, nombre){
+          this.modalEliminarEstudio = true;
+          this.estudioAEliminar = id;
+          this.estudioAEliminarNombre = nombre;
+        },
+        cerrarEliminar(){
+        //   this.modalEliminar = false;
+          this.modalEliminarEstudio = false;
+        },
+        editarEstudio(item){
+            console.log(item);
+        },
+        editarEdicion(item){
+            console.log(item);
+        },
+        async eliminarEstudio(){
           try{
-            this.ediciones = await EdicionRepository.consultar();
+            await EstudiosRepository.eliminar(this.estudioAEliminar)
+            // location.href = '/participantes'
+            swal("Estudio eliminado", "", "success")
+            this.modalEliminarEstudio = false
+            this.getEstudios()
+            this.ediciones = []
           }
           catch(err){
             console.log(err)
-            swal("No se pudo obtener las ediciones", "", "error")
-          } 
-        },
-
-        mostrarEliminar(participanteID, participanteNombre){
-          this.popupEliminar = true;
-          this.participanteAEliminar = participanteID;
-          this.participanteAEliminarNombre = participanteNombre;
-        },
-
-        async eliminarParticipante(){
-          try{
-            await EdicionesRepository.eliminar(this.participanteAEliminar)
-            location.href = '/ediciones'
-          }
-          catch(err){
-            console.log(err)
-            swal("El participante no pudo ser eliminado", "", "error")
+            swal("el estudio no pudo ser eliminado", "", "error")
           }
         },
-
-        async filtrar(){
-          try{
-            this.ediciones = await ParticipantesRepository.filtrar(this.form);
-          }
-          catch(err){
-            console.log(err)
-            swal("La consulta no pudo ser realizada", "", "error")
-          }
-        },
-
-        exportarCSV(arrData){
-          let csvContent = "data:text/csv;charset=utf-8,";
-          csvContent += [
-            Object.keys(arrData[0]).join(";"),
-            ...arrData.map(item => Object.values(item).join(";"))
-          ]
-            .join("\n")
-            .replace(/(^\[)|(\]$)/gm, "");
-
-          const data = encodeURI(csvContent);
-          const link = document.createElement("a");
-          link.setAttribute("href", data);
-          link.setAttribute("download", "estudios.csv");
-          link.click();
-        },
-
-        async limpiar(){
-          this.$refs.registerForm.reset();
-          this.ediciones = [];
-          this.getEdiciones();
-        },
-
         goRoute(route) {
             this.$router.push("/" + route);
         },
     },
-
     mounted(){
-        this.getEdiciones();
+        this.getEstudios();
     }
 }
 </script>

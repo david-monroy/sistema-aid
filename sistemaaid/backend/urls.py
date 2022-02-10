@@ -33,6 +33,7 @@ urlpatterns = [
     path('usuarios/agregar/', views.agregar_usuario),
     path('usuarios/', views.obtener_usuarios),
     path('usuarios/grupos/', views.obtener_grupos),
+    path('estudios/ediciones/<int:id>', views.obtenerEdiciones),
 ]
 
 urlpatterns += router.urls

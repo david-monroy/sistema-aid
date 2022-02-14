@@ -134,6 +134,64 @@
           :search="search2"
           sort-by='codigo'
         >
+          <template v-slot:top>
+            <v-dialog v-model="modalEdicion" max-width="650px">
+                <v-card class="project-dialog">
+                  <v-card-title class="headline grey lighten-2">
+                    {{actualEdicion.nombre}}
+                  </v-card-title>
+
+                  <v-card-text class="my-2  pb-0">
+                    <v-row>
+                      <v-col class="md-6">
+                        <div>
+                          <strong>Código: </strong> <p>{{actualEdicion.codigo}}</p>
+                      </div>
+                      </v-col>
+                      <v-col class="md-6">
+                        <div>
+                          <strong>Estudio: </strong> <p>{{estudio.nombre}}</p>
+                      </div>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col class="md-6">
+                        <div>
+                          <strong>Fecha de inicio: </strong> <p>{{actualEdicion.fechaInicio}}</p>
+                      </div>
+                      </v-col>
+                        <v-col class="md-6">
+                        <div>
+                          <strong>Fecha de fin: </strong><p>{{actualEdicion.fechaInicio}}</p>
+                      </div>
+                      </v-col>
+                    </v-row>
+                    <v-row>       
+                      <v-col class="md-6">
+                        <div>
+                          <strong>Período: </strong> <p>{{actualEdicion.periodo}}</p>
+                      </div>
+                      </v-col>
+                      <v-col class="md-6">
+                        <div>
+                          <strong>Muestra total: </strong> <p>{{actualEdicion.totalMuestra}}</p>
+                      </div>
+                      </v-col>
+                    </v-row>              
+                  </v-card-text>
+
+                  <v-card-actions>
+                    <v-btn
+                      color="primary"
+                      text
+                      @click="modalEdicion = false"
+                    >
+                      Cerrar
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+          </template>
             <template v-slot:[`item.actions`]="{ item }">
             <v-tooltip
                 top 
@@ -145,6 +203,16 @@
               </template>
               <span>Editar</span>
             </v-tooltip>
+            <v-tooltip
+                    top 
+                    style="display: inline"
+                >
+                <template v-slot:activator="{ on, attrs }">
+                    <v-icon small v-bind="attrs" v-on="on"
+                    @click="mostrarInformacionEdicion(item.id)" class="mr-2 secondary--text">fa-info-circle</v-icon>
+                </template>
+                <span>Información</span>
+                </v-tooltip>
           </template>
         </v-data-table>
         <v-row class="d-flex" style="justify-content: center">
@@ -188,12 +256,20 @@ export default {
             modalEliminarEstudio: false,
             modalEditarEstudio: false,
             modalEstudio: false,
+            modalEdicion: false,
             actualEstudio: {
                 nombre: null,
                 codigo: null,
                 poblacionObjetivo: null,
                 antecedentes: null,
                 objetivoNegocio: null
+            },
+            actualEdicion: {
+                codigo: null,
+                fechaInicio: null,
+                fechaFin: null,
+                periodo: null,
+                totalMuestra: null
             },
             estudioSeleccionado: null,
             estudioAEliminar: '',
@@ -243,6 +319,15 @@ export default {
           this.estudios.forEach(est => {
             if (est.id == estudio){
               this.actualEstudio = est;
+            }
+          });
+        },
+        mostrarInformacionEdicion(id){
+          this.modalEdicion = true;
+          let edicion = id;
+          this.ediciones.forEach(edi => {
+            if (edi.id == edicion){
+              this.actualEdicion = edi;
             }
           });
         },

@@ -15,6 +15,6 @@ def validarCodigo(request):
 
 @csrf_exempt
 def obtenerEdiciones(request,id):
-    ediciones = modelEdicion.Edicion.objects.filter(estudio = id).values()
+    ediciones = modelEdicion.Edicion.objects.filter(estudio_id = id).values()
     query_respuesta = json.dumps(list(ediciones), cls=DjangoJSONEncoder)
     return HttpResponse(query_respuesta)

@@ -78,9 +78,15 @@ const MetodologiaRepository = Repository.get("Metodologia")
 export default {
   data: () => ({
     pasoActual: 1,
-    fichaTecnica: [],
-    muestra: [],
-    metodologia:[],
+    fichaTecnica: {
+      nombre: null,
+      codigo: null,
+      poblacionObjetivo: null,
+      antecedentes: null,
+      objetivoNegocio: null,
+    },
+    muestra: {},
+    metodologia:{},
     idEdicion: 0,
     estudio_id: null,
     tipo: null
@@ -120,12 +126,12 @@ export default {
     async insertarEstudio(data){
       try{
         var estudio = await EstudiosRepository.agregar(data);
-        data.estudio = estudio.id
+        data.estudio_id = estudio.id
         var response = await EdicionesRepository.agregar(data);
         this.idEdicion = response.id  
         this.metodologia.edicionId = response.id
-        await MuestraPonderadaRepository.insertarMuestra(this.muestra, this.idEdicion);
-        await MetodologiaRepository.insertarMetodologia (this.metodologia)
+        if (this.muestra) await MuestraPonderadaRepository.insertarMuestra(this.muestra, this.idEdicion);
+        if (this.metodologia) await MetodologiaRepository.insertarMetodologia (this.metodologia)
         swal("El estudio ha sido agregado satisfactoriamente", "", "success")
       }
       catch(err){

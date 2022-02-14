@@ -52,7 +52,7 @@ class EdicionSerializer(serializers.ModelSerializer):
     estudio = EstudioSerializer(read_only=True)
     estudio_id = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Estudio.objects.all(), source='estudio')
     class Meta:
-        model = Estudio
+        model = Edicion
         fields = '__all__'
     # estudio = serializers.SerializerMethodField()
     # class Meta:

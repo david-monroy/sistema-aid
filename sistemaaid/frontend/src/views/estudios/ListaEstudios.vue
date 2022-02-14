@@ -119,7 +119,7 @@
         <v-card-title> <span class="primary--text">Ediciones</span>
           <v-spacer></v-spacer>
           <v-text-field
-            v-model="search"
+            v-model="search2"
             append-icon="fa-search"
             label="Buscar"
             single-line
@@ -131,7 +131,7 @@
           :items="ediciones"
           :hide-default-footer="false"
           :items-per-page="10"
-          :search="search"
+          :search="search2"
           sort-by='codigo'
         >
             <template v-slot:[`item.actions`]="{ item }">
@@ -165,6 +165,7 @@ export default {
     data() {
         return {
             search: '',
+            search2: '',
             headersEstudios: [
             { text: 'Código', value: 'codigo' },
             { text: 'Nombre', value: 'nombre' },
@@ -179,6 +180,7 @@ export default {
             { text: 'Acciones', value: 'actions', sortable: false, align:'center'},
             ],
             estudios: [],
+            ediciones: [],
             estudio: {
               id: null,
               nombre: null,
@@ -203,7 +205,6 @@ export default {
         async getEstudios(){
             try{
                 this.estudios = await EstudiosRepository.consultar();
-                console.log(this.estudios)
             }
             catch(err){
                 console.log(err)
@@ -219,6 +220,7 @@ export default {
           this.estudioSeleccionado = id
           this.ediciones = await EstudiosRepository.obtenerEdiciones(id)
           console.log(id)
+          console.log(this.ediciones)
         },
         mostrarEliminarEstudio(id, nombre){
           this.modalEliminarEstudio = true;
@@ -238,7 +240,6 @@ export default {
         mostrarInformacion(id){
           this.modalEstudio = true;
           let estudio = id;
-          console.log(estudio)
           this.estudios.forEach(est => {
             if (est.id == estudio){
               this.actualEstudio = est;

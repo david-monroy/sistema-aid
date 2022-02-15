@@ -167,23 +167,21 @@
                     >
                     <template v-slot:activator="{ on, attrs }">
                         <v-text-field
-                            v-model="form.fechaFin"
-                            label="Fecha estimada fin *"
-                            hint="AAAA-MM-DD"
-                            persistent-hint
-                            prepend-icon="fa-calendar"
-                            v-bind="attrs"
-                            v-on="on"
-                            required
-                            dense
-                            :rules='[rules.required]'
+                            v-model="date"
+                                label="Fecha Fin"
+                                hint="AAAA-MM-DD"
+                                persistent-hint
+                                prepend-icon="fa-calendar"
+                                v-bind="attrs"
+                                @blur="date = parseDate(dateFormatted)"
+                                v-on="on"
                         ></v-text-field>
                     </template>
                     <v-date-picker
-                        v-model="form.fechaFin"
+                        v-model="date"
                         no-title
                         color="primary"
-                        :min="form.fechaInicio"
+                        :min="form.fechaFin"
                         @input="menu2 = false"
                     ></v-date-picker>
                 </v-menu>
@@ -242,6 +240,8 @@ export default {
                 vinculada: true,
                 totalMuestra: ''
             },
+            date: new Date().toISOString().substr(0, 10),
+            dateFormatted: this.formatDate(new Date().toISOString().substr(0, 10)),
             menu1:false,
             menu2:false,
             valid: true,
@@ -258,11 +258,25 @@ export default {
             }
         }
     },
-    computed: {},
+    computed: {
+        computedDateFormatted () {
+        return this.formatDate(this.date)
+      },
+    },
     methods: {
+        formatDate (date) {
+            if (!date) return null
+            const [year, month, day] = date.split('-')
+            return `${year}-${month}-${day}`
+        },
+        parseDate (date) {
+            if (!date) return null
+            const [month, day, year] = date.split('/')
+            return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+        },
         async pasoSiguiente() {
             let validatedForm = this.$refs.registerForm.validate();
-
+            this.form.fechaFin = this.fechaFin;
             if (validatedForm){
                 let estudioExistente = await EstudiosRepository.validarCodigo(this.form)
                 if (this.form.fechaInicio > this.form.fechaFin) {
@@ -282,7 +296,13 @@ export default {
         goRoute(route) {
             this.$router.push("/" + route);
         },
-    }
+    },
+    watch: {
+      date () {
+        this.fechaFin = this.formatDate(this.date)
+      },
+
+    },
 }
 </script>
 

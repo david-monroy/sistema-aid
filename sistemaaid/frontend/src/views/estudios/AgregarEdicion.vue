@@ -137,8 +137,7 @@ export default {
         console.log(err)
         swal("La edición no se pudo agregar", "", "error")
       }
-    },
-
+    }
   }
 };
 </script>

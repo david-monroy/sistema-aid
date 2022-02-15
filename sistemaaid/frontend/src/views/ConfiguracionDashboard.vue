@@ -21,6 +21,10 @@
           </v-col>
         </v-row>
       </v-card-text>
+      <v-btn @click="goRoute('inicio')"
+          class="btn-block accent1 w-25 mx-auto  mb-0 d-none d-sm-flex">
+          Regresar
+      </v-btn>
     </div>
   </div>
 </template>
@@ -28,7 +32,7 @@
 <script>
 import DashboardCard from "../components/dashboard/DashboardCard.vue";
 export default {
-  name: "Dashboard",
+  name: "ConfiguracionDashboard",
   components: {
     DashboardCard
   },
@@ -39,34 +43,18 @@ export default {
       dashItems: [
       {
         id: 1,
-        name: "Estudios",
-        icon: "fa-file-alt",
+        name: "Usuarios",
+        icon: "fa-users-cog",
         rol: 2,
-        route: "estudios",
-      },
-      {
-        id: 2,
-        name: "Participantes",
-        icon: "fa-users",
-        rol: 1,
-        route: "participantes",
-      },
-      {
-        id: 3,
-        name: "Reportes",
-        icon: "fa-chart-pie",
-        rol: 3,
-        route: "#",
-      },
-      {
-        id: 4,
-        name: "Configuración",
-        icon: "fa-cog",
-        rol: 3,
-        route: "configuracion",
+        route: "usuarios",
       },
     ]
-  })
+  }),
+  methods: {
+    goRoute(route) {
+      this.$router.push("/" + route);
+    },
+  }
 };
 </script>
 

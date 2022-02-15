@@ -80,6 +80,24 @@ const router = new Router({
       component: () => import("../views/estudios/AgregarEdicion.vue")
     },
     {
+<<<<<<< HEAD
+      path: '/configuracion',
+      name: 'Configuracion',
+      meta: { requiresAuth: true },
+      component: () => import("../views/ConfiguracionDashboard.vue")
+    },
+    {
+      path: '/usuarios',
+      name: 'ListaUsuario',
+      meta: { requiresAuth: true },
+      component: () => import("../views/usuarios/ListaUsuario.vue")
+    },
+    {
+      path: '/usuarios/agregar',
+      name: 'AgregarUsuario',
+      meta: { requiresAuth: true },
+      component: () => import("../views/usuarios/AgregarUsuario.vue")
+=======
       path: `/estudios/agregarListaCodigo`,
       name: 'AgregarListaCodigo',
       meta: { requiresAuth: true },
@@ -90,6 +108,7 @@ const router = new Router({
       name: 'ListasDeCodigos',
       meta: { requiresAuth: true },
       component: () => import("../views/estudios/listasDeCodigo/ListasDeCodigos.vue")
+>>>>>>> develop
     },
 
   ],

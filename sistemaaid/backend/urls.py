@@ -1,6 +1,6 @@
 from rest_framework import routers, urlpatterns
 from . import views
-from django.urls import path
+from django.urls import path, include
 from .viewsets import *
 from rest_framework_simplejwt import views as jwt_views
 
@@ -34,8 +34,10 @@ urlpatterns = [
     path('participantes/filtrar/', views.participantes_filtrar),
     path('lugares/estados/', views.get_estados),
     path('lugares/municipios/', views.get_municipios),
+    path('usuarios/agregar/', views.agregar_usuario),
+    path('usuarios/', views.obtener_usuarios),
+    path('usuarios/grupos/', views.obtener_grupos),
+    path('estudios/ediciones/<int:id>', views.obtenerEdiciones),
 ]
 
 urlpatterns += router.urls
-
-

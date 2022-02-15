@@ -70,3 +70,14 @@ class MetodologiaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Metodologia
         fields = '__all__'
+
+class ListaCodigoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ListaCodigo
+        fields = '__all__'
+
+class CategoriaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Categoria
+        fields = '__all__'
+        

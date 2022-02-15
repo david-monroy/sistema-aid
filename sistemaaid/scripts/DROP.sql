@@ -9,3 +9,4 @@ drop table backend_listacodigo;
 drop table backend_participante;
 drop table backend_colegio;
 drop table backend_sede;
+drop table backend_lugar;

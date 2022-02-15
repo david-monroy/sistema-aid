@@ -14,6 +14,8 @@ router.register('estudios', EstudioViewSet)
 router.register('ediciones', EdicionViewSet)
 router.register('muestraPonderada',MuestraPonderadaViewSet)
 router.register('metodologia',MetodologiaViewSet)
+router.register('listaCodigo',ListaCodigoViewSet)
+router.register('categoria',CategoriaViewSet)
 router.register('lugares', LugarViewSet)
 
 urlpatterns = [
@@ -24,6 +26,8 @@ urlpatterns = [
     path('muestraPonderada/insertar/<int:idEdicion>', views.insertarMuestra),
     path('estudios/validarCodigo', views.validarCodigo),
     path('ediciones/validarCodigo', views.validarCodigo),
+    path('categoria/cargar/<int:idLista>', views.cargarListaCodigo),
+    path('categoria/consultar/<int:idLista>', views.obtenerCategorias),
     path('participantes/agregar_masivo/', views.agregar_masivo),
     path('participantes/carga_masiva/', views.carga_masiva),
     path('participantes/participantecarreras/', views.get_participantecarrera),

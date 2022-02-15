@@ -10,12 +10,15 @@ import CarrerasRepository from "./Comun/carreras.repository";
 import ParticipanteCarrerasRepository from "./Participantes/participante_carreras.repository";
 import MetodologiaRepository from "./Estudios/metodologia.repository";
 import UsuariosRepository from "./usuarios.repository";
+import ListaCodigoRepository from "./Estudios/listaCodigo.repository";
 
 const repositories = {
     Autorizacion: AutorizacionRepository,
     Estudios: EstudiosRepository,
     Ediciones: EdicionesRepository,
     MuestraPonderada: MuestraPonderadaRepository,
+    Metodologia:MetodologiaRepository,
+    ListaCodigo: ListaCodigoRepository,
     Participantes: ParticipantesRepository,
     Sedes: SedesRepository,
     Carreras: CarrerasRepository,

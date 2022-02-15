@@ -80,6 +80,7 @@ const router = new Router({
       component: () => import("../views/estudios/AgregarEdicion.vue")
     },
     {
+<<<<<<< HEAD
       path: '/configuracion',
       name: 'Configuracion',
       meta: { requiresAuth: true },
@@ -96,6 +97,18 @@ const router = new Router({
       name: 'AgregarUsuario',
       meta: { requiresAuth: true },
       component: () => import("../views/usuarios/AgregarUsuario.vue")
+=======
+      path: `/estudios/agregarListaCodigo`,
+      name: 'AgregarListaCodigo',
+      meta: { requiresAuth: true },
+      component: () => import("../views/estudios/listasDeCodigo/AgregarListaCodigo.vue")
+    },
+    {
+      path: `/estudios/ListasCodigos`,
+      name: 'ListasDeCodigos',
+      meta: { requiresAuth: true },
+      component: () => import("../views/estudios/listasDeCodigo/ListasDeCodigos.vue")
+>>>>>>> develop
     },
 
   ],

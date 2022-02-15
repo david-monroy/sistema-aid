@@ -50,7 +50,7 @@
               <Metodologia :tipo="tipo"></Metodologia>
             </v-stepper-content>
             <v-stepper-content step="4" >
-              <h3>Proximamente</h3>
+              <Instrumento></Instrumento>
             </v-stepper-content>
             <v-stepper-content step="5" >
               <h3>Proximamente</h3>
@@ -67,9 +67,11 @@
 import Metodologia from "../../components/estudios/Metodologia.vue"
 import FichaTecnica from "../../components/estudios/FichaTecnica.vue";
 import MuestraPonderada from "../../components/estudios/MuestraPonderada.vue";
+import Instrumento from '../../components/estudios/Instrumento.vue';
 import { EventBus } from "../../main.js";
 import swal from 'sweetalert'
 import Repository from "../../services/repositories/repositoryFactory";
+
 const EstudiosRepository = Repository.get("Estudios");
 const EdicionesRepository = Repository.get("Ediciones");
 const MuestraPonderadaRepository = Repository.get("MuestraPonderada");
@@ -81,13 +83,16 @@ export default {
     fichaTecnica: [],
     muestra: [],
     metodologia:[],
+    instrumento:[],
     idEdicion: 0,
     tipo: null
   }),
   components: {
     FichaTecnica,
     MuestraPonderada,
-    Metodologia
+    Metodologia,
+    Instrumento,
+    Instrumento
   },
 
   created() {
@@ -102,6 +107,9 @@ export default {
         if (this.pasoActual == 3){
           this.metodologia = data
         }
+        if (this.pasoActual == 4){
+          this.instrumento= data
+        }
         this.pasoActual += 1; 
     }),
 
@@ -110,7 +118,7 @@ export default {
     }),
 
     EventBus.$on("registrar-estudio", (data) => {
-        this.metodologia = data
+        this.instrumento = data
         this.insertarEstudio(this.fichaTecnica)
     })
   },

@@ -14,7 +14,7 @@ router.register('estudios', EstudioViewSet)
 router.register('ediciones', EdicionViewSet)
 router.register('muestraPonderada',MuestraPonderadaViewSet)
 router.register('metodologia',MetodologiaViewSet)
-router.register('pregunta',PreguntaViewSet)
+router.register('preguntas',PreguntaViewSet)
 router.register('listaCodigo',ListaCodigoViewSet)
 router.register('categoria',CategoriaViewSet)
 router.register('lugares', LugarViewSet)
@@ -36,6 +36,8 @@ urlpatterns = [
     path('participantes/filtrar/', views.participantes_filtrar),
     path('lugares/estados/', views.get_estados),
     path('lugares/municipios/', views.get_municipios),
+    path('preguntas/cargar/', views.insertarPreguntas),
+    path('preguntas/preview/', views.previewPreguntas),
 ]
 
 urlpatterns += router.urls

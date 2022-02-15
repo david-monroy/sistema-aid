@@ -52,6 +52,10 @@
             <v-stepper-content step="3">
               <Metodologia :tipo="tipo"></Metodologia>
             </v-stepper-content>
+
+             <v-stepper-content step="4">
+              <Instrumento></Instrumento>
+            </v-stepper-content>
           </v-stepper-items> 
         </v-stepper>
       </v-col>
@@ -64,12 +68,14 @@
 import InformacionGeneral from "../../components/estudios/InformacionGeneral.vue";
 import MuestraPonderada from "../../components/estudios/MuestraPonderada.vue";
 import Metodologia from "../../components/estudios/Metodologia.vue"
+import Instrumento from '../../components/estudios/Instrumento.vue';
 import { EventBus } from "../../main.js";
 import swal from 'sweetalert'
 import Repository from "../../services/repositories/repositoryFactory";
 const EdicionesRepository = Repository.get("Ediciones");
 const MuestraPonderadaRepository = Repository.get("MuestraPonderada");
-const MetodologiaRepository = Repository.get("Metodologia")
+const MetodologiaRepository = Repository.get("Metodologia");
+const PreguntasRepository = Repository.get("Preguntas")
 
 export default {
   data: () => ({
@@ -77,13 +83,15 @@ export default {
     fichaTecnica:[],
     muestra:[],
     metodologia:[],
+    instrumento:[],
     tipo:"",
     idEdicion:0
   }),
   components: {
     InformacionGeneral,
     MuestraPonderada,
-    Metodologia
+    Metodologia,
+    Instrumento
   },
 
   created() {
@@ -98,6 +106,9 @@ export default {
         if (this.pasoActual == 3){
           this.metodologia = data
         }
+        if (this.pasoActual == 4){
+          this.instrumento = data
+        }
         this.pasoActual += 1; 
     }),
 
@@ -106,7 +117,7 @@ export default {
     }),
 
     EventBus.$on("registrar-edicion", (data) => {
-        this.metodologia = data
+        this.instrumento = data
         this.insertarEdicion()
     })
   },
@@ -117,9 +128,9 @@ export default {
         var response = await EdicionesRepository.agregar(this.fichaTecnica);
         this.idEdicion = response.id  
         this.metodologia.edicionId = response.id
-        
         await MuestraPonderadaRepository.insertarMuestra(this.muestra, this.idEdicion);
-        await MetodologiaRepository.insertarMetodologia (this.metodologia)
+        await MetodologiaRepository.insertarMetodologia (this.metodologia);
+        await PreguntasRepository.cargar(this.instrumento);
         swal("El edición ha sido agregada satisfactoriamente", "", "success")
       }
       catch(err){

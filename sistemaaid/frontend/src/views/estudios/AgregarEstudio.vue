@@ -50,7 +50,7 @@
               <Metodologia :tipo="tipo"></Metodologia>
             </v-stepper-content>
             <v-stepper-content step="4" >
-              <Instrumento></Instrumento>
+              <Instrumento :tipo="tipo"></Instrumento>
             </v-stepper-content>
             <v-stepper-content step="5" >
               <h3>Proximamente</h3>
@@ -76,26 +76,15 @@ const EstudiosRepository = Repository.get("Estudios");
 const EdicionesRepository = Repository.get("Ediciones");
 const MuestraPonderadaRepository = Repository.get("MuestraPonderada");
 const MetodologiaRepository = Repository.get("Metodologia")
+const PreguntasRepository = Repository.get("Preguntas")
 
 export default {
   data: () => ({
     pasoActual: 1,
-<<<<<<< HEAD
     fichaTecnica: [],
     muestra: [],
     metodologia:[],
     instrumento:[],
-=======
-    fichaTecnica: {
-      nombre: null,
-      codigo: null,
-      poblacionObjetivo: null,
-      antecedentes: null,
-      objetivoNegocio: null,
-    },
-    muestra: {},
-    metodologia:{},
->>>>>>> bb5024918ac65fdbd3272a941a3d9229c8fd308b
     idEdicion: 0,
     estudio_id: null,
     tipo: null
@@ -111,6 +100,7 @@ export default {
   created() {
     EventBus.$on("pasoSiguiente", (data) => { 
         if (this.pasoActual == 1 ) {
+          console.log(data)
           this.fichaTecnica = data
           this.tipo = "Estudio"
         }
@@ -143,9 +133,12 @@ export default {
         data.estudio_id = estudio.id
         var response = await EdicionesRepository.agregar(data);
         this.idEdicion = response.id  
-        this.metodologia.edicionId = response.id
-        if (this.muestra) await MuestraPonderadaRepository.insertarMuestra(this.muestra, this.idEdicion);
-        if (this.metodologia) await MetodologiaRepository.insertarMetodologia (this.metodologia)
+        await MuestraPonderadaRepository.insertarMuestra(this.muestra, this.idEdicion);
+        if (this.metodologia) {
+          this.metodologia.edicionId = response.id
+          await MetodologiaRepository.insertarMetodologia (this.metodologia)
+        }
+        if (this.instrumento) await PreguntasRepository.cargar(this.instrumento, this.idEdicion);
         swal("El estudio ha sido agregado satisfactoriamente", "", "success")
       }
       catch(err){

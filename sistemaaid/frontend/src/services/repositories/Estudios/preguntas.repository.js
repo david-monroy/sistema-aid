@@ -8,8 +8,8 @@ const headers =  {
 }
 
 export default {
-  async cargar(data) {
-    let response = await conn.post(`/preguntas/cargar/`, data, jwt.getAuthHeaderToken());
+  async cargar(data, idEdicion) {
+    let response = await conn.post(`/preguntas/cargar/${idEdicion}/`, data, jwt.getAuthHeaderToken());
     return response;
   },
   async preview(data) {

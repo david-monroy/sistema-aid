@@ -10,4 +10,4 @@ class Pregunta(models.Model):
     listaCodigo = models.ForeignKey(ListaCodigo, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
-        return self.nombre
+        return self.etiqueta

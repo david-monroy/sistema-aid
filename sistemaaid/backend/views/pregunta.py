@@ -1,9 +1,11 @@
 from django.http import HttpResponse
 import pandas as pd
-from backend.models import modelPreguntaEdicion,modelPregunta
+from backend.models import Pregunta, PreguntaEdicion, Edicion
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.core.serializers.json import DjangoJSONEncoder
+
+from backend.models.modelListaCodigo import ListaCodigo
 
 @csrf_exempt
 def previewPreguntas(request):
@@ -12,28 +14,58 @@ def previewPreguntas(request):
     return HttpResponse(df.to_json(orient="table"))
 
 @csrf_exempt
-def insertarPreguntas(request):
+def insertarPreguntas(request, idEdicion):
     data = request.body.decode('utf8').replace("'", '"')
     df = pd.DataFrame(json.loads(data))
-
-    row_iter = df.iterrows()
     
+    row_iter = df.iterrows()
     for index, row in row_iter:
+        listaCodigo = None
+        if (row[3] == 'Cadena'):
+                listaCodigo = asignarListaCodigo(row[2])
 
-        preguntaFilter = modelPregunta.Pregunta.objects.get(preguntaedicion__edicion=1, codigo=row[0]).values_list('id')
+        preguntaFilter = Pregunta.objects.filter(preguntaedicion__edicion=idEdicion, codigo=row[1])
         if (preguntaFilter):
-            pregunta = modelPregunta.Pregunta.objects.get(pk=preguntaFilter)
-            pregunta.etiqueta = row[1]
+            pregunta = Pregunta.objects.get(preguntaedicion__edicion=idEdicion, codigo=row[1])
+            pregunta.etiqueta = row[2]
+            pregunta.tipo = row[3]
+            if (listaCodigo != None):
+                listaCodigo = asignarListaCodigo(row[2])
             pregunta.save()
         
         else:
-            modelPregunta.Pregunta.objects.create(
-                codigo = row[0],
-                etiqueta = row[1],
-                tipo= row[2],
+            if (listaCodigo != None):
+                
+                nueva_pregunta = Pregunta.objects.create(
+                    codigo = row[1],
+                    etiqueta = row[2],
+                    tipo= row[3],
+                    listaCodigo = asignarListaCodigo(row[2])    
+                )
+            
+            else:
+
+                nueva_pregunta = Pregunta.objects.create(
+                    codigo = row[1],
+                    etiqueta = row[2],
+                    tipo= row[3] 
+                )
+
+            PreguntaEdicion.objects.create(
+                pregunta = nueva_pregunta,
+                edicion = Edicion.objects.get(pk=idEdicion)
             )
 
+
     return HttpResponse()
+
+def asignarListaCodigo(etiqueta):
+    listaCodigo = None
+    if (ListaCodigo.objects.filter(nombre=etiqueta)):
+        listaCodigo = ListaCodigo.objects.get(nombre=etiqueta)
+    return listaCodigo
+
+
 
 
     

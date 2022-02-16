@@ -127,10 +127,13 @@ export default {
       try{ 
         var response = await EdicionesRepository.agregar(this.fichaTecnica);
         this.idEdicion = response.id  
-        this.metodologia.edicionId = response.id
         await MuestraPonderadaRepository.insertarMuestra(this.muestra, this.idEdicion);
-        await MetodologiaRepository.insertarMetodologia (this.metodologia);
-        await PreguntasRepository.cargar(this.instrumento);
+        if (this.metodologia != []){
+          this.metodologia.edicionId = response.id
+          await MetodologiaRepository.insertarMetodologia (this.metodologia);
+        }
+      
+        await PreguntasRepository.cargar(this.instrumento, this.idEdicion);
         swal("El edición ha sido agregada satisfactoriamente", "", "success")
       }
       catch(err){

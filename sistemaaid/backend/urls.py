@@ -36,7 +36,7 @@ urlpatterns = [
     path('participantes/filtrar/', views.participantes_filtrar),
     path('lugares/estados/', views.get_estados),
     path('lugares/municipios/', views.get_municipios),
-    path('preguntas/cargar/', views.insertarPreguntas),
+    path('preguntas/cargar/<int:idEdicion>/', views.insertarPreguntas),
     path('preguntas/preview/', views.previewPreguntas),
     path('usuarios/agregar/', views.agregar_usuario),
     path('usuarios/', views.obtener_usuarios),

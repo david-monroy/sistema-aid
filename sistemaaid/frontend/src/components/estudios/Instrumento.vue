@@ -39,10 +39,13 @@
                 </v-data-table>
             </div>
             <div v-else>
-                <p> A continuación puede cargar un archivo .csv para obtener la distribución de la población para este estudio.</p>
-                <p> Puede guiarse de esta tabla, puede agregar tantas columnas desee.</p>
+                <span style=“text-align:left”> A continuación puede cargar un archivo .csv con la lista de preguntas de este estudio.</span>
+                <p style=“text-align:left”> Debe contener en la primera columna el código de la Pregunta el cual debe ser único.</p>
+                <p> En la segunda columna la etiqueta de la Pregunta</p>
+                <p> En la tercera columna el tipo de pregunta Numerico o Cadena</p>
+                <p> En el caso de querer asociar una pregunta a un plan de Código entonces el nombre del paln y la etiqueta de la pregunta deben coincidir</p>
                 <img
-                src="../../assets/tablademuestraponderada.png"
+                src="../../assets/tablaPreguntas.png"
                 />
                 
             </div>
@@ -108,13 +111,15 @@ export default {
             ]
         }
     },
+    props: {
+        tipo:String
+    },
     methods: {
         async cargarCSV(){
             const formData = new FormData();
             formData.append('file', this.file)
             try{
                this.preguntas = await PreguntasRepository.preview(formData);
-               console.log(this.preguntas)
             }
             catch(err){
                 console.log(err)
@@ -143,10 +148,10 @@ export default {
         },
         async insertarInfo(){
             if (this.tipo == "Estudio"){
-                 EventBus.$emit("registrar-estudio",this.preguntas)
+                EventBus.$emit("registrar-estudio",this.preguntas)
             }
             else {
-                 EventBus.$emit("registrar-edicion",this.preguntas)
+                EventBus.$emit("registrar-edicion",this.preguntas)
             }
            
         },

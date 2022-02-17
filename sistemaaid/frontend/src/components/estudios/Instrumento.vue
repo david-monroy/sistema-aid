@@ -39,8 +39,8 @@
                 </v-data-table>
             </div>
             <div v-else>
-                <span style=“text-align:left”> A continuación puede cargar un archivo .csv con la lista de preguntas de este estudio.</span>
-                <p style=“text-align:left”> Debe contener en la primera columna el código de la Pregunta el cual debe ser único.</p>
+                <p> A continuación puede cargar un archivo .csv con la lista de preguntas de este estudio.</p>
+                <p> Debe contener en la primera columna el código de la Pregunta el cual debe ser único.</p>
                 <p> En la segunda columna la etiqueta de la Pregunta</p>
                 <p> En la tercera columna el tipo de pregunta Numerico o Cadena</p>
                 <p> En el caso de querer asociar una pregunta a un plan de Código entonces el nombre del paln y la etiqueta de la pregunta deben coincidir</p>

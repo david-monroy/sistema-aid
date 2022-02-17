@@ -100,7 +100,6 @@ export default {
   created() {
     EventBus.$on("pasoSiguiente", (data) => { 
         if (this.pasoActual == 1 ) {
-          console.log(data)
           this.fichaTecnica = data
           this.tipo = "Estudio"
         }
@@ -134,7 +133,7 @@ export default {
         var response = await EdicionesRepository.agregar(data);
         this.idEdicion = response.id  
         await MuestraPonderadaRepository.insertarMuestra(this.muestra, this.idEdicion);
-        if (this.metodologia) {
+        if (this.metodologia != []) {
           this.metodologia.edicionId = response.id
           await MetodologiaRepository.insertarMetodologia (this.metodologia)
         }

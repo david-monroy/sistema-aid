@@ -48,6 +48,13 @@ export default {
         rol: 2,
         route: "usuarios",
       },
+      {
+        id: 2,
+        name: "Patrones",
+        icon: "fa-clipboard-list",
+        rol: 2,
+        route: "patrones",
+      },
     ]
   }),
   methods: {

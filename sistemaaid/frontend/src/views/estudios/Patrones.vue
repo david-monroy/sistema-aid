@@ -55,8 +55,16 @@ export default {
   data() {
     return {
       file: "",
+    //   variablesSeleccionadas: []
     };
   },
+  computed: {
+      csvData() {
+      return this.variablesSeleccionadas.map(item => ({
+        ...item
+      }));
+    }
+    },
   methods: {
     seleccionarCSV() {
       this.file = this.$refs.file.files[0];
@@ -68,14 +76,36 @@ export default {
       const formData = new FormData();
       formData.append("file", this.file);
       try {
-        let res = await EstudiosRepository.seleccionarVariablesRFE(formData);
+        let variablesSeleccionadas = await EstudiosRepository.seleccionarVariablesRFE(formData);
         swal("Archivo cargado exitosamente", "", "success");
-        console.log(res)
+        // console.log(variablesSeleccionadas)
+        let varlist = []
+        for(var i in variablesSeleccionadas)
+            varlist.push(variablesSeleccionadas [i]);
+
+        
+        this.exportarCSV(varlist)
       } catch (err) {
         console.log(err);
         swal("No se ha podido cargar el archivo", "", "error");
       }
     },
+    exportarCSV(arrData){
+          let csvContent = "data:text/csv;charset=utf-8,";
+          csvContent += [
+            Object.keys(arrData[0]).join(";"),
+            ...arrData.map(item => Object.values(item).join(";"))
+          ]
+            .join("\n")
+            .replace(/(^\[)|(\]$)/gm, "");
+
+          const data = encodeURI(csvContent);
+          const link = document.createElement("a");
+          link.setAttribute("href", data);
+          link.setAttribute("download", "variablesSeleccionadasRFE.csv");
+          link.click();
+          console.log(arrData)
+        },
   },
   created() {},
 };

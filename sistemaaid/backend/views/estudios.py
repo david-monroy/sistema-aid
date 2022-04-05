@@ -35,10 +35,9 @@ def seleccionarVariablesRFE(request):
    selectedVariables = pd.DataFrame ({'Variables': entrenar.columns[(rfe.get_support())],
                                     'Ponderacion': rfe.estimator_.feature_importances_ })
                                     
-   writer = ExcelWriter('variablesSeleccionadasPorRFE3.xlsx')
-   selectedVariables.to_excel(writer, 'Hoja de datos', index=False)
-   writer.save()
+   # writer = ExcelWriter('variablesSeleccionadasPorRFE3.xlsx')
+   # selectedVariables.to_excel(writer, 'Hoja de datos', index=False)
+   # writer.save()
 
-   print(type(selectedVariables))
 
-   return HttpResponse(selectedVariables)
+   return HttpResponse(selectedVariables.to_json(orient='index'))

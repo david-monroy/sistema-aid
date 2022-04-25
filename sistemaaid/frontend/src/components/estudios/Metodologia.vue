@@ -74,7 +74,7 @@
                 <v-btn
                     :small="$vuetify.breakpoint.smAndDown"
                     class="primary"
-                    @click="insertarInfo()"
+                    @click="pasoSiguiente()"
                     :disable=!valid
                 >
                     <p class="mt-3 hidden-sm-and-down">Siguiente</p>

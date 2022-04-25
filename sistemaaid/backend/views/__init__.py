@@ -6,4 +6,5 @@ from .estudios import *
 from .edicion import *
 from .listaCodigo import *
 from .lugar import *
+from .pregunta import *
 from .usuario import *

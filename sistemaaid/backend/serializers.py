@@ -71,6 +71,15 @@ class MetodologiaSerializer(serializers.ModelSerializer):
         model = Metodologia
         fields = '__all__'
 
+class PreguntaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Pregunta
+        fields = '__all__'
+
+class PreguntaEdicionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PreguntaEdicion
+        fields = '__all__'
 class ListaCodigoSerializer(serializers.ModelSerializer):
     class Meta:
         model = ListaCodigo

@@ -55,6 +55,10 @@ def leer_csv_actualizar(request):
     
     row_iter = df.iterrows()
 
+    df['Fecha nacimiento'] = pd.to_datetime(df['Fecha nacimiento'])
+    df['Telefono secundario']=df['Telefono secundario'].fillna('')
+    df['Correo ucab']=df['Correo ucab'].fillna('')
+
     for index, row in row_iter:
         existe_participante = modelParticipante.Participante.objects.filter(cedula=row[1])
 
@@ -65,7 +69,7 @@ def leer_csv_actualizar(request):
             par.telfPrincipal = row[3]
             par.telfSecundario = row[4]
             par.correo = row[5]
-            par.edad = row[7]
+            par.correoUcab = row[6]
             par.colegio = modelColegio.Colegio.objects.get(pk=row[8])
             par.save()
 
@@ -78,6 +82,23 @@ def leer_csv_actualizar(request):
                 par_car.semestre = row[11]
                 par_car.save()
         else:
-            print('no existe')
+            nuevo_participante = modelParticipante.Participante.objects.create(
+                nombre = row[0],
+                cedula  = row[1],
+                genero = row[2],
+                telfPrincipal = row[3],
+                telfSecundario = row[4],
+                correo = row[5],
+                correoUcab = row[6],
+                fechaNacimiento = row[7],
+                colegio = modelColegio.Colegio.objects.get(pk=row[8]),
+            )
+
+            nuevo_participante_carrera = modelParticipanteCarrera.ParticipanteCarrera.objects.create(
+                participante = nuevo_participante,
+                sede  = modelSede.Sede.objects.get(pk=row[9]),
+                carrera = modelCarrera.Carrera.objects.get(pk=row[10]),
+                semestre = row[11],
+            )
 
     return HttpResponse(df)

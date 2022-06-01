@@ -83,10 +83,7 @@ export default {
     pasoActual: 1,
     fichaTecnica: [],
     muestra: [],
-    metodologia:[],
-    instrumento:[],
     idEdicion: 0,
-    estudio_id: null,
     tipo: null
   }),
   components: {
@@ -120,7 +117,7 @@ export default {
     }),
 
     EventBus.$on("registrar-estudio", (data) => {
-        this.instrumento = data
+        this.muestra = data
         this.insertarEstudio(this.fichaTecnica)
     })
   },
@@ -145,6 +142,7 @@ export default {
         swal("El estudio no pudo ser agregado", "", "error")
       }
     }
+
   }
 };
 </script>

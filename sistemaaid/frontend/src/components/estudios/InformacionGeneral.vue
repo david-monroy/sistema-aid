@@ -225,7 +225,7 @@ export default {
                     swal("Ya existe una edición con el mismo código", "", "error")
                 }
                 else {
-                    EventBus.$emit("pasoSiguienteEdi",this.form)
+                    EventBus.$emit("pasoSiguienteEdi","Edicion",this.form)
                 }
             }
                 

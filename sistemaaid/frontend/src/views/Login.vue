@@ -29,6 +29,7 @@
               <div class="form-group">
                 <v-text-field
                   v-model="form.password"
+                  type="password"
                   label="Contraseña"
                   required
                   :append-icon="show ? 'fa-eye' : 'fa-eye-slash'"

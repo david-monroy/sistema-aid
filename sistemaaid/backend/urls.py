@@ -61,9 +61,13 @@ urlpatterns = [
     path('usuarios/', views.obtener_usuarios),
     path('usuarios/grupos/', views.obtener_grupos),
     path('estudios/ediciones/<int:id>', views.obtenerEdiciones),
+<<<<<<< HEAD
 =======
     path('ediciones/validarCodigo', views.validarCodigo)
 >>>>>>> 90e4720eda23bb18385e64b04cefeb1a0ccab7a4
+=======
+    path('estudios/seleccionarVariablesRFE/', views.seleccionarVariablesRFE),
+>>>>>>> 4c47022cd3a0b138943943605d473169b43d99e6
 ]
 
 urlpatterns += router.urls

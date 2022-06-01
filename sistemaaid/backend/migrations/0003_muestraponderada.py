@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('backend', '0002_remove_estudio_objetivoorganizacion'),
+        
     ]
 
     operations = [

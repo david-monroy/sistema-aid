@@ -56,7 +56,7 @@ export default {
         name: "Reportes",
         icon: "fa-chart-pie",
         rol: 3,
-        route: "#",
+        route: "reportes",
       },
       {
         id: 4,

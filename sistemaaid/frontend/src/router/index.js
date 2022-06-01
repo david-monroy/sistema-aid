@@ -114,7 +114,13 @@ const router = new Router({
       name: 'ListasDeCodigos',
       meta: { requiresAuth: true },
       component: () => import("../views/estudios/listasDeCodigo/ListasDeCodigos.vue")
-    }
+    },
+    {
+      path: '/reportes',
+      name: 'Reportes',
+      meta: { requiresAuth: true },
+      component: () => import("../views/reportes/Reportes.vue")
+    },
 
   ],
   mode: 'history',

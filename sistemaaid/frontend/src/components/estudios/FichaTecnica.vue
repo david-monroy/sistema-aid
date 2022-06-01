@@ -167,7 +167,7 @@
                     >
                     <template v-slot:activator="{ on, attrs }">
                         <v-text-field
-                            v-model="date"
+                            v-model="form.fechaFin"
                                 label="Fecha Fin"
                                 hint="AAAA-MM-DD"
                                 persistent-hint
@@ -175,13 +175,16 @@
                                 v-bind="attrs"
                                 @blur="date = parseDate(dateFormatted)"
                                 v-on="on"
+                                required
+                                dense
+                                :rules='[rules.required]'
                         ></v-text-field>
                     </template>
                     <v-date-picker
-                        v-model="date"
+                        v-model="form.fechaFin"
                         no-title
                         color="primary"
-                        :min="form.fechaFin"
+                        :min="form.fechaInicio"
                         @input="menu2 = false"
                     ></v-date-picker>
                 </v-menu>
@@ -235,7 +238,7 @@ export default {
                 objetivoNegocio :'',
                 periodo:'',
                 fechaInicio: moment().format("YYYY-MM-DD"),
-                fechaFin:'',
+                fechaFin: moment().format("YYYY-MM-DD"),
                 estudio:'',
                 vinculada: true,
                 totalMuestra: ''
@@ -276,7 +279,6 @@ export default {
         },
         async pasoSiguiente() {
             let validatedForm = this.$refs.registerForm.validate();
-            this.form.fechaFin = this.fechaFin;
             if (validatedForm){
                 let estudioExistente = await EstudiosRepository.validarCodigo(this.form)
                 if (this.form.fechaInicio > this.form.fechaFin) {

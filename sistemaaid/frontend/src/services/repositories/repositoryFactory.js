@@ -11,6 +11,7 @@ import ParticipanteCarrerasRepository from "./Participantes/participante_carrera
 import MetodologiaRepository from "./Estudios/metodologia.repository";
 import UsuariosRepository from "./usuarios.repository";
 import ListaCodigoRepository from "./Estudios/listaCodigo.repository";
+import PreguntasRepository from "./Estudios/preguntas.repository";
 
 const repositories = {
     Autorizacion: AutorizacionRepository,
@@ -25,7 +26,7 @@ const repositories = {
     ParticipanteCarreras: ParticipanteCarrerasRepository,
     Colegios: ColegiosRepository,
     Lugares: LugaresRepository,
-    Metodologia: MetodologiaRepository,
+    Preguntas: PreguntasRepository,
     Usuarios: UsuariosRepository
 };
 

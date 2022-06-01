@@ -10,7 +10,7 @@
 
           <div class="navbar-list">
               <li class="nav-item">
-            <router-link to="#" class="nav-link">Estudios</router-link>
+            <router-link to="/estudios" class="nav-link">Estudios</router-link>
             </li>
             <li class="nav-item">
                 <router-link to="/participantes" class="nav-link">Participantes</router-link>
@@ -24,7 +24,8 @@
 
             <li class="nav-item">
                 <a class="nav-link">
-                <font-awesome-icon icon="sign-out-alt" />     Cerrar sesión
+                  {{activeUser()}}
+                <v-icon color="white" @click="cerrarSesion">fas fa-sign-out-alt</v-icon>
                 </a>
             </li>
           </div>
@@ -39,6 +40,16 @@ export default {
   name: "navbar",
   data: () => ({
   }),
+
+  methods:{
+   activeUser() {
+      return this.$store.getters["users/getUser"].username;
+    },
+     cerrarSesion() {
+      this.$store.dispatch("users/cerrarSesion", this.form);
+      this.$router.push("/login");
+    }
+  }
 
 }
 </script>

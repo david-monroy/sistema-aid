@@ -1,6 +1,4 @@
 from datetime import date, datetime, timedelta
-from dateutil import relativedelta
-import dateutil
 from django.shortcuts import render
 from django.http import HttpResponse
 import pandas as pd
@@ -8,10 +6,12 @@ from backend.models import *
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.db import transaction
+import json
+from django.core.serializers.json import DjangoJSONEncoder
 
 # Create your views here.
 @csrf_exempt
-def leer_csv(request):
+def agregar_masivo(request):
 
     path = request.FILES['file']
 
@@ -47,7 +47,7 @@ def leer_csv(request):
     return HttpResponse(df)
 
 @csrf_exempt
-def leer_csv_actualizar(request):
+def editar_masivo(request):
 
     path = request.FILES['file']
 
@@ -102,3 +102,45 @@ def leer_csv_actualizar(request):
             )
 
     return HttpResponse(df)
+
+@csrf_exempt
+def participantes_filtrar(request):
+
+    consulta_dict = json.loads(request.body.decode('utf8').replace("'", '"')) # request en formato DICCIONARIO, esto servira para trabajar los atributos en DJango
+
+    nombre = consulta_dict["nombre"]
+    cedula = consulta_dict["cedula"]
+    genero = consulta_dict["genero"]
+    colegio = consulta_dict["colegio"]
+    carrera = consulta_dict["carrera"]
+    sede = consulta_dict["sede"]
+    semestre = consulta_dict["semestre"]
+
+    filtro = {}
+
+    if nombre:
+        filtro["nombre__contains"] = nombre
+    
+    if cedula:
+        filtro["cedula"] = cedula
+
+    if genero:
+        filtro["genero"] = genero
+
+    if colegio:
+        filtro["colegio"] = colegio
+
+    if carrera:
+        filtro["carreras"] = carrera
+
+    if sede:
+        filtro["participantecarrera__sede"] = sede
+
+    if semestre:
+        filtro["participantecarrera__semestre"] = semestre
+    
+    query_participante = modelParticipante.Participante.objects.filter(**filtro).values()
+    
+    query_respuesta = json.dumps(list(query_participante), cls=DjangoJSONEncoder) # Convierte el query retornado en un JSON para enviar a Vue
+
+    return HttpResponse(query_respuesta)

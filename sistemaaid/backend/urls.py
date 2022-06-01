@@ -1,6 +1,10 @@
 from rest_framework import routers, urlpatterns
 from . import views
+<<<<<<< HEAD
 from django.urls import path, include
+=======
+from django.urls import path
+>>>>>>> 90e4720eda23bb18385e64b04cefeb1a0ccab7a4
 from .viewsets import *
 from rest_framework_simplejwt import views as jwt_views
 
@@ -13,10 +17,14 @@ router.register('participantecarreras', ParticipanteCarreraViewSet)
 router.register('estudios', EstudioViewSet)
 router.register('ediciones', EdicionViewSet)
 router.register('muestraPonderada',MuestraPonderadaViewSet)
+<<<<<<< HEAD
 router.register('metodologia',MetodologiaViewSet)
 router.register('listaCodigo',ListaCodigoViewSet)
 router.register('categoria',CategoriaViewSet)
 router.register('lugares', LugarViewSet)
+=======
+
+>>>>>>> 90e4720eda23bb18385e64b04cefeb1a0ccab7a4
 
 urlpatterns = [
     path('login/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
@@ -25,6 +33,7 @@ urlpatterns = [
     path('muestraPonderada/cargar/<int:tamanoMuestral>', views.cargarMuestra),
     path('muestraPonderada/insertar/<int:idEdicion>', views.insertarMuestra),
     path('estudios/validarCodigo', views.validarCodigo),
+<<<<<<< HEAD
     path('ediciones/validarCodigo', views.validarCodigo),
     path('categoria/cargar/<int:idLista>', views.cargarListaCodigo),
     path('categoria/consultar/<int:idLista>', views.obtenerCategorias),
@@ -38,6 +47,9 @@ urlpatterns = [
     path('usuarios/', views.obtener_usuarios),
     path('usuarios/grupos/', views.obtener_grupos),
     path('estudios/ediciones/<int:id>', views.obtenerEdiciones),
+=======
+    path('ediciones/validarCodigo', views.validarCodigo)
+>>>>>>> 90e4720eda23bb18385e64b04cefeb1a0ccab7a4
 ]
 
 urlpatterns += router.urls

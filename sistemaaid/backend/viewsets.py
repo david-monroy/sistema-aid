@@ -39,6 +39,7 @@ class EdicionViewSet(viewsets.ModelViewSet):
 
 class MuestraPonderadaViewSet(viewsets.ModelViewSet):
     queryset = MuestraPonderada.objects.all()
+<<<<<<< HEAD
     serializer_class = MuestraPonderadaSerializer
 
 class MetodologiaViewSet(viewsets.ModelViewSet):
@@ -52,3 +53,6 @@ class CategoriaViewSet(viewsets.ModelViewSet):
     queryset = Categoria.objects.all()
     serializer_class = CategoriaSerializer
     
+=======
+    serializer_class = MuestraPonderadaSerializer
+>>>>>>> 90e4720eda23bb18385e64b04cefeb1a0ccab7a4

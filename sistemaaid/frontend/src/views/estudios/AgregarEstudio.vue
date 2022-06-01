@@ -78,17 +78,9 @@ const MetodologiaRepository = Repository.get("Metodologia")
 export default {
   data: () => ({
     pasoActual: 1,
-    fichaTecnica: {
-      nombre: null,
-      codigo: null,
-      poblacionObjetivo: null,
-      antecedentes: null,
-      objetivoNegocio: null,
-    },
-    muestra: {},
-    metodologia:{},
+    fichaTecnica: [],
+    muestra: [],
     idEdicion: 0,
-    estudio_id: null,
     tipo: null
   }),
   components: {
@@ -117,7 +109,7 @@ export default {
     }),
 
     EventBus.$on("registrar-estudio", (data) => {
-        this.metodologia = data
+        this.muestra = data
         this.insertarEstudio(this.fichaTecnica)
     })
   },

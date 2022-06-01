@@ -5,8 +5,12 @@ from .modelParticipante import *
 from .modelParticipanteCarrera import *
 from .modelEstudio import *
 from .modelEdicion import *
+<<<<<<< HEAD
 from .modelMuestraPonderada import *
 from .modelMetodologia import *
 from .modelListaCodigo import * 
 from .modelCategoria import *
 from .modelLugar import *
+=======
+from .modelMuestraPonderada import *
+>>>>>>> 90e4720eda23bb18385e64b04cefeb1a0ccab7a4

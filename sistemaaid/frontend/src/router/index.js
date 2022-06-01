@@ -86,6 +86,12 @@ const router = new Router({
       component: () => import("../views/ConfiguracionDashboard.vue")
     },
     {
+      path: '/patrones',
+      name: 'Patrones',
+      meta: { requiresAuth: true },
+      component: () => import("../views/estudios/Patrones.vue")
+    },
+    {
       path: '/usuarios',
       name: 'ListaUsuario',
       meta: { requiresAuth: true },

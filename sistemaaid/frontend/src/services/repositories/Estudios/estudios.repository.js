@@ -17,5 +17,13 @@ export default {
   async validarCodigo(codigo) {
     let response = await conn.post(`/estudios/validarCodigo`, codigo, jwt.getAuthHeaderToken());
     return response;
-  }
+  },
+  async seleccionarVariablesRFE(data){
+    let response = await conn.post(`/estudios/seleccionarVariablesRFE/`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }, jwt.getAuthHeaderToken());
+    return response;
+  },
 };

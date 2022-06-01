@@ -10,6 +10,10 @@ class ColegioViewSet(viewsets.ModelViewSet):
     queryset = Colegio.objects.all()
     serializer_class = ColegioSerializer
 
+class LugarViewSet(viewsets.ModelViewSet):
+    queryset = Lugar.objects.all()
+    serializer_class = LugarSerializer
+
 class SedeViewSet(viewsets.ModelViewSet):
     queryset = Sede.objects.all()
     serializer_class = SedeSerializer
@@ -27,3 +31,16 @@ class ParticipanteCarreraViewSet(viewsets.ModelViewSet):
 class EstudioViewSet(viewsets.ModelViewSet):
     queryset = Estudio.objects.all()
     serializer_class = EstudioSerializer
+
+
+class EdicionViewSet(viewsets.ModelViewSet):
+    queryset = Edicion.objects.all()
+    serializer_class = EdicionSerializer
+
+class MuestraPonderadaViewSet(viewsets.ModelViewSet):
+    queryset = MuestraPonderada.objects.all()
+    serializer_class = MuestraPonderadaSerializer
+
+class MetodologiaViewSet(viewsets.ModelViewSet):
+    queryset = Metodologia.objects.all()
+    serializer_class = MetodologiaSerializer

@@ -7,23 +7,41 @@
       <div class="section">
           <div class="container">
 
-              <form
-               @submit.prevent="enviarCSV"
-               enctype="multipart/form-data">
-
-                <div class="field">
-                    <label for="file" class="label">Subir archivo</label>
-
-                    <input type="file"
-                    ref="file"
-                    @change="seleccionarCSV">
+            <v-row class="pb-0 mb-0 form-row" >
+            <v-col md="10" cols="10" class="py-0">
+                <div class="form-group">
+                    <v-file-input
+                        v-model="file"
+                        truncate-length="15"
+                        label="Carga el archivo con los participantes"
+                    ></v-file-input>
                 </div>
-
-              <div class="field">
-                  <button class="button is-info">Enviar</button>
-              </div>
-
-            </form>
+            </v-col>
+            <v-col md="2" cols="2" align="end">
+                <v-btn
+                    :small="$vuetify.breakpoint.smAndDown"
+                    class="primary"
+                    @click="cargarCSV()"
+                    :disable=!valid
+                >
+                    <p class="mt-3 hidden-sm-and-down">Enviar</p>
+                    <v-icon>mdi-chevron-right</v-icon>
+                </v-btn>
+            </v-col>
+        </v-row>
+            <div>
+                <p> A continuación, cargue un archivo .csv para <b>registrar o editar</b> participantes.</p>
+                <p> La estructura debe ser como la siguiente imagen, puede agregar tantas filas como desee.</p>
+                <p> Es importante mantener el nombre de las cabeceras tal como se indica, tomando en cuenta las mayúsculas y minúsculas.</p>
+                <p> El formato para la fecha de nacimiento debe ser <b>día/mes/año</b>.</p>
+                <p> Los campos marcados en <b><span class="red--text">rojo</span></b> son <b>obligatorios.</b></p>
+                <p> Los participantes deben ser <b>mayores de 11 años.</b></p>
+                <p class='secondary--text' style="font-size: 14px"><i>Pase el cursor por la imagen para hacer zoom.</i></p>
+                <img
+                class="img-zoom"
+                src="../../assets/Tabladeparticipantes.png"
+                />
+            </div>
 
           </div>
       </div> 
@@ -53,12 +71,16 @@ export default {
         seleccionarCSV(){
             this.file = this.$refs.file.files[0]
         },
-        async enviarCSV(){
+        goRoute(route) {
+            this.$router.push("/" + route);
+        },
+        async cargarCSV(){
             const formData = new FormData();
             formData.append('file', this.file)
             try{
-                await ParticipantesRepository.agregarMasivo(formData);
-                swal("Participantes creados satisfactoriamente", "", "success")
+                await ParticipantesRepository.cargaMasiva(formData);
+                swal("Archivo cargado exitosamente", "", "success")
+                this.goRoute('participantes')
             }
             catch(err){
               console.log(err)
@@ -75,4 +97,11 @@ export default {
 <style>
 @import "../../styles/main.css";
 @import "../../styles/components/participantes.css";
+.img-zoom{
+    max-width: 100%;
+    transition: transform .2s; /* Animation */
+}
+.img-zoom:hover{
+    transform: scale(1.5);
+}
 </style>

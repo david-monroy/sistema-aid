@@ -24,14 +24,19 @@ router.register('ediciones', EdicionViewSet)
 router.register('muestraPonderada',MuestraPonderadaViewSet)
 <<<<<<< HEAD
 router.register('metodologia',MetodologiaViewSet)
+router.register('preguntas',PreguntaViewSet)
 router.register('listaCodigo',ListaCodigoViewSet)
 router.register('categoria',CategoriaViewSet)
 router.register('lugares', LugarViewSet)
+<<<<<<< HEAD
 =======
 
 >>>>>>> 90e4720eda23bb18385e64b04cefeb1a0ccab7a4
 =======
 >>>>>>> 708883dbad694a00eba065c470171258dd18f353
+=======
+router.register('preguntaEdicion', PreguntaEdicionViewSet)
+>>>>>>> a33aee54cd3c259c1f9d06de5baaf78c541f536a
 
 urlpatterns = [
     path('login/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
@@ -50,6 +55,8 @@ urlpatterns = [
     path('participantes/filtrar/', views.participantes_filtrar),
     path('lugares/estados/', views.get_estados),
     path('lugares/municipios/', views.get_municipios),
+    path('preguntas/cargar/<int:idEdicion>/', views.insertarPreguntas),
+    path('preguntas/preview/', views.previewPreguntas),
     path('usuarios/agregar/', views.agregar_usuario),
     path('usuarios/', views.obtener_usuarios),
     path('usuarios/grupos/', views.obtener_grupos),

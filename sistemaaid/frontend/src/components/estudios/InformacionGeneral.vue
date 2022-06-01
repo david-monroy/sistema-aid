@@ -10,7 +10,7 @@
             <v-col md="12" cols="12" class="py-0">
                 <div class="form-group">
                     <v-autocomplete
-                        v-model="form.estudio"
+                        v-model="form.estudio_id"
                         :items="estudios"
                         required
                         :rules='[rules.required]'
@@ -195,7 +195,7 @@ export default {
                 periodo:'',
                 fechaInicio: moment().format("YYYY-MM-DD"),
                 fechaFin:'',
-                idEstudio:'',
+                estudio_id:'',
                 vinculada: true,
                 totalMuestra: '',
 

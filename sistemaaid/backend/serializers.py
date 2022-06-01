@@ -49,6 +49,7 @@ class EstudioSerializer(serializers.ModelSerializer):
 
 
 class EdicionSerializer(serializers.ModelSerializer):
+<<<<<<< HEAD
     estudio = EstudioSerializer(read_only=True)
     estudio_id = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Estudio.objects.all(), source='estudio')
     class Meta:
@@ -88,3 +89,9 @@ class CategoriaSerializer(serializers.ModelSerializer):
 =======
         
 >>>>>>> 90e4720eda23bb18385e64b04cefeb1a0ccab7a4
+=======
+    class Meta:
+        model = Edicion
+        fields = '__all__'
+        
+>>>>>>> 708883dbad694a00eba065c470171258dd18f353

@@ -4,8 +4,12 @@ from . import views
 from django.urls import path, include
 =======
 from django.urls import path
+<<<<<<< HEAD
 >>>>>>> 90e4720eda23bb18385e64b04cefeb1a0ccab7a4
 from .viewsets import *
+=======
+from .viewsets import EstudioViewSet, ParticipanteViewSet, CarreraViewSet, SedeViewSet, ParticipanteCarreraViewSet, ColegioViewSet, EdicionViewSet
+>>>>>>> 708883dbad694a00eba065c470171258dd18f353
 from rest_framework_simplejwt import views as jwt_views
 
 router = routers.SimpleRouter()
@@ -16,6 +20,7 @@ router.register('colegios', ColegioViewSet)
 router.register('participantecarreras', ParticipanteCarreraViewSet)
 router.register('estudios', EstudioViewSet)
 router.register('ediciones', EdicionViewSet)
+<<<<<<< HEAD
 router.register('muestraPonderada',MuestraPonderadaViewSet)
 <<<<<<< HEAD
 router.register('metodologia',MetodologiaViewSet)
@@ -25,6 +30,8 @@ router.register('lugares', LugarViewSet)
 =======
 
 >>>>>>> 90e4720eda23bb18385e64b04cefeb1a0ccab7a4
+=======
+>>>>>>> 708883dbad694a00eba065c470171258dd18f353
 
 urlpatterns = [
     path('login/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),

@@ -131,6 +131,7 @@ export default {
         swal("El estudio no pudo ser agregado", "", "error")
       }
     }
+
   }
 };
 </script>

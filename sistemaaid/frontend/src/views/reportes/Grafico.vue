@@ -29,6 +29,7 @@ export default {
   name: "Grafico",
   data() {
     return {
+      chart: null,
       datos: {
         data: {
           labels: ["Inscritos", "No inscritos"],
@@ -38,34 +39,49 @@ export default {
               data: [100, 120],
               backgroundColor: ["rgba(54,73,93,.5)", "rgba(4,7,93,.5)"],
               borderWidth: 3,
+              yAxisID: 0,
             },
           ],
         },
         options: {
           scales: {
-            y: {
-              beginAtZero: true,
-            },
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                },
+              },
+            ],
           },
-        }
+        },
       },
       tipoGrafico: null,
       tiposGrafico: [
-        { id: 1, nombre: "Torta" },
-        { id: 2, nombre: "Barras" },
+        { id: "pie", nombre: "Torta" },
+        { id: "bar", nombre: "Barras" },
+        { id: "radar", nombre: "Radar" },
       ],
     };
   },
-  methods: {
-    crearGraficoTorta() {
-      this.datos.type = "pie";
-      const ctx = document.getElementById("chart");
-      new Chart(ctx, this.datos);
+  watch: {
+    tipoGrafico: function (val) {
+      this.crearGrafico(this.tipoGrafico);
     },
-    crearGraficoBarra() {
-      this.datos.type = "bar";
-      const ctx = document.getElementById("chart");
-      new Chart(ctx, this.datos);
+  },
+  methods: {
+    crearGrafico(tipo) {
+      if (!this.chart) {
+        this.datos.type = tipo;
+        const ctx = document.getElementById("chart");
+
+        this.chart = new Chart(ctx, this.datos);
+      } else {
+          this.chart.destroy()
+          this.datos.type = tipo;
+        const ctx = document.getElementById("chart");
+
+        this.chart = new Chart(ctx, this.datos);
+      }
     },
   },
   mounted() {

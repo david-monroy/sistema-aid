@@ -59,7 +59,6 @@ export default {
       tiposGrafico: [
         { id: "pie", nombre: "Torta" },
         { id: "bar", nombre: "Barras" },
-        { id: "radar", nombre: "Radar" },
       ],
     };
   },
@@ -70,24 +69,13 @@ export default {
   },
   methods: {
     crearGrafico(tipo) {
-      if (!this.chart) {
         this.datos.type = tipo;
         const ctx = document.getElementById("chart");
 
         this.chart = new Chart(ctx, this.datos);
-      } else {
-          this.chart.destroy()
-          this.datos.type = tipo;
-        const ctx = document.getElementById("chart");
-
-        this.chart = new Chart(ctx, this.datos);
-      }
     },
   },
   mounted() {
-    this.crearGraficoBarra();
-    // const ctx = document.getElementById("chart");
-    // new Chart(ctx, this.datos);
   },
 };
 </script>

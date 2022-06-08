@@ -41,9 +41,7 @@ def obtener_usuarios(request):
 
 @csrf_exempt
 def obtener_usuario(request):
-        print(request.body)
         requestToDict= json.loads(request.body.decode("utf-8").replace("'", '"'))
-        print(requestToDict)
         queryset = User.objects.filter(username = requestToDict["username"])
         serializers = UserSerializer(queryset, many=True)
         usuariosJSON = json.dumps(serializers.data, cls=DjangoJSONEncoder)

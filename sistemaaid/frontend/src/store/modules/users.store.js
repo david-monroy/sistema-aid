@@ -21,6 +21,9 @@ const getters = {
   getUserId(state) {
     return state.user.id;
   },
+  getPermisos(state){
+    return state.permisos[0].groups[0].permissions_code
+  }
 };
 
 // Mutations

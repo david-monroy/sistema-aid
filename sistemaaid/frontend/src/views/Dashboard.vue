@@ -11,6 +11,7 @@
               :key="item.id"
             >
               <DashboardCard
+                v-if="permisos(item.permiso) != false"
                 :name="item.name"
                 :icon="item.icon"
                 :route="item.route"
@@ -43,6 +44,7 @@ export default {
         icon: "fa-file-alt",
         rol: 2,
         route: "estudios",
+        permiso: 'backend | estudio | Can view estudio'
       },
       {
         id: 2,
@@ -50,6 +52,7 @@ export default {
         icon: "fa-users",
         rol: 1,
         route: "participantes",
+        permiso: 'backend | participante | Can view participante'
       },
       {
         id: 3,
@@ -57,6 +60,7 @@ export default {
         icon: "fa-chart-pie",
         rol: 3,
         route: "#",
+        permiso: ''
       },
       {
         id: 4,
@@ -64,9 +68,19 @@ export default {
         icon: "fa-cog",
         rol: 3,
         route: "configuracion",
+        permiso: 'admin | log entry | Can view log entry'
       },
     ]
-  })
+  }),
+  methods:{
+  permisos(permiso) {
+      var permisos = this.$store.getters["users/getPermisos"];
+      if (permisos.includes(permiso))
+        return true;
+      else 
+        return false;
+  }
+  }
 };
 </script>
 

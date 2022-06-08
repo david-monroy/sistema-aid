@@ -28,7 +28,7 @@ const router = new Router({
     {
       path: '/participantes',
       name: 'ListaParticipante',
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true, permission: ['backend | participante | Can view participante']},
       component: () => import("../views/participantes/ListaParticipante.vue")
     },
     {
@@ -130,15 +130,21 @@ router.beforeEach((to, from, next) => {
         next({ name: "Login" });
       } else {
         next();
-      }
+        }  
     } else {
       if (route.meta.hideForAuth) {
         next({ name: "Dashboard" });
       } else {
-      next();
+        console.log(route.meta.permission)
+        if (store.getters["users/getPermisos"].includes(route.meta.permission)){
+          next();
+        }
+        else {
+            console.log("Sin acceso")
+        }
       }
     };
-});
+    });
 });
 
 export default router

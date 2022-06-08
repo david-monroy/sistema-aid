@@ -28,6 +28,9 @@ const mutations = {
   set_user(state, data) {
     state.user = data;
   },
+  set_permisos(state, data) {
+    state.permisos = data;
+  },
   set_error_message(state, error) {
     state.error = error;
   },
@@ -50,6 +53,17 @@ const actions = {
       commit("set_error_message", e);
     }
   },
+
+  async permisos({ commit }, user) {
+    try {
+      const response = await AutorizacionRepository.obtenerPermisos(user);
+      commit("set_permisos", response);
+    } catch (e) {
+      commit("set_error_message", e);
+    }
+  },
+
+
 
   cerrarSesion({ commit }) {
     commit("reset");

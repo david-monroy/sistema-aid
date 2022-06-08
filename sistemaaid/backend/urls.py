@@ -39,8 +39,8 @@ urlpatterns = [
     path('preguntas/cargar/<int:idEdicion>/', views.insertarPreguntas),
     path('preguntas/preview/', views.previewPreguntas),
     path('usuarios/agregar/', views.agregar_usuario),
+    path('usuarios/usuario', views.obtener_usuario),
     path('usuarios/', views.obtener_usuarios),
-    path('usuarios/grupos/', views.obtener_grupos),
     path('estudios/ediciones/<int:id>', views.obtenerEdiciones),
     path('estudios/seleccionarVariablesRFE/', views.seleccionarVariablesRFE),
 ]

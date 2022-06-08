@@ -1,10 +1,11 @@
 <template>
+<v-row>
   <v-row
     align="center"
     class="list px-3 mx-auto nav-separator container"
-    style="display: flex; align-items: flex-start"
+    style="display: flex; justify-content: center"
   >
-    <v-col cols="6" sm="6" class="mt-2">
+    <v-col cols="8" sm="8" class="mt-2">
       <v-card class="mx-auto p-3" tile>
         <v-card-title>
           <span class="primary--text">Estudios</span>
@@ -95,17 +96,9 @@
           </template>
         
         </v-data-table>
-        <v-row class="d-flex" style="justify-content: center">
-          <v-btn
-            color="accent2"
-            class="mx-4 my-6"
-            @click="goRoute('estudios/agregarEstudio')"
-            >Agregar estudio</v-btn
-          >
-        </v-row>
       </v-card>
     </v-col>
-    <v-col cols="6" sm="6" class="mt-2">
+    <!-- <v-col cols="6" sm="6" class="mt-2">
       <v-card class="mx-auto p-3 mb-0" tile>
         <div v-if="!estudio.id">
           Selecciona un estudio para ver sus ediciones.
@@ -222,7 +215,8 @@
         </div>
       </v-card>
       
-    </v-col>
+    </v-col> -->
+  </v-row>
     <v-btn
         @click="goRoute('inicio')"
         class="btn-block accent1 w-25 mx-auto mb-0 d-none d-sm-flex"
@@ -313,8 +307,8 @@ export default {
       });
       this.estudioSeleccionado = id;
       this.ediciones = await EstudiosRepository.obtenerEdiciones(id);
-      console.log(id);
-      console.log(this.ediciones);
+      this.goRoute(`graficos/${id}`);
+
     },
   },
   mounted() {

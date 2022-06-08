@@ -122,10 +122,10 @@ const router = new Router({
       component: () => import("../views/reportes/Reportes.vue")
     },
     {
-      path: '/grafico',
-      name: 'Grafico',
+      path: '/graficos/:id',
+      name: 'Graficos',
       meta: { requiresAuth: true },
-      component: () => import("../views/reportes/Grafico.vue")
+      component: () => import("../views/reportes/Graficos.vue")
     },
 
   ],

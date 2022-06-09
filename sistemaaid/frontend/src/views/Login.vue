@@ -85,8 +85,6 @@ export default {
           else {
             await this.$store.dispatch("users/permisos", this.form);
             this.$router.push("/inicio");
-            var permisos = this.$store.getters["users/getPermisos"]
-            console.log(permisos)
           }
 
       }

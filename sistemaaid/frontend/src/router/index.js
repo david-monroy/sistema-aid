@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import jwt from '../common/jwt.service'
 import store from '../store/index'
+import swal from 'sweetalert';
 
 Vue.use(Router)
 
@@ -22,31 +23,31 @@ const router = new Router({
     {
       path: '/inicio',
       name: 'Dashboard',
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true, permission: "auth | user | log in" },
       component: () => import("../views/Dashboard.vue")
     },
     {
       path: '/participantes',
       name: 'ListaParticipante',
-      meta: { requiresAuth: true, permission: ['backend | participante | Can view participante']},
+      meta: { requiresAuth: true, permission: 'backend | participante | Can view participante'},
       component: () => import("../views/participantes/ListaParticipante.vue")
     },
     {
       path: '/participantes/:id/editar',
       name: 'EditarParticipante',
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true, permission: 'backend | participante | Can change participante' },
       component: () => import("../components/Participante/EditarParticipante.vue")
     },
     {
       path: `/participantes/agregar`,
       name: 'ParticipanteManual',
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true, permission: "backend | participante | Can add participante" },
       component: () => import("../components/Participante/ParticipanteManual.vue")
     },
     {
       path: `/participantes/masivo`,
       name: 'ParticipanteMasivo',
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true, permission: "backend | participante | Can add participante" },
       component: () => import("../components/Participante/ParticipanteMasivo.vue")
     },
     {
@@ -58,7 +59,7 @@ const router = new Router({
     {
       path: '/estudios',
       name: 'ListaEstudios',
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true, permission: "backend | participante | Can change participante" },
       component: () => import("../views/estudios/ListaEstudios.vue")
     },
     {
@@ -70,19 +71,19 @@ const router = new Router({
     {
       path: `/estudios/agregarEstudio`,
       name: 'AgregarEstudio',
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true, permission: "backend | estudio | Can add estudio" },
       component: () => import("../views/estudios/AgregarEstudio.vue")
     },
     {
       path: `/estudios/agregarEdicion`,
       name: 'AgregarEdicion',
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true, permission: "backend | edicion | Can add edicion" },
       component: () => import("../views/estudios/AgregarEdicion.vue")
     },
     {
       path: '/configuracion',
       name: 'Configuracion',
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true, permission: "auth | user | configuracion" },
       component: () => import("../views/ConfiguracionDashboard.vue")
     },
     {
@@ -135,12 +136,12 @@ router.beforeEach((to, from, next) => {
       if (route.meta.hideForAuth) {
         next({ name: "Dashboard" });
       } else {
-        console.log(route.meta.permission)
         if (store.getters["users/getPermisos"].includes(route.meta.permission)){
+          //console.log("DASHBOARD")
           next();
         }
         else {
-            console.log("Sin acceso")
+          swal("No tiene permisos para ingresar a esta dirección", "", "error")
         }
       }
     };

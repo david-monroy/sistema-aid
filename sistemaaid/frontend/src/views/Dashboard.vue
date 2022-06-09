@@ -60,7 +60,7 @@ export default {
         icon: "fa-chart-pie",
         rol: 3,
         route: "#",
-        permiso: ''
+        permiso: 'auth | user | reportes'
       },
       {
         id: 4,
@@ -68,7 +68,7 @@ export default {
         icon: "fa-cog",
         rol: 3,
         route: "configuracion",
-        permiso: 'admin | log entry | Can view log entry'
+        permiso: 'auth | user | configuracion'
       },
     ]
   }),

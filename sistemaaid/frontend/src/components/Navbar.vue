@@ -15,10 +15,10 @@
             <li class="nav-item" v-if="permisos('backend | participante | Can view participante') != false">
                 <router-link to="/participantes" class="nav-link">Participantes</router-link>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" v-if="permisos('auth | user | reportes') != false">
                 <router-link to="#" class="nav-link">Reportes</router-link>
             </li>
-            <li class="nav-item" v-if="permisos('admin | log entry | Can view log entry') != false">
+            <li class="nav-item" v-if="permisos('auth | user | configuracion') != false">
                 <router-link to="/configuracion" class="nav-link">Configuración</router-link>
             </li>
 

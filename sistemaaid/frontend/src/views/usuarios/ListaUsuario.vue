@@ -108,6 +108,7 @@ name: "UsuariosView",
     methods: {
         async getUsuarios(){
             this.usuarios = await UsuariosRepository.obtener();
+            console.log(this.usuarios)
         },
         mostrarEliminar(usuarioID, usuarioNombre){
           this.popupEliminar = true;

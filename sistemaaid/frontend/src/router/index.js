@@ -95,14 +95,20 @@ const router = new Router({
     {
       path: '/usuarios',
       name: 'ListaUsuario',
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true, permission: "auth | user | Can view user" },
       component: () => import("../views/usuarios/ListaUsuario.vue")
     },
     {
       path: '/usuarios/agregar',
       name: 'AgregarUsuario',
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true, permission: "auth | user | Can add user" },
       component: () => import("../views/usuarios/AgregarUsuario.vue")
+    },
+    {
+      path: '/usuarios/:id/editar',
+      name: 'EditarUsuario',
+      meta: { requiresAuth: true, permission: "auth | user | Can change user" },
+      component: () => import("../views/usuarios/EditarUsuario.vue")
     },
     {
       path: `/estudios/agregarListaCodigo`,

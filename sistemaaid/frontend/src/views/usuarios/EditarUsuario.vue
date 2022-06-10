@@ -1,7 +1,7 @@
 <template>
   <div class="col-md-12 nav-separator pt-1">
     <div class="card card-container mt-0 form-card">
-      <h3 class="primary--text mx-auto mb-6 mt-0">Registrar nuevo usuario</h3>
+      <h3 class="primary--text mx-auto mb-6 mt-0">Editar usuario</h3>
       <v-spacer></v-spacer>
   
       <v-form
@@ -94,7 +94,7 @@
             </v-col>
           </v-row>
 
-            <v-btn @click="registrarUsuario"
+            <v-btn @click="editarUsuario"
                 :disabled="!valid"
                 class="btn success btn-block w-50 my-2 mx-auto  d-none d-sm-flex">
                 Registrar
@@ -130,6 +130,7 @@ export default {
                 group: null
             },
             grupos: [],
+            usuario: null,
             rules: {} = {
                 required: (value) =>
                 (!!value && value !== "" && value !== undefined) || "Este campo es requerido",
@@ -142,7 +143,7 @@ export default {
     },
 
     methods: {
-        async registrarUsuario() {
+        async editarUsuario() {
             let validatedForm = this.$refs.registerForm.validate();
 
             if (validatedForm){
@@ -169,9 +170,18 @@ export default {
         async getGrupos(){
             this.grupos = await UsuariosRepository.obtenerGrupos();
         },
+
+        async getUsuario(id){
+            this.usuario = await UsuariosRepository.obtenerPorId(id);
+            console.log(this.usuario)
+            this.form = this.usuario;
+            console.log(this.usuario);
+            console.log(this.form)
+        },
     },
     mounted(){
         this.getGrupos();
+        this.getUsuario(this.$route.params.id);
     }
 }
 </script>

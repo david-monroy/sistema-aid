@@ -21,8 +21,6 @@ def agregar_usuario(request):
         
     user = User.objects.create_user(usuario_dict["username"], usuario_dict['email'], usuario_dict["password"])
 
-    print(usuario_dict["group"])
-
     user.first_name = usuario_dict["first_name"]
     user.last_name = usuario_dict["last_name"]
     user.save()
@@ -46,3 +44,15 @@ def obtener_usuario(request):
         serializers = UserSerializer(queryset, many=True)
         usuariosJSON = json.dumps(serializers.data, cls=DjangoJSONEncoder)
         return HttpResponse(usuariosJSON)
+
+@csrf_exempt
+def obtener_usuario_id(request, id):
+        queryset = User.objects.get(pk = id)
+        query_respuesta = json.dumps(queryset, cls=DjangoJSONEncoder)
+        return HttpResponse(query_respuesta)
+
+@csrf_exempt
+def editar_usuario(request, id):
+        queryset = User.objects.get(pk = id)
+        queryset.delete()
+        return HttpResponse("Exitoso")

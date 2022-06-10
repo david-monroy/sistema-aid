@@ -45,10 +45,11 @@
                         <v-select
                         v-model="form.group"
                         :items="grupos"
-                        label="Permisos *"
+                        label="Rol *"
                         item-text="name"
                         item-value="id"
                         required
+                        
                         :rules='[rules.required]'
                         ></v-select>
                     </v-col>
@@ -151,7 +152,7 @@ export default {
 
                     try{
                         let res = await UsuariosRepository.agregar(this.form);
-                        swal("Usuario creado satisfactoriamente", "", "success")
+                        swal("Usuario editado satisfactoriamente", "", "success")
                         this.goRoute('usuarios')
                     }
                     catch(err){
@@ -173,10 +174,8 @@ export default {
 
         async getUsuario(id){
             this.usuario = await UsuariosRepository.obtenerPorId(id);
-            console.log(this.usuario)
             this.form = this.usuario;
-            console.log(this.usuario);
-            console.log(this.form)
+            this.form.group = this.usuario.groups[0].id
         },
     },
     mounted(){

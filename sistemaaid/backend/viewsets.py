@@ -69,5 +69,5 @@ class GrupoViewSet(viewsets.ModelViewSet):
 
 class UsuarioViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
-    serializer_class = UserSerializer(queryset, many=True)
+    serializer_class = UserSerializer
     

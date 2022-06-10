@@ -11,7 +11,7 @@ export default {
     return response;
   },
   async obtenerGrupos(){
-    let response = await conn.get(`/usuarios/grupos/`, jwt.getAuthHeaderToken());
+    let response = await conn.get(`/grupos/`, jwt.getAuthHeaderToken());
     return response;
   },
   async obtenerPorId(id){

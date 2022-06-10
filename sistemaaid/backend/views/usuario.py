@@ -10,6 +10,8 @@ from django.db import transaction
 import json
 from django.core.serializers.json import DjangoJSONEncoder
 from django.contrib.auth.models import User, Group
+from backend.serializers import GroupSerializer, UserSerializer
+from rest_framework.decorators import action
 
 # Create your views here.
 @csrf_exempt
@@ -18,8 +20,6 @@ def agregar_usuario(request):
     usuario_dict = json.loads(request.body.decode('utf8').replace("'", '"')) # request en formato DICCIONARIO, esto servira para trabajar los atributos en DJango
         
     user = User.objects.create_user(usuario_dict["username"], usuario_dict['email'], usuario_dict["password"])
-
-    print(usuario_dict["group"])
 
     user.first_name = usuario_dict["first_name"]
     user.last_name = usuario_dict["last_name"]
@@ -32,14 +32,27 @@ def agregar_usuario(request):
 @csrf_exempt
 def obtener_usuarios(request):
 
-    usuarios = User.objects.filter().values()
-    usuariosJSON = json.dumps(list(usuarios), cls=DjangoJSONEncoder) # Convierte el query retornado en un JSON para enviar a Vue
-
+    queryset = User.objects.all()
+    serializers = UserSerializer(queryset, many=True)
+    usuariosJSON = json.dumps(serializers.data, cls=DjangoJSONEncoder) 
     return HttpResponse(usuariosJSON)
 
-def obtener_grupos(request):
+@csrf_exempt
+def obtener_usuario(request):
+        requestToDict= json.loads(request.body.decode("utf-8").replace("'", '"'))
+        queryset = User.objects.filter(username = requestToDict["username"])
+        serializers = UserSerializer(queryset, many=True)
+        usuariosJSON = json.dumps(serializers.data, cls=DjangoJSONEncoder)
+        return HttpResponse(usuariosJSON)
 
-    grupos = Group.objects.filter().values()
-    gruposJSON = json.dumps(list(grupos), cls=DjangoJSONEncoder) # Convierte el query retornado en un JSON para enviar a Vue
+@csrf_exempt
+def obtener_usuario_id(request, id):
+        queryset = User.objects.get(pk = id)
+        query_respuesta = json.dumps(queryset, cls=DjangoJSONEncoder)
+        return HttpResponse(query_respuesta)
 
-    return HttpResponse(gruposJSON)
+@csrf_exempt
+def editar_usuario(request, id):
+        queryset = User.objects.get(pk = id)
+        queryset.delete()
+        return HttpResponse("Exitoso")

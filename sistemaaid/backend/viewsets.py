@@ -52,6 +52,7 @@ class PreguntaViewSet(viewsets.ModelViewSet):
 class PreguntaEdicionViewSet(viewsets.ModelViewSet):
     queryset = PreguntaEdicion.objects.all()
     serializer_class = PreguntaEdicionSerializer
+    
 class ListaCodigoViewSet(viewsets.ModelViewSet):
     queryset = ListaCodigo.objects.all()
     serializer_class = ListaCodigoSerializer
@@ -59,4 +60,14 @@ class ListaCodigoViewSet(viewsets.ModelViewSet):
 class CategoriaViewSet(viewsets.ModelViewSet):
     queryset = Categoria.objects.all()
     serializer_class = CategoriaSerializer
+
+
+##USUARIOS
+class GrupoViewSet(viewsets.ModelViewSet):
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+
+class UsuarioViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
     

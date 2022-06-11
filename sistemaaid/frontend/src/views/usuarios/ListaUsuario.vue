@@ -47,6 +47,7 @@
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-icon small v-bind="attrs" v-on="on"
+                v-if="permisos('auth | user | Can change user') != false"
                 @click="editarUsuario(item.id)" class="mr-2">fa-pen</v-icon>
               </template>
               <span>Editar</span>
@@ -58,6 +59,7 @@
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-icon small v-bind="attrs" v-on="on"
+                v-if="permisos('auth | user | Can delete user') != false"
                 @click="mostrarEliminar(item.id, item.username)" class="red--text">fa-trash</v-icon>
               </template>
               <span>Eliminar</span>
@@ -108,6 +110,7 @@ name: "UsuariosView",
     methods: {
         async getUsuarios(){
             this.usuarios = await UsuariosRepository.obtener();
+            console.log(this.usuarios)
         },
         mostrarEliminar(usuarioID, usuarioNombre){
           this.popupEliminar = true;
@@ -131,6 +134,14 @@ name: "UsuariosView",
         goRoute(route) {
             this.$router.push("/" + route);
         },
+
+        permisos(permiso) {
+          var permisos = this.$store.getters["users/getPermisos"];
+          if (permisos.includes(permiso))
+            return true;
+          else 
+            return false;
+        }
     },
 
     mounted(){

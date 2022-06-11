@@ -1,7 +1,7 @@
 <template>
   <div class="col-md-12 nav-separator pt-1">
     <div class="card card-container mt-0 form-card">
-      <h3 class="primary--text mx-auto mb-6 mt-0">Registrar nuevo usuario</h3>
+      <h3 class="primary--text mx-auto mb-6 mt-0">Editar usuario</h3>
       <v-spacer></v-spacer>
   
       <v-form
@@ -45,10 +45,11 @@
                         <v-select
                         v-model="form.group"
                         :items="grupos"
-                        label="Permisos *"
+                        label="Rol *"
                         item-text="name"
                         item-value="id"
                         required
+                        
                         :rules='[rules.required]'
                         ></v-select>
                     </v-col>
@@ -94,7 +95,7 @@
             </v-col>
           </v-row>
 
-            <v-btn @click="registrarUsuario"
+            <v-btn @click="editarUsuario"
                 :disabled="!valid"
                 class="btn success btn-block w-50 my-2 mx-auto  d-none d-sm-flex">
                 Registrar
@@ -130,6 +131,7 @@ export default {
                 group: null
             },
             grupos: [],
+            usuario: null,
             rules: {} = {
                 required: (value) =>
                 (!!value && value !== "" && value !== undefined) || "Este campo es requerido",
@@ -142,7 +144,7 @@ export default {
     },
 
     methods: {
-        async registrarUsuario() {
+        async editarUsuario() {
             let validatedForm = this.$refs.registerForm.validate();
 
             if (validatedForm){
@@ -150,7 +152,7 @@ export default {
 
                     try{
                         let res = await UsuariosRepository.agregar(this.form);
-                        swal("Usuario creado satisfactoriamente", "", "success")
+                        swal("Usuario editado satisfactoriamente", "", "success")
                         this.goRoute('usuarios')
                     }
                     catch(err){
@@ -169,9 +171,16 @@ export default {
         async getGrupos(){
             this.grupos = await UsuariosRepository.obtenerGrupos();
         },
+
+        async getUsuario(id){
+            this.usuario = await UsuariosRepository.obtenerPorId(id);
+            this.form = this.usuario;
+            this.form.group = this.usuario.groups[0].id
+        },
     },
     mounted(){
         this.getGrupos();
+        this.getUsuario(this.$route.params.id);
     }
 }
 </script>

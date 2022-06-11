@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import *
+from django.contrib.auth.models import Group, Permission,User
 
 class CarreraSerializer(serializers.ModelSerializer):
     class Meta:
@@ -84,4 +85,42 @@ class CategoriaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Categoria
         fields = '__all__'
+
+class GroupSerializer(serializers.ModelSerializer):
+
+    permissions_code = serializers.StringRelatedField(many=True, source='permissions')
+
+    class Meta:
+        model = Group
+        fields = [
+            'id',
+            'name',
+            'permissions_code'
+        ]
+
+class UserSerializer(serializers.ModelSerializer):
+    
+    ##grupos = serializers.StringRelatedField(many=True, source='groups')
+    groups = GroupSerializer(Group.objects.all(), many=True)
+
+    class Meta:
+        model = User        
+        fields = [
+            'id',
+            'username',
+            'first_name',
+            'last_name',
+            'email',
+            'groups'
+        ]
+
+class PermissionsSerializers(serializers.ModelSerializer):
+    """
+    PermissionsSerializers
+    """
+    class Meta:
+        model = Permission
+        fields = [
+            'codename'
+        ]
         

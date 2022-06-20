@@ -19,6 +19,8 @@ router.register('listaCodigo',ListaCodigoViewSet)
 router.register('categoria',CategoriaViewSet)
 router.register('lugares', LugarViewSet)
 router.register('preguntaEdicion', PreguntaEdicionViewSet)
+router.register('grupos', GrupoViewSet)
+router.register('usuarios', UsuarioViewSet)
 
 urlpatterns = [
     path('login/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
@@ -39,8 +41,9 @@ urlpatterns = [
     path('preguntas/cargar/<int:idEdicion>/', views.insertarPreguntas),
     path('preguntas/preview/', views.previewPreguntas),
     path('usuarios/agregar/', views.agregar_usuario),
+    path('usuarios/usuario', views.obtener_usuario),
     path('usuarios/', views.obtener_usuarios),
-    path('usuarios/grupos/', views.obtener_grupos),
+   ### path('usuario/<int:id>/', views.obtener_usuario_id),
     path('estudios/ediciones/<int:id>', views.obtenerEdiciones),
     path('estudios/seleccionarVariablesRFE/', views.seleccionarVariablesRFE),
 ]

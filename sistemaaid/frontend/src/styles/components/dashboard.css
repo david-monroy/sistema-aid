@@ -13,23 +13,24 @@
   .dashboard-item-list{
     display: flex; 
     justify-content: space-around;
-    height: 450px;
+    /* height: 450px; */
     padding: 0 40px;
     align-items: center;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: wrap;
   }
 
   .dashboard-card__item{
     display: flex !important;
-    flex-direction: column;
+    flex: 1;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
-    width:320px;
-    height:200px;
+    width: 600px;
+    height:100px;
     color: #F6F6F6 !important;
     transition: 0.3s;
-    margin: 8px  !important;
+    margin: 10px 0px !important;
     border-radius: 12px !important;
     background-color: #1E56A0 !important;
     text-decoration: none !important;

@@ -6,7 +6,6 @@ class Encuesta(models.Model):
     fechaAplicacion = models.DateField()
     estaCodificada = models.BooleanField(default=False)
     codigo = models.IntegerField()
-    totalMuestra = models.IntegerField()
     participante =models.ForeignKey(Participante, on_delete=CASCADE, null=True, blank=True)
 
     def __str__(self):

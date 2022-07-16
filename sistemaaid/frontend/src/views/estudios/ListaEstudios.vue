@@ -212,7 +212,17 @@
                     @click="mostrarInformacionEdicion(item.id)" class="mr-2 secondary--text">fa-info-circle</v-icon>
                 </template>
                 <span>Información</span>
-                </v-tooltip>
+            </v-tooltip>
+            <v-tooltip
+                    top 
+                    style="display: inline"
+                >
+                <template v-slot:activator="{ on, attrs }">
+                    <v-icon small v-bind="attrs" v-on="on"
+                    @click="CargarEncuestas(item.id)" class="mr-2 secondary--text">fa-upload</v-icon>
+                </template>
+                <span>Cargar encuestas</span>
+            </v-tooltip>
           </template>
         </v-data-table>
         <v-row class="d-flex" style="justify-content: center">

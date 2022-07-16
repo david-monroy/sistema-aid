@@ -10,21 +10,20 @@ from backend.models.modelListaCodigo import ListaCodigo
 @csrf_exempt
 def previewPreguntas(request):
     path = request.FILES['file']
-    df = pd.read_csv(path, header=0, encoding='ISO-8859-1', delimiter=',')
+    df = pd.read_excel(path)
     return HttpResponse(df.to_json(orient="table"))
 
 @csrf_exempt
 def insertarPreguntas(request, idEdicion):
     data = request.body.decode('utf8').replace("'", '"')
     df = pd.DataFrame(json.loads(data))
-    
     row_iter = df.iterrows()
     for index, row in row_iter:
         listaCodigo = None
         if (row[3] == 'Cadena'):
                 listaCodigo = asignarListaCodigo(row[2])
-
         preguntaFilter = Pregunta.objects.filter(preguntaedicion__edicion=idEdicion, codigo=row[1])
+        print(preguntaFilter)
         if (preguntaFilter):
             pregunta = Pregunta.objects.get(preguntaedicion__edicion=idEdicion, codigo=row[1])
             pregunta.etiqueta = row[2]
@@ -32,8 +31,9 @@ def insertarPreguntas(request, idEdicion):
             if (listaCodigo != None):
                 listaCodigo = asignarListaCodigo(row[2])
             pregunta.save()
-        
+            print("paso 3")
         else:
+            print("paso 4")
             if (listaCodigo != None):
                 
                 nueva_pregunta = Pregunta.objects.create(
@@ -42,6 +42,8 @@ def insertarPreguntas(request, idEdicion):
                     tipo= row[3],
                     listaCodigo = asignarListaCodigo(row[2])    
                 )
+
+                print("paso 5")
             
             else:
 
@@ -55,8 +57,7 @@ def insertarPreguntas(request, idEdicion):
                 pregunta = nueva_pregunta,
                 edicion = Edicion.objects.get(pk=idEdicion)
             )
-
-
+            print("paso 4")
     return HttpResponse()
 
 def asignarListaCodigo(etiqueta):

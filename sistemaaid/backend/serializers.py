@@ -86,6 +86,13 @@ class CategoriaSerializer(serializers.ModelSerializer):
         model = Categoria
         fields = '__all__'
 
+class EncuestaSerializer(serializers.ModelSerializer):
+    class Meta:
+        participante = ParticipanteSerializer(read_only=True)
+       ## participante_id = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Participante.objects.all(), source='participante')
+        model = Encuesta
+        fields = '__all__'
+
 class GroupSerializer(serializers.ModelSerializer):
 
     permissions_code = serializers.StringRelatedField(many=True, source='permissions')
@@ -123,4 +130,6 @@ class PermissionsSerializers(serializers.ModelSerializer):
         fields = [
             'codename'
         ]
+
+
         

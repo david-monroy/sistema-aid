@@ -21,6 +21,7 @@ router.register('lugares', LugarViewSet)
 router.register('preguntaEdicion', PreguntaEdicionViewSet)
 router.register('grupos', GrupoViewSet)
 router.register('usuarios', UsuarioViewSet)
+router.register('encuestas', EncuestaViewSet)
 
 urlpatterns = [
     path('login/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
@@ -29,7 +30,7 @@ urlpatterns = [
     path('muestraPonderada/cargar/<int:tamanoMuestral>', views.cargarMuestra),
     path('muestraPonderada/insertar/<int:idEdicion>', views.insertarMuestra),
     path('estudios/validarCodigo', views.validarCodigo),
-    path('ediciones/validarCodigo', views.validarCodigo),
+    path('ediciones/validarCodigo', views.validarCodigoEdicion),
     path('categoria/cargar/<int:idLista>', views.cargarListaCodigo),
     path('categoria/consultar/<int:idLista>', views.obtenerCategorias),
     path('participantes/agregar_masivo/', views.agregar_masivo),

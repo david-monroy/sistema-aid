@@ -113,13 +113,13 @@ const router = new Router({
     {
       path: `/estudios/agregarListaCodigo`,
       name: 'AgregarListaCodigo',
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true, permission: "backend | lista codigo | Can add lista codigo" },
       component: () => import("../views/estudios/listasDeCodigo/AgregarListaCodigo.vue")
     },
     {
       path: `/estudios/ListasCodigos`,
       name: 'ListasDeCodigos',
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true, permission: "backend | lista codigo | Can view lista codigo" },
       component: () => import("../views/estudios/listasDeCodigo/ListasDeCodigos.vue")
     },
     {

@@ -67,9 +67,9 @@ export default {
             const formData = new FormData();
             formData.append('file', this.file)
             try{
-                this.respuesta = await EdicionRepository.cargarEncuestas(formData,edicion.id);
+                this.respuesta = await EdicionRepository.cargarEncuestas(formData,this.edicion.id);
                 swal(this.respuesta, "", "success")
-                this.$router.push(`/ediciones/ConsultarEncuestas/${id}`);
+                this.$router.push(`/ediciones/ConsultarEdicion/${this.edicion.id}`);
             }
             catch(err){
                 console.log(err)

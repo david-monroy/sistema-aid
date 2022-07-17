@@ -37,8 +37,10 @@ def insertarEncuestas(request,idEdicion):
                         encuesta = nuevaEncuesta,
                         pregunta = preguntaEdicion
                     )
+    
+        return HttpResponse('Se inserto correctamente')
 
     except BaseException as err:
-        print(err)
+        print("Error:"  + err)
+        return HttpResponse("Error:"  + err)
 
-    return HttpResponse('Se inserto correctamente')

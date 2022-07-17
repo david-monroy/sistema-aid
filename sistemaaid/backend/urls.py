@@ -30,8 +30,12 @@ urlpatterns = [
     path('participantes/participantecarreras/<int:id>', views.get_participantecarrera),
     path('muestraPonderada/cargar/<int:tamanoMuestral>', views.cargarMuestra),
     path('muestraPonderada/insertar/<int:idEdicion>', views.insertarMuestra),
+    path('muestraPonderada/<int:idEdicion>', views.get_muestraPonderada),
     path('estudios/validarCodigo', views.validarCodigo),
+    path('estudios/ediciones/<int:id>', views.obtenerEdiciones),
+    path('estudios/seleccionarVariablesRFE/', views.seleccionarVariablesRFE),
     path('ediciones/validarCodigo', views.validarCodigoEdicion),
+    path('ediciones/cargar_encuesta/<int:idEdicion>/', views.insertarEncuestas),
     path('categoria/cargar/<int:idLista>', views.cargarListaCodigo),
     path('categoria/consultar/<int:idLista>', views.obtenerCategorias),
     path('participantes/agregar_masivo/', views.agregar_masivo),
@@ -42,13 +46,11 @@ urlpatterns = [
     path('lugares/municipios/', views.get_municipios),
     path('preguntas/cargar/<int:idEdicion>/', views.insertarPreguntas),
     path('preguntas/preview/', views.previewPreguntas),
+    path('preguntas/<int:idEdicion>/', views.get_preguntas),
     path('usuarios/agregar/', views.agregar_usuario),
     path('usuarios/usuario', views.obtener_usuario),
     path('usuarios/', views.obtener_usuarios),
-   ### path('usuario/<int:id>/', views.obtener_usuario_id),
-    path('estudios/ediciones/<int:id>', views.obtenerEdiciones),
-    path('estudios/seleccionarVariablesRFE/', views.seleccionarVariablesRFE),
-    path('ediciones/cargar_encuesta/<int:idEdicion>/', views.insertarEncuestas),
+    path('metodologia/<int:idEdicion>/',views.get_metodologia)
 ]
 
 urlpatterns += router.urls

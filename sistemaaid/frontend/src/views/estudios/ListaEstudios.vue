@@ -305,8 +305,6 @@ export default {
           });
           this.estudioSeleccionado = id
           this.ediciones = await EstudiosRepository.obtenerEdiciones(id)
-          console.log(id)
-          console.log(this.ediciones)
         },
         mostrarEliminarEstudio(id, nombre){
           this.modalEliminarEstudio = true;
@@ -314,8 +312,10 @@ export default {
           this.estudioAEliminarNombre = nombre;
         },
         cerrarEliminar(){
-        //   this.modalEliminar = false;
           this.modalEliminarEstudio = false;
+        },
+        CargarEncuestas(id){
+          this.$router.push(`/ediciones/AgregarEncuestas/${id}`);
         },
         editarEstudio(item){
             console.log(item);
@@ -333,13 +333,7 @@ export default {
           });
         },
         mostrarInformacionEdicion(id){
-          this.modalEdicion = true;
-          let edicion = id;
-          this.ediciones.forEach(edi => {
-            if (edi.id == edicion){
-              this.actualEdicion = edi;
-            }
-          });
+          this.$router.push(`/ediciones/${id}`);
         },
         async eliminarEstudio(){
           try{

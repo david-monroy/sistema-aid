@@ -23,7 +23,6 @@ def insertarPreguntas(request, idEdicion):
         if (row[3] == 'Cadena'):
                 listaCodigo = asignarListaCodigo(row[2])
         preguntaFilter = Pregunta.objects.filter(preguntaedicion__edicion=idEdicion, codigo=row[1])
-        print(preguntaFilter)
         if (preguntaFilter):
             pregunta = Pregunta.objects.get(preguntaedicion__edicion=idEdicion, codigo=row[1])
             pregunta.etiqueta = row[2]
@@ -59,6 +58,17 @@ def asignarListaCodigo(etiqueta):
     if (ListaCodigo.objects.filter(nombre=etiqueta)):
         listaCodigo = ListaCodigo.objects.get(nombre=etiqueta)
     return listaCodigo
+
+@csrf_exempt
+def get_preguntas(request,idEdicion):
+    try: 
+        preguntas = Pregunta.objects.filter(preguntaedicion__edicion=idEdicion).values()
+        query_respuesta = json.dumps(list(preguntas), cls=DjangoJSONEncoder) 
+        return HttpResponse(query_respuesta)
+    except BaseException as err:
+        print(err)
+        return(err)
+
 
 
 

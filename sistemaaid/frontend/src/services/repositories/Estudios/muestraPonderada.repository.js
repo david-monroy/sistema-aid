@@ -18,4 +18,9 @@ export default {
     return response;
   },
 
+  async obtenerMuestra(idEdicion) {
+    let response = await conn.get(`/muestraPonderada/${idEdicion}`, jwt.getAuthHeaderToken());
+    return response;
+  }
+
 };

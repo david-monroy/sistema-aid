@@ -9,3 +9,4 @@ from .lugar import *
 from .pregunta import *
 from .usuario import *
 from .encuestas import *
+from .metodologia import *

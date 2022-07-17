@@ -123,11 +123,18 @@ const router = new Router({
       component: () => import("../views/estudios/listasDeCodigo/ListasDeCodigos.vue")
     },
     {
-      path: `/ediciones/AgregarEncuestas`,
+      path: `/ediciones/AgregarEncuestas/:id`,
       name: 'AgregarEncuestas',
       meta: { requiresAuth: true, permission: "backend | encuesta | Can add encuesta" },
       component: () => import("../views/estudios/AgregarEncuestas.vue")
+    },
+    {
+      path: `/ediciones/:id`,
+      name: 'ConsultarEdicion',
+      meta: { requiresAuth: true, permission: "backend | encuesta | Can view encuesta" },
+      component: () => import("../views/estudios/ConsultarEdicion.vue")
     }
+
 
   ],
   mode: 'history',

@@ -81,7 +81,6 @@ export default {
     FichaTecnica,
     MuestraPonderada,
     Metodologia,
-    Instrumento,
     Instrumento
   },
 

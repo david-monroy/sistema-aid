@@ -121,6 +121,12 @@ const router = new Router({
       name: 'ListasDeCodigos',
       meta: { requiresAuth: true },
       component: () => import("../views/estudios/listasDeCodigo/ListasDeCodigos.vue")
+    },
+    {
+      path: `/ediciones/AgregarEncuestas`,
+      name: 'AgregarEncuestas',
+      meta: { requiresAuth: true, permission: "backend | encuesta | Can add encuesta" },
+      component: () => import("../views/estudios/AgregarEncuestas.vue")
     }
 
   ],

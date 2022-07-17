@@ -1,6 +1,12 @@
 import conn from "../../api-connector";
 import jwt from "../../../common/jwt.service";
 
+const headers =  {
+  "Content-Type": 'multipart/form-data',
+  Accept: 'multipart/form-data',
+  Authorization: `Bearer ${jwt.getToken()}`
+}
+
 export default {
   async agregar(data) {
     console.log(data);
@@ -23,5 +29,10 @@ export default {
     let response = await conn.post(`/ediciones/filtrar/`, data, jwt.getAuthHeaderToken());
     return response;
   },
+
+  async cargarEncuestas(data) {
+    let response = await conn.post(`/ediciones/cargar_encuesta/`, data, headers);
+    return response.data;
+  }
 
 };

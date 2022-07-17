@@ -65,6 +65,9 @@ class EncuestaViewSet(viewsets.ModelViewSet):
     queryset = Encuesta.objects.all()
     serializer_class = EncuestaSerializer
 
+class RespuestaViewSet(viewsets.ModelViewSet):
+    queryset = Respuesta.objects.all()
+    serializer_class = RespuestaSerializer
 
 ##USUARIOS
 class GrupoViewSet(viewsets.ModelViewSet):

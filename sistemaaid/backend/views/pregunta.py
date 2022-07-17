@@ -31,9 +31,7 @@ def insertarPreguntas(request, idEdicion):
             if (listaCodigo != None):
                 listaCodigo = asignarListaCodigo(row[2])
             pregunta.save()
-            print("paso 3")
         else:
-            print("paso 4")
             if (listaCodigo != None):
                 
                 nueva_pregunta = Pregunta.objects.create(
@@ -42,9 +40,6 @@ def insertarPreguntas(request, idEdicion):
                     tipo= row[3],
                     listaCodigo = asignarListaCodigo(row[2])    
                 )
-
-                print("paso 5")
-            
             else:
 
                 nueva_pregunta = Pregunta.objects.create(
@@ -57,7 +52,6 @@ def insertarPreguntas(request, idEdicion):
                 pregunta = nueva_pregunta,
                 edicion = Edicion.objects.get(pk=idEdicion)
             )
-            print("paso 4")
     return HttpResponse()
 
 def asignarListaCodigo(etiqueta):

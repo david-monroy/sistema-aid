@@ -7,6 +7,3 @@ class Encuesta(models.Model):
     estaCodificada = models.BooleanField(default=False)
     codigo = models.IntegerField()
     participante =models.ForeignKey(Participante, on_delete=CASCADE, null=True, blank=True)
-
-    def __str__(self):
-        return self.participante

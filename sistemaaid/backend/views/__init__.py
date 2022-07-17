@@ -8,3 +8,4 @@ from .listaCodigo import *
 from .lugar import *
 from .pregunta import *
 from .usuario import *
+from .encuestas import *

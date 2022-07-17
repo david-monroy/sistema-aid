@@ -93,6 +93,13 @@ class EncuestaSerializer(serializers.ModelSerializer):
         model = Encuesta
         fields = '__all__'
 
+class RespuestaSerializer(serializers.ModelSerializer):
+    class Meta:
+        encuesta = EncuestaSerializer(read_only=True)
+        pregunta = PreguntaEdicionSerializer(read_only=True)
+        model = Respuesta
+        fields = '__all__'
+
 class GroupSerializer(serializers.ModelSerializer):
 
     permissions_code = serializers.StringRelatedField(many=True, source='permissions')

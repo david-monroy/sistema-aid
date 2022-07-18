@@ -37,6 +37,7 @@ urlpatterns = [
     path('ediciones/validarCodigo', views.validarCodigoEdicion),
     path('ediciones/cargar_encuesta/<int:idEdicion>/', views.insertarEncuestas),
     path('ediciones/clasificar/<int:idEdicion>/', views.clasificar),
+    path('ediciones/encuestas/<int:idEdicion>', views.get_encuestas),
     path('categoria/cargar/<int:idLista>', views.cargarListaCodigo),
     path('categoria/consultar/<int:idLista>', views.obtenerCategorias),
     path('participantes/agregar_masivo/', views.agregar_masivo),

@@ -4,6 +4,7 @@ from backend.models import Pregunta, PreguntaEdicion, Edicion
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.core.serializers.json import DjangoJSONEncoder
+from django.db.models import F
 
 from backend.models.modelListaCodigo import ListaCodigo
 
@@ -65,12 +66,13 @@ def asignarListaCodigo(etiqueta):
 @csrf_exempt
 def get_preguntas(request,idEdicion):
     try: 
-        preguntas = Pregunta.objects.filter(preguntaedicion__edicion=idEdicion).values()
+        preguntas = Pregunta.objects.filter(preguntaedicion__edicion=idEdicion).values(
+                                    'id','etiqueta','codigo','tipo').annotate(
+                                        listaCodigo=F('listaCodigo__nombre'))
         query_respuesta = json.dumps(list(preguntas), cls=DjangoJSONEncoder) 
         return HttpResponse(query_respuesta)
     except BaseException as err:
-        print(err)
-        return(err)
+        return HttpResponse(err)
 
 
 

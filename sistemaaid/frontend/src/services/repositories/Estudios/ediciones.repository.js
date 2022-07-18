@@ -37,6 +37,12 @@ export default {
   async cargarEncuestas(data,idEdicion) {
     let response = await conn.post(`/ediciones/cargar_encuesta/${idEdicion}/`, data, headers);
     return response.data;
+  },
+
+  async obtenerEncuestas(idEdicion) {
+    let response = await conn.get(`/ediciones/encuestas/${idEdicion}`, jwt.getAuthHeaderToken());
+    return response.data;
   }
+
 
 };

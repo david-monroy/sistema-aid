@@ -49,7 +49,7 @@
         </template>
       </v-expansion-panel-header>
       <v-expansion-panel-content>
-        
+        <ConsultarEncuestas :edicion="edicion"></ConsultarEncuestas>
       </v-expansion-panel-content>
     </v-expansion-panel>
 
@@ -64,6 +64,7 @@ import Repository from "../../services/repositories/repositoryFactory";
 import ConsultarFichaTecnica from "../../components/estudios/ConsultaFichaTecnica.vue";
 import ConsultarMuestraPonderada from "../../components/estudios/ConsultarMuestraPonderada.vue";
 import ConsultarInstrumento from "../../components/estudios/ConsultarInstrumento.vue";
+import ConsultarEncuestas from "../../components/estudios/ConsultarEncuestas.vue";
 
 import { EventBus } from "../../main.js";
 const EdicionRepository = Repository.get("Ediciones");
@@ -81,7 +82,8 @@ export default {
     components: {
     ConsultarFichaTecnica,
     ConsultarMuestraPonderada,
-    ConsultarInstrumento
+    ConsultarInstrumento,
+    ConsultarEncuestas
     },
     beforeMount(){
         this.buscarEdicion(this.$route.params.id);

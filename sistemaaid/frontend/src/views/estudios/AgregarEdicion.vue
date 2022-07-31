@@ -99,6 +99,7 @@ export default {
         if (this.pasoActual == 1 ) {
           this.fichaTecnica = data
           this.tipo = "Edicion"
+          console.log(this.fichaTecnica)
         }
         if (this.pasoActual == 2){
           this.muestra = data

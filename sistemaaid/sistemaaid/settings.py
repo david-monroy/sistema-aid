@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-o_$wj=1dnq079o2s85rdzbxe(#$y=1u1*e7kf6)i(lcch9a3ct'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -66,8 +66,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'backend',
-    'rest_framework',
     'corsheaders',
+    'rest_framework',
     'sqlalchemy',
     'rest_framework_simplejwt',
 ]

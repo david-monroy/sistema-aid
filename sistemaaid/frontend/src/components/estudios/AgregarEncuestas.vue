@@ -1,6 +1,5 @@
 <template>
   <v-container fluid elevation="0" class="nav-separator">
-    <Loading :show=activeLoading />
     <v-row no-gutters justify="center">
       <h3 class="primary--text mx-auto mb-6 mt-0 md=8">Agregar encuestas a </h3>
     </v-row>
@@ -47,7 +46,6 @@
 <script>
 import swal from 'sweetalert'
 import Repository from "../../services/repositories/repositoryFactory";
-import Loading from "../../components/comunes/Loading.vue"
 import { EventBus } from "../../main.js";
 const EdicionRepository = Repository.get("Ediciones");
 
@@ -58,36 +56,27 @@ export default {
             valid:true,
             respuesta: [],
             idEdicion: null,
-            edicion: {},
-            activeLoading: false
+            edicion: {}
         }
+    },
+    props:{
+      idEdicion: Number,
     },
      mounted(){
         this.buscarEdicion(this.$route.params.id);
-    },
-    components: {
-        Loading
     },
     methods: {
         async cargarExcel(){
             const formData = new FormData();
             formData.append('file', this.file)
             try{
-                this.activeLoading = true;
                 this.respuesta = await EdicionRepository.cargarEncuestas(formData,this.edicion.id);
-                this.activeLoading = false
-                if (this.respuesta.status == 200 ){
-                    swal("", this.respuesta.detail, "success");
-                    this.$router.push(`/ediciones/ConsultarEdicion/${this.edicion.id}`);
-                }
-                else{
-                    swal("Error", this.respuesta.error[0], "error")
-                }
-                    
+                swal(this.respuesta, "", "success")
+                this.$router.push(`/ediciones/ConsultarEdicion/${this.edicion.id}`);
             }
             catch(err){
-                this.activeLoading = false
-                swal("Error", err, "error")
+                console.log(err)
+                swal("No se pudo procesar la muestra", "", "error")
             } 
         },
         

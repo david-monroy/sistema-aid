@@ -35,7 +35,7 @@
                 :headers="headers"
                 :items="preguntas"
                 hide-default-footer
-                :items-per-page="-1"
+                :items-per-page="10"
                 class="elevation-1"
                 >
                 </v-data-table>

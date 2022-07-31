@@ -1,13 +1,13 @@
-from asyncio.windows_events import NULL
-from logging import exception
 from django.http import HttpResponse
 import pandas as pd
 from backend.models import Encuesta, Pregunta,Respuesta, PreguntaEdicion,Participante
 from django.views.decorators.csrf import csrf_exempt
-import json
-from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import F,CharField, Value as V
 from django.db.models.functions import Concat
+from backend.errorResponse import error_response
+import json
+from rest_framework import status
+
 
 @csrf_exempt
 def insertarEncuestas(request,idEdicion):
@@ -31,6 +31,7 @@ def insertarEncuestas(request,idEdicion):
            
             for i in range(3,df.shape[1]):
                 codigoPregunta = column.index[i].split('_')[0]
+                print(codigoPregunta)
                 pregunta = Pregunta.objects.get(preguntaedicion__edicion=idEdicion, codigo=codigoPregunta)
                 preguntaEdicion = PreguntaEdicion.objects.get(pregunta_id= pregunta.id)
                 if (pregunta):
@@ -43,8 +44,7 @@ def insertarEncuestas(request,idEdicion):
         return HttpResponse('Se inserto correctamente')
 
     except BaseException as err:
-        print("Error:"  + err)
-        return HttpResponse("Error:"  + err)
+        return HttpResponse(error_response(message="Ha ocurrido un error", error=err.args, status=status.HTTP_400_BAD_REQUEST))
 
 @csrf_exempt
 def get_encuestas(request,idEdicion):

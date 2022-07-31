@@ -1,3 +1,5 @@
+from cmath import nan
+from xmlrpc.client import ResponseError
 from django.http import HttpResponse
 import pandas as pd
 from backend.models import Pregunta, PreguntaEdicion, Edicion
@@ -5,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import F
+import math
 
 from backend.models.modelListaCodigo import ListaCodigo
 
@@ -12,55 +15,59 @@ from backend.models.modelListaCodigo import ListaCodigo
 def previewPreguntas(request):
     path = request.FILES['file']
     df = pd.read_excel(path)
+    df['Codigo'] = df['Codigo'].str.replace('_', '-')
+    df['Pregunta'] = df['Pregunta'].str.replace('_', ' ')
     return HttpResponse(df.to_json(orient="table"))
 
 @csrf_exempt
 def insertarPreguntas(request, idEdicion):
     try:
-        data = request.body.decode('utf8').replace("'", '"')
-        df = pd.DataFrame(json.loads(data))
-        row_iter = df.iterrows()
-        for index, row in row_iter:
+        path = request.FILES['file']
+        df = pd.read_excel(path)
+        for row,column in df.iterrows():
             listaCodigo = None
-            if (row[3] == 'Cadena'):
-                    listaCodigo = asignarListaCodigo(row[2])
-            preguntaFilter = Pregunta.objects.filter(preguntaedicion__edicion=idEdicion, codigo=row[1])
+            if (column[2] == 'Cadena'):
+                if (math.isnan(column[3]) == True):
+                    return HttpResponse("Debe asociar una lista de código a la pregunta " + column [0])
+                else:
+                    listaCodigo = asignarListaCodigo(column[3])
+            preguntaFilter = Pregunta.objects.filter(preguntaedicion__edicion=idEdicion, codigo=column[0])
             if (preguntaFilter):
-                pregunta = Pregunta.objects.get(preguntaedicion__edicion=idEdicion, codigo=row[1])
-                pregunta.etiqueta = row[2]
-                pregunta.tipo = row[3]
+                pregunta = Pregunta.objects.get(preguntaedicion__edicion=idEdicion, codigo=column[0])
+                pregunta.etiqueta = column[1]
+                pregunta.tipo = column[2]
                 if (listaCodigo != None):
-                    listaCodigo = asignarListaCodigo(row[2])
+                    pregunta.listaCodigo = listaCodigo
                 pregunta.save()
             else:
                 if (listaCodigo != None):
                     
                     nueva_pregunta = Pregunta.objects.create(
-                        codigo = row[1],
-                        etiqueta = row[2],
-                        tipo= row[3],
-                        listaCodigo = asignarListaCodigo(row[2])    
+                        codigo = column[0],
+                        etiqueta = column[1],
+                        tipo= column[2],
+                        listaCodigo = listaCodigo   
                     )
                 else:
 
                     nueva_pregunta = Pregunta.objects.create(
-                        codigo = row[1],
-                        etiqueta = row[2],
-                        tipo= row[3] 
+                        codigo = column[0],
+                        etiqueta = column[1],
+                        tipo= column[2] 
                     )
 
                 PreguntaEdicion.objects.create(
                     pregunta = nueva_pregunta,
                     edicion = Edicion.objects.get(pk=idEdicion)
                 )
-            return HttpResponse("Se cargó exitosamente el instrumento")
+        return HttpResponse("Se cargó exitosamente el instrumento")
     except BaseException as err:
         return HttpResponse(err)
 
-def asignarListaCodigo(etiqueta):
+def asignarListaCodigo(id):
     listaCodigo = None
-    if (ListaCodigo.objects.filter(nombre=etiqueta)):
-        listaCodigo = ListaCodigo.objects.get(nombre=etiqueta)
+    if (ListaCodigo.objects.filter(pk=id)):
+        listaCodigo = ListaCodigo.objects.get(pk=id)
     return listaCodigo
 
 @csrf_exempt

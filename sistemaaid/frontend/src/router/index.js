@@ -59,7 +59,7 @@ const router = new Router({
     {
       path: '/estudios',
       name: 'ListaEstudios',
-      meta: { requiresAuth: true, permission: "backend | participante | Can change participante" },
+      meta: { requiresAuth: true, permission: "backend | estudio | Can view estudio" },
       component: () => import("../views/estudios/ListaEstudios.vue")
     },
     {
@@ -117,7 +117,7 @@ const router = new Router({
       component: () => import("../views/estudios/listasDeCodigo/AgregarListaCodigo.vue")
     },
     {
-      path: `/estudios/ListasCodigos`,
+      path: `/ListasCodigos`,
       name: 'ListasDeCodigos',
       meta: { requiresAuth: true, permission: "backend | lista codigo | Can view lista codigo" },
       component: () => import("../views/estudios/listasDeCodigo/ListasDeCodigos.vue")
@@ -131,7 +131,7 @@ const router = new Router({
     {
       path: `/ediciones/:id`,
       name: 'ConsultarEdicion',
-      meta: { requiresAuth: true, permission: "backend | encuesta | Can view encuesta" },
+      meta: { requiresAuth: true, permission: "backend | edicion | Can view edicion" },
       component: () => import("../views/estudios/ConsultarEdicion.vue")
     }
 

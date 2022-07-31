@@ -49,7 +49,7 @@
         </template>
       </v-expansion-panel-header>
       <v-expansion-panel-content>
-        <ConsultarEncuestas :edicion="edicion"></ConsultarEncuestas>
+          <ConsultarEncuestas :edicion="edicion"></ConsultarEncuestas>
       </v-expansion-panel-content>
     </v-expansion-panel>
 

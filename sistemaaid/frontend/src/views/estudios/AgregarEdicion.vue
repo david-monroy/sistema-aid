@@ -1,5 +1,6 @@
 <template>
   <v-container fluid elevation="0" class="nav-separator">
+    <Loading :show=activeLoading />
     <v-row no-gutters justify="center">
       <v-col cols="12" md="8" align="center">
         <h3 class="primary--text mx-auto mb-6 mt-0 md=8">Agregar una edición a un estudio existente</h3>
@@ -68,6 +69,7 @@
 import InformacionGeneral from "../../components/estudios/InformacionGeneral.vue";
 import MuestraPonderada from "../../components/estudios/MuestraPonderada.vue";
 import Metodologia from "../../components/estudios/Metodologia.vue"
+import Loading from "../../components/comunes/Loading.vue"
 import Instrumento from '../../components/estudios/Instrumento.vue';
 import { EventBus } from "../../main.js";
 import swal from 'sweetalert'
@@ -85,13 +87,15 @@ export default {
     metodologia:[],
     instrumento:[],
     tipo:"",
-    idEdicion:0
+    idEdicion:0,
+    activeLoading: false
   }),
   components: {
     InformacionGeneral,
     MuestraPonderada,
     Metodologia,
-    Instrumento
+    Instrumento,
+    Loading
   },
 
   created() {
@@ -99,7 +103,6 @@ export default {
         if (this.pasoActual == 1 ) {
           this.fichaTecnica = data
           this.tipo = "Edicion"
-          console.log(this.fichaTecnica)
         }
         if (this.pasoActual == 2){
           this.muestra = data
@@ -126,6 +129,7 @@ export default {
   methods:{
     async insertarEdicion(){
       try{ 
+        this.activeLoading = true;
         var response = await EdicionesRepository.agregar(this.fichaTecnica);
         this.idEdicion = response.id  
         await MuestraPonderadaRepository.insertarMuestra(this.muestra, this.idEdicion);
@@ -134,12 +138,22 @@ export default {
           await MetodologiaRepository.insertarMetodologia (this.metodologia);
         }
       
-        await PreguntasRepository.cargar(this.instrumento, this.idEdicion);
-        swal("El edición ha sido agregada satisfactoriamente", "", "success")
+        var resultadoPreguntas= await PreguntasRepository.cargar(this.instrumento, this.idEdicion);
+
+        if (resultadoPreguntas.status == 200){
+          this.activeLoading = false;
+          swal("", resultadoPreguntas.detail, "success")
+          this.$router.push("/estudios");
+        }
+        else {
+          this.activeLoading = false;
+          swal("ERROR", resultadoPreguntas.error[0], "error")
+        }
+          
       }
       catch(err){
-        console.log(err)
-        swal("La edición no se pudo agregar", "", "error")
+        this.activeLoading = false;
+        swal("ERROR", err, "error")
       }
     }
   }

@@ -20,7 +20,6 @@
 import Repository from "../../services/repositories/repositoryFactory";
 import DataTable from "../../components/comunes/DataTable.vue"
 import Boton from "../../components/comunes/Boton.vue"
-import AgregarEncuestas from "../../components/estudios/AgregarEncuestas.vue"
 const EdicionesRepository = Repository.get("Ediciones");
 export default {
   data: () => ({
@@ -32,7 +31,6 @@ export default {
   },
   components: {
     DataTable,
-    AgregarEncuestas,
     Boton
     },
   beforeMount(){

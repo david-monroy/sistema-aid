@@ -8,6 +8,7 @@ import json
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import F
 import math
+from backend.response import *
 
 from backend.models.modelListaCodigo import ListaCodigo
 
@@ -22,47 +23,56 @@ def previewPreguntas(request):
 @csrf_exempt
 def insertarPreguntas(request, idEdicion):
     try:
-        path = request.FILES['file']
-        df = pd.read_excel(path)
+        data = request.body.decode('utf8').replace("'", '"')
+        df = pd.DataFrame(json.loads(data))
         for row,column in df.iterrows():
             listaCodigo = None
-            if (column[2] == 'Cadena'):
-                if (math.isnan(column[3]) == True):
-                    return HttpResponse("Debe asociar una lista de código a la pregunta " + column [0])
+            if (column[3] == 'Cadena'):
+                if (math.isnan(column[4]) == True):
+                    return HttpResponse("Debe asociar una lista de código a la pregunta " + column [1])
                 else:
-                    listaCodigo = asignarListaCodigo(column[3])
-            preguntaFilter = Pregunta.objects.filter(preguntaedicion__edicion=idEdicion, codigo=column[0])
+                    listaCodigo = asignarListaCodigo(column[4])
+     
+            preguntaFilter = Pregunta.objects.filter(codigo=column[1])
             if (preguntaFilter):
-                pregunta = Pregunta.objects.get(preguntaedicion__edicion=idEdicion, codigo=column[0])
-                pregunta.etiqueta = column[1]
-                pregunta.tipo = column[2]
+                pregunta = Pregunta.objects.get(codigo=column[1])
+                pregunta.etiqueta = column[2]
+                pregunta.tipo = column[3]
                 if (listaCodigo != None):
                     pregunta.listaCodigo = listaCodigo
                 pregunta.save()
+
+                preguntaParaEstaEdicion = Pregunta.objects.filter(preguntaedicion__edicion=idEdicion, codigo=column[1])
+                if (preguntaParaEstaEdicion):
+                    pass
+                else:
+                    PreguntaEdicion.objects.create(
+                    pregunta = pregunta,
+                    edicion = Edicion.objects.get(pk=idEdicion)
+                    )
             else:
                 if (listaCodigo != None):
-                    
                     nueva_pregunta = Pregunta.objects.create(
-                        codigo = column[0],
-                        etiqueta = column[1],
-                        tipo= column[2],
+                        codigo = column[1],
+                        etiqueta = column[2],
+                        tipo= column[3],
                         listaCodigo = listaCodigo   
                     )
                 else:
-
                     nueva_pregunta = Pregunta.objects.create(
-                        codigo = column[0],
-                        etiqueta = column[1],
-                        tipo= column[2] 
+                        codigo = column[1],
+                        etiqueta = column[2],
+                        tipo= column[3] 
                     )
 
                 PreguntaEdicion.objects.create(
                     pregunta = nueva_pregunta,
                     edicion = Edicion.objects.get(pk=idEdicion)
                 )
-        return HttpResponse("Se cargó exitosamente el instrumento")
+
+        return HttpResponse(response(message="Se cargó exitosamente el instrumento"))
     except BaseException as err:
-        return HttpResponse(err)
+        return HttpResponse(error_response(message="Ha ocurrido un error", error=err.args))
 
 def asignarListaCodigo(id):
     listaCodigo = None

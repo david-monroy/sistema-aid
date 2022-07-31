@@ -4,9 +4,8 @@ from backend.models import Encuesta, Pregunta,Respuesta, PreguntaEdicion,Partici
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import F,CharField, Value as V
 from django.db.models.functions import Concat
-from backend.errorResponse import error_response
-import json
-from rest_framework import status
+from backend.response import *
+import math
 
 
 @csrf_exempt
@@ -14,37 +13,41 @@ def insertarEncuestas(request,idEdicion):
     try:
         path = request.FILES['file']
         df = pd.read_excel(path)
-
+        encuestas = []
+        respuestas = []
+        
         for row, column in df.iterrows():
-            
-            if (Participante.objects.filter(cedula=column[0])):
-                nuevaEncuesta = Encuesta.objects.create(
-                    participante = column[0],
+            if (math.isnan(column[0]) == False):
+                nuevaEncuesta = Encuesta(
+                    participante = Participante.objects.get(cedula=column[0]),
                     fechaAplicacion = column[1],
                     codigo = column[2]
                 )
             else: 
-                nuevaEncuesta = Encuesta.objects.create(
+                nuevaEncuesta = Encuesta(
                     fechaAplicacion = column[1],
                     codigo = column[2]
                 )
            
+            encuestas.append(nuevaEncuesta)
+
             for i in range(3,df.shape[1]):
                 codigoPregunta = column.index[i].split('_')[0]
                 print(codigoPregunta)
-                pregunta = Pregunta.objects.get(preguntaedicion__edicion=idEdicion, codigo=codigoPregunta)
-                preguntaEdicion = PreguntaEdicion.objects.get(pregunta_id= pregunta.id)
-                if (pregunta):
-                    nuevaRespuesta = Respuesta.objects.create(
+                preguntaEdicion = PreguntaEdicion.objects.get(pregunta__codigo=codigoPregunta, edicion_id=idEdicion)
+                if (preguntaEdicion):
+                    respuestas.append(Respuesta(
                         respuesta = column[i],
                         encuesta = nuevaEncuesta,
                         pregunta = preguntaEdicion
-                    )
+                    ))
+        Encuesta.objects.bulk_create(encuestas)
+        Respuesta.objects.bulk_create(respuestas)
     
-        return HttpResponse('Se inserto correctamente')
+        return HttpResponse(response(message="Se insertaron correctamente las " + df.shape[1] + " encuestas"))
 
     except BaseException as err:
-        return HttpResponse(error_response(message="Ha ocurrido un error", error=err.args, status=status.HTTP_400_BAD_REQUEST))
+        return HttpResponse(error_response(message="Ha ocurrido un error", error=err.args))
 
 @csrf_exempt
 def get_encuestas(request,idEdicion):

@@ -84,7 +84,7 @@
                     <template v-slot:activator="{ on, attrs }">
                         <v-text-field
                             v-model="form.periodo"
-                            label="Periodo"
+                            label="Período"
                             v-bind="attrs"
                             v-on="on"
                             dense
@@ -288,7 +288,7 @@ export default {
                     swal("Ya existe un estudio con el mismo código", "", "error")
                 }
                 else {
-                    EventBus.$emit("pasoSiguiente","Estudio",this.form)
+                    EventBus.$emit("pasoSiguiente", this.form)
                 }
             }   
         },  

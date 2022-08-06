@@ -30,12 +30,6 @@
             :complete="pasoActual>4">
             Instrumento
             </v-stepper-step>
-
-            <v-divider></v-divider>
-
-            <v-stepper-step step="5">
-            Flujo de ejecución
-            </v-stepper-step>
             
           </v-stepper-header>
 
@@ -51,9 +45,6 @@
             </v-stepper-content>
             <v-stepper-content step="4" >
               <Instrumento :tipo="tipo"></Instrumento>
-            </v-stepper-content>
-            <v-stepper-content step="5" >
-              <h3>Proximamente</h3>
             </v-stepper-content>
           </v-stepper-items> 
         </v-stepper>
@@ -90,7 +81,6 @@ export default {
     FichaTecnica,
     MuestraPonderada,
     Metodologia,
-    Instrumento,
     Instrumento
   },
 
@@ -117,7 +107,7 @@ export default {
     }),
 
     EventBus.$on("registrar-estudio", (data) => {
-        this.muestra = data
+        this.instrumento = data
         this.insertarEstudio(this.fichaTecnica)
     })
   },
@@ -125,6 +115,7 @@ export default {
   methods:{
     async insertarEstudio(data){
       try{
+        console.log("fICHA TECNICA" + this.fichaTecnica)
         var estudio = await EstudiosRepository.agregar(data);
         data.estudio_id = estudio.id
         var response = await EdicionesRepository.agregar(data);
@@ -136,10 +127,11 @@ export default {
         }
         if (this.instrumento) await PreguntasRepository.cargar(this.instrumento, this.idEdicion);
         swal("El estudio ha sido agregado satisfactoriamente", "", "success")
+        this.$router.push("/estudios");
       }
       catch(err){
         console.log(err)
-        swal("El estudio no pudo ser agregado", "", "error")
+        swal("El estudio no pudo ser agregado" + err, "", "error")
       }
     }
 

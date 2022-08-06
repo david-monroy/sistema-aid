@@ -47,6 +47,7 @@ export default {
         icon: "fa-users-cog",
         rol: 2,
         route: "usuarios",
+        permiso: "auth | user | Can add user"
       },
       {
         id: 2,
@@ -54,6 +55,15 @@ export default {
         icon: "fa-clipboard-list",
         rol: 2,
         route: "patrones",
+        permiso: "auth | user | patrones"
+      },
+      {
+        id: 3,
+        name: "Listas de código",
+        icon: "fa-clipboard-list",
+        rol: 2,
+        route: "ListasCodigos",
+        permiso: 'backend | lista codigo | Can add lista codigo'
       },
     ]
   }),

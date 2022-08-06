@@ -52,27 +52,9 @@ def insertarEncuestas(request,idEdicion):
 @csrf_exempt
 def get_encuestas(request,idEdicion):
     try: 
-        encuestas = Encuesta.objects.filter(respuesta__pregunta__edicion=idEdicion).values(
-                                    'codigo','fechaAplicacion', 'respuesta__respuesta', 'respuesta__pregunta__pregunta__codigo').annotate(
-                                        participante=F('participante__nombre'))
-        preguntas = Pregunta.objects.filter(preguntaedicion__edicion=idEdicion).values('codigo','etiqueta').annotate(pregunta=Concat('codigo', V('_'),'etiqueta'))
-        preguntasDf = pd.DataFrame(preguntas)
-        preguntasDf = preguntasDf.drop(['codigo', 'etiqueta'], axis=1)
-        respuestasDf = pd.DataFrame(encuestas)
-        encuestasDf = pd.DataFrame()
-        encuestasDf['ID'] = respuestasDf['codigo']
-        encuestasDf['Fecha de Aplicacion'] = respuestasDf['fechaAplicacion']
-        encuestasDf['Participante']=respuestasDf['participante']
-        for row,column in preguntasDf.iterrows():
-            nombreColumna = column[0]
-            encuestasDf[nombreColumna] = ""
-
-        for row1,column1 in encuestasDf.iterrows():
-            for row2,column2 in respuestasDf.iterrows():
-                for i in range(3,encuestasDf.shape[1]):
-                    if(column2[3]==column1.index[i].split('_')[0]):
-                        if(column2[0]==column1[0]):
-                            encuestasDf.loc[row1, column1.index[i]]=column2[2]
+        print(idEdicion)
+        encuestas = Encuesta.objects.filter(respuesta__pregunta__edicion__id=idEdicion).distinct()
+        encuestasDf = pd.DataFrame(encuestas)
 
         return HttpResponse(encuestasDf.to_json(orient="table"))             
     except BaseException as err:

@@ -125,13 +125,13 @@ const router = new Router({
     {
       path: '/reportes',
       name: 'Reportes',
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true, permission: "backend | edicion | view reportes" },
       component: () => import("../views/reportes/Reportes.vue")
     },
     {
       path: '/graficos/:id',
       name: 'Graficos',
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true,  permission: "backend | edicion | view reportes"   },
       component: () => import("../views/reportes/Graficos.vue")
     },
     {

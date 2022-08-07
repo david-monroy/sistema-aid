@@ -125,7 +125,7 @@ WSGI_APPLICATION = 'sistemaaid.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'SistemaAIDDavid',
+        'NAME': 'SistemaAID',
         'USER': 'postgres',
         'PASSWORD': '209fadfc',
         'HOST': '127.0.0.1',

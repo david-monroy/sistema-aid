@@ -1,18 +1,6 @@
 <template>
-    <v-col cols="12" class="mt-2">
-      <div
-        class="form-group"
-        style="display: flex; justify-content: center; width: 100%"
-      >
-        <v-select
-          v-model="tipoGrafico"
-          :items="tiposGrafico"
-          item-text="nombre"
-          item-value="id"
-          label="Tipo de gráfico"
-        ></v-select>
-      </div>
-      <canvas :id="chartID"></canvas>
+    <v-col cols="12">
+      <canvas :id="chartID" ></canvas>
     </v-col>
 </template>
 
@@ -23,6 +11,7 @@ export default {
   name: "Grafico",
   props:{
       chartID: Number,
+      tipoGrafico: String
   },
   data() {
     return {
@@ -52,11 +41,6 @@ export default {
           },
         },
       },
-      tipoGrafico: null,
-      tiposGrafico: [
-        { id: "pie", nombre: "Torta" },
-        { id: "bar", nombre: "Barras" },
-      ],
     };
   },
   watch: {
@@ -76,7 +60,7 @@ export default {
     },
   },
   mounted() {
-      this.crearGrafico('pie')
+      this.crearGrafico(this.tipoGrafico)
   },
 };
 </script>

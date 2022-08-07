@@ -124,18 +124,25 @@ const router = new Router({
     },
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 0ad56b737a8ad05747ee7b606914fb7b58d5022e
       path: '/reportes',
       name: 'Reportes',
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true, permission: "backend | edicion | view reportes" },
       component: () => import("../views/reportes/Reportes.vue")
     },
     {
       path: '/graficos/:id',
       name: 'Graficos',
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true,  permission: "backend | edicion | view reportes"   },
       component: () => import("../views/reportes/Graficos.vue")
     },
+<<<<<<< HEAD
 =======
+=======
+    {
+>>>>>>> 0ad56b737a8ad05747ee7b606914fb7b58d5022e
       path: `/ediciones/AgregarEncuestas/:id`,
       name: 'AgregarEncuestas',
       meta: { requiresAuth: true, permission: "backend | encuesta | Can add encuesta" },
@@ -147,7 +154,10 @@ const router = new Router({
       meta: { requiresAuth: true, permission: "backend | edicion | Can view edicion" },
       component: () => import("../views/estudios/ConsultarEdicion.vue")
     }
+<<<<<<< HEAD
 >>>>>>> develop
+=======
+>>>>>>> 0ad56b737a8ad05747ee7b606914fb7b58d5022e
 
 
   ],

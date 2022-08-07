@@ -8,7 +8,7 @@
       <v-col cols="12" sm="6" class="mt-4">
         Seleccione una o dos ediciones del estudio <b>{{ estudio.nombre }}</b> para comparar sus resultados
         <v-select
-          v-model="edicionesSelect"
+          v-model="presentacion.ediciones"
           :items="ediciones"
           item-text="codigo"
           item-value="id"
@@ -22,23 +22,70 @@
       </v-col>
     </v-row>
     <v-row
-      align="center"
-      class="list px-3 mx-auto nav-separator container mt-4"
-      style="display: flex; align-items: flex-start"
-    >
-      <v-col cols="3" class="mt-2">
-        <GraficoComponente :chartID="1"></GraficoComponente>
+    align="center"
+      style="display: flex; justify-content: center">
+      <v-btn
+                    :small="$vuetify.breakpoint.smAndDown"
+                    class="primary"
+                    @click="getPreguntas()"
+                    :disable=!valid
+                >
+                    <p class="mt-3 hidden-sm-and-down">Obtener preguntas</p>
+                </v-btn>
+    </v-row>
+    <div class="card-container mt-0 form-card">
+    <v-form
+        ref="registerForm"
+        v-model="valid"
+        lazy-validation
+      >
+    <v-row>
+      <v-col cols="4">
+          <v-combobox
+            dense
+            outlined
+            label="Seleccione la pregunta a graficar"
+            v-model="presentacion.pregunta"
+            :items = "preguntas"
+            item-text = "etiqueta"
+            item-value = "id"
+      ></v-combobox> 
       </v-col>
-      <v-col cols="3" class="mt-2">
-        <GraficoComponente :chartID="2"></GraficoComponente>
+      <v-col cols="4">
+        <v-select
+          v-model="presentacion.tipoGrafico"
+          :items="tiposGrafico"
+          item-text="nombre"
+          item-value="id"
+          label="Tipo de gráfico"
+        ></v-select>
+          <GraficoComponente :chartID="1" :tipoGrafico="presentacion.tipoGrafico"></GraficoComponente>
       </v-col>
-      <v-col cols="3" class="mt-2">
-        <GraficoComponente :chartID="3"></GraficoComponente>
-      </v-col>
-      <v-col cols="3" class="mt-2">
-        <GraficoComponente :chartID="4"></GraficoComponente>
+      <v-col cols="4">
+        <v-textarea
+          outlined
+          name="input-7-4"
+          v-model="presentacion.texto"
+          label="Texto de la diapositiva"
+        ></v-textarea>
       </v-col>
     </v-row>
+    
+    </v-form>
+    </div>
+     <v-row
+    align="center"
+      style="display: flex; justify-content: center">
+      <v-btn
+                    :small="$vuetify.breakpoint.smAndDown"
+                    class="primary"
+                    @click="crearPresentacion()"
+                    :disable=!valid
+                >
+                    <p class="mt-3 hidden-sm-and-down">Crear presentación</p>
+                </v-btn>
+    </v-row>
+    
   </v-container>
 </template>
 
@@ -47,6 +94,8 @@ import Chart from "chart.js";
 import GraficoComponente from "../../components/reportes/Grafico.vue";
 import Repository from "../../services/repositories/repositoryFactory";
 const EstudiosRepository = Repository.get("Estudios");
+const PreguntasRepository = Repository.get("Preguntas");
+const EdicionesRepository = Repository.get("Ediciones");
 export default {
   name: "Graficos",
   components: { GraficoComponente },
@@ -55,18 +104,26 @@ export default {
     return {
       estudio_id: null,
       ediciones: [],
-      edicionesSelect: [],
-      estudio: null
+      tiposGrafico: [
+        { id: "pie", nombre: "Torta" },
+        { id: "bar", nombre: "Barras" },
+      ],
+      estudio: null,
+      presentacion: {
+        pregunta: null,
+        tipoGrafico: "pie",
+        texto: null,
+        ediciones: null
+      },
+      preguntas : []
     };
   },
   methods: {
     async getEdiciones(id) {
       this.ediciones = await EstudiosRepository.obtenerEdiciones(id);
-      console.log(this.ediciones)
     },
     limiteOpciones(e) {
       if(e.length > 2) {
-        console.log('Solo puedes seleccionar dos', e)
         e.pop()
       }
     },
@@ -77,7 +134,21 @@ export default {
           this.estudio = est;
         }
       });
-    }
+    },
+    async getPreguntas(){
+      if (this.presentacion.ediciones.length <= 0){
+        swal("", "Debe seleccionar una edición primero", "warning")
+      }
+      else { 
+        this.preguntas = await PreguntasRepository.obtenerPreguntas(this.presentacion.ediciones);
+      }
+      
+    },
+    async crearPresentacion(){
+        console.log(this.presentacion)
+        let presentacion = await EdicionesRepository.crearPresentacion(this.presentacion);
+        console.log(presentacion)
+      }
   },
   mounted() {
     this.estudio_id = this.$route.params.id;

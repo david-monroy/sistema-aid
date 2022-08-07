@@ -60,7 +60,7 @@ export default {
         icon: "fa-chart-pie",
         rol: 3,
         route: "reportes",
-        permiso: 'auth | user | reportes'
+        permiso: 'backend | edicion | view reportes'
       },
       {
         id: 4,

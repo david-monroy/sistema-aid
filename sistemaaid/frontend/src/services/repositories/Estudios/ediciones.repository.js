@@ -42,7 +42,13 @@ export default {
   async obtenerEncuestas(idEdicion) {
     let response = await conn.get(`/ediciones/encuestas/${idEdicion}`, jwt.getAuthHeaderToken());
     return response.data;
+  },
+
+  async crearPresentacion(data) {
+    let response = await conn.post(`/ediciones/crear-presentacion/`, data, jwt.getAuthHeaderToken());
+    return response;
   }
+
 
 
 };

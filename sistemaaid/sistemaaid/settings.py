@@ -26,6 +26,10 @@ SECRET_KEY = 'django-insecure-o_$wj=1dnq079o2s85rdzbxe(#$y=1u1*e7kf6)i(lcch9a3ct
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+ALLOWED_HOSTS = ['*']
+
+DATE_INPUT_FORMATS = ['%d-%m-%Y']
+
 CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ORIGIN_WHITELIST = [
@@ -62,8 +66,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'backend',
-    'rest_framework',
     'corsheaders',
+    'rest_framework',
     'sqlalchemy',
     'rest_framework_simplejwt',
 ]
@@ -121,9 +125,9 @@ WSGI_APPLICATION = 'sistemaaid.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'SistemaAID',
+        'NAME': 'SistemaAIDDavid',
         'USER': 'postgres',
-        'PASSWORD': 'admin',
+        'PASSWORD': '209fadfc',
         'HOST': '127.0.0.1',
         'PORT': '5432',
         'ATOMIC_REQUEST': True
@@ -173,3 +177,4 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+

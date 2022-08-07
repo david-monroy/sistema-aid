@@ -15,6 +15,11 @@ export default {
   async preview(data) {
     let response = await conn.post(`/preguntas/preview/`, data, headers);
     return response.data;
+  },
+
+  async obtenerInstrumento(idEdicion) {
+    let response = await conn.get(`/preguntas/${idEdicion}/`, jwt.getAuthHeaderToken());
+    return response;
   }
 
 };

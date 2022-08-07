@@ -7,7 +7,7 @@
         lazy-validation
       >
         <v-row class="pb-0 mb-0 form-row" >
-            <v-col md="10" cols="10" class="py-0">
+            <v-col md="8" cols="8" class="py-0">
                 <div class="form-group">
                     <v-file-input
                         v-model="file"
@@ -15,6 +15,9 @@
                         label="Carga el archivo con la lista de preguntas"
                     ></v-file-input>
                 </div>
+            </v-col>
+            <v-col md="2" cols="2" align="end">         
+                <a href="/assets/files/Plantilla_Instrumento.xlsx"  download>Plantilla</a>
             </v-col>
             <v-col md="2" cols="2" align="end">
                 <v-btn
@@ -24,7 +27,6 @@
                     :disable=!valid
                 >
                     <p class="mt-3 hidden-sm-and-down">Cargar</p>
-                    <v-icon>mdi-chevron-right</v-icon>
                 </v-btn>
             </v-col>
         </v-row>
@@ -33,7 +35,7 @@
                 :headers="headers"
                 :items="preguntas"
                 hide-default-footer
-                :items-per-page="-1"
+                :items-per-page="10"
                 class="elevation-1"
                 >
                 </v-data-table>
@@ -92,6 +94,8 @@
 import swal from 'sweetalert'
 import Repository from "../../services/repositories/repositoryFactory";
 import { EventBus } from "../../main.js";
+import {saveAs} from 'file-saver';
+import axios from 'axios';
 const PreguntasRepository = Repository.get("Preguntas");
 
 export default {
@@ -101,11 +105,7 @@ export default {
             valid:true,
             preguntas: [],
             headers: [
-            {
-                text: 'Código',
-                align: 'start',
-                value: 'Codigo',
-            },
+            {text: 'Código', value: 'Codigo'},
             { text: 'Etiqueta', value: 'Pregunta' },
             { text: 'Tipo', value: 'Tipo' },
             ]
@@ -115,6 +115,13 @@ export default {
         tipo:String
     },
     methods: {
+        descargarPlantilla() {
+            axios
+                .get('../../assets/files/Plantilla_Instrumento.xlsx', {responseType: 'blob'})
+                .then(response => {
+                    saveAs(response.data, 'Plantilla_CargarInstrumento.xlsx');
+                })
+        },
         async cargarCSV(){
             const formData = new FormData();
             formData.append('file', this.file)
@@ -123,7 +130,7 @@ export default {
             }
             catch(err){
                 console.log(err)
-                swal("No se pudoieron cargar las preguntas", "", "error")
+                swal("No se pudieron cargar las preguntas", "", "error")
             } 
         },
         pasoAnterior() {

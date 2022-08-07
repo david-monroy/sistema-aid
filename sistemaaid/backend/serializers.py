@@ -66,9 +66,16 @@ class MetodologiaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Metodologia
         fields = '__all__'
+        
+class ListaCodigoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ListaCodigo
+        fields = '__all__'
 
 class PreguntaSerializer(serializers.ModelSerializer):
     class Meta:
+
+        listaCodigo = ListaCodigoSerializer(read_only=True)
         model = Pregunta
         fields = '__all__'
 
@@ -76,14 +83,24 @@ class PreguntaEdicionSerializer(serializers.ModelSerializer):
     class Meta:
         model = PreguntaEdicion
         fields = '__all__'
-class ListaCodigoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ListaCodigo
-        fields = '__all__'
 
 class CategoriaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Categoria
+        fields = '__all__'
+
+class EncuestaSerializer(serializers.ModelSerializer):
+    class Meta:
+        participante = ParticipanteSerializer(read_only=True)
+       ## participante_id = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Participante.objects.all(), source='participante')
+        model = Encuesta
+        fields = '__all__'
+
+class RespuestaSerializer(serializers.ModelSerializer):
+    class Meta:
+        encuesta = EncuestaSerializer(read_only=True)
+        pregunta = PreguntaEdicionSerializer(read_only=True)
+        model = Respuesta
         fields = '__all__'
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -123,4 +140,6 @@ class PermissionsSerializers(serializers.ModelSerializer):
         fields = [
             'codename'
         ]
+
+
         

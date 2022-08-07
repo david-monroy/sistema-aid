@@ -12,3 +12,6 @@ from .modelPreguntaEdicion import *
 from .modelListaCodigo import * 
 from .modelCategoria import *
 from .modelLugar import *
+from .modelEncuesta import * 
+from .modelRespuesta import * 
+

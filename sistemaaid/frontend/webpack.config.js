@@ -25,7 +25,17 @@ module.exports = {
             },
           ],
         },
+<<<<<<< HEAD
         
+=======
+        {
+          test: /\.(csv|xlsx|xls)$/,
+          loader: 'file-loader',
+          options: {
+              name: `files/[name].[ext]`
+          }
+      }
+>>>>>>> develop
       ],
     }
   }

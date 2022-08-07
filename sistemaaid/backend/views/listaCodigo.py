@@ -9,7 +9,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 @csrf_exempt
 def cargarListaCodigo(request,idLista):
     path = request.FILES['file']
-    df = pd.read_csv(path, header=0, encoding='ISO-8859-1', delimiter=',')
+    df = pd.read_excel(path)
 
     row_iter = df.iterrows()
     

@@ -7,4 +7,10 @@ export default {
     return response;
   },
 
+  async buscarMetodologia(idEdicion) {
+    let response = await conn.get(`/metodologia/${idEdicion}/`,jwt.getAuthHeaderToken());
+    return response[0];
+
+  },
+
 };

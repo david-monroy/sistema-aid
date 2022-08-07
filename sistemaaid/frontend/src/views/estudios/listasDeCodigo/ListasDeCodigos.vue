@@ -262,6 +262,7 @@ export default {
         return {
             search: '',
             headersLista: [
+            { text: 'ID', value: 'id' }, 
             { text: 'Nombre', value: 'nombre' },
             { text: 'Descripción', value: 'descripcion' },
             { text: 'Ver categorías', value: 'categorias', sortable: false, align:'center'},

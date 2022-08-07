@@ -147,15 +147,6 @@ export default {
         goRoute(route) {
             this.$router.push("/" + route);
         },
-        async insertarInfo(){
-            if (this.tipo == "Estudio"){
-                 EventBus.$emit("registrar-estudio",this.muestraPonderada)
-            }
-            else {
-                 EventBus.$emit("registrar-edicion",this.muestraPonderada)
-            }
-           
-        },
     },
 }
 </script>

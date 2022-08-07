@@ -59,7 +59,7 @@ const router = new Router({
     {
       path: '/estudios',
       name: 'ListaEstudios',
-      meta: { requiresAuth: true, permission: "backend | participante | Can change participante" },
+      meta: { requiresAuth: true, permission: "backend | estudio | Can view estudio" },
       component: () => import("../views/estudios/ListaEstudios.vue")
     },
     {
@@ -113,16 +113,17 @@ const router = new Router({
     {
       path: `/estudios/agregarListaCodigo`,
       name: 'AgregarListaCodigo',
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true, permission: "backend | lista codigo | Can add lista codigo" },
       component: () => import("../views/estudios/listasDeCodigo/AgregarListaCodigo.vue")
     },
     {
-      path: `/estudios/ListasCodigos`,
+      path: `/ListasCodigos`,
       name: 'ListasDeCodigos',
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true, permission: "backend | lista codigo | Can view lista codigo" },
       component: () => import("../views/estudios/listasDeCodigo/ListasDeCodigos.vue")
     },
     {
+<<<<<<< HEAD
       path: '/reportes',
       name: 'Reportes',
       meta: { requiresAuth: true },
@@ -134,6 +135,20 @@ const router = new Router({
       meta: { requiresAuth: true },
       component: () => import("../views/reportes/Graficos.vue")
     },
+=======
+      path: `/ediciones/AgregarEncuestas/:id`,
+      name: 'AgregarEncuestas',
+      meta: { requiresAuth: true, permission: "backend | encuesta | Can add encuesta" },
+      component: () => import("../views/estudios/AgregarEncuestas.vue")
+    },
+    {
+      path: `/ediciones/:id`,
+      name: 'ConsultarEdicion',
+      meta: { requiresAuth: true, permission: "backend | edicion | Can view edicion" },
+      component: () => import("../views/estudios/ConsultarEdicion.vue")
+    }
+>>>>>>> develop
+
 
   ],
   mode: 'history',

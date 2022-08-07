@@ -3,6 +3,7 @@ import pandas as pd
 from backend.models import MuestraPonderada, modelEdicion
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.core.serializers.json import DjangoJSONEncoder
 
 # Create your views here.
 @csrf_exempt
@@ -49,6 +50,16 @@ def insertarMuestra (request, idEdicion):
 
     msj =  MuestraPonderada.objects.bulk_create(muestras)
     return HttpResponse()
+
+@csrf_exempt
+def get_muestraPonderada(request,idEdicion):
+    try: 
+        muestraPonderada = MuestraPonderada.objects.filter(edicion_id=idEdicion).values()
+        query_respuesta = json.dumps(list(muestraPonderada), cls=DjangoJSONEncoder) 
+        return HttpResponse(query_respuesta)
+    except BaseException as err:
+        print(err)
+        return(err)
 
 
     

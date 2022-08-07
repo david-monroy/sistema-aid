@@ -1,9 +1,14 @@
 import conn from "../../api-connector";
 import jwt from "../../../common/jwt.service";
 
+const headers =  {
+  "Content-Type": 'multipart/form-data',
+  Accept: 'multipart/form-data',
+  Authorization: `Bearer ${jwt.getToken()}`
+}
+
 export default {
   async agregar(data) {
-    console.log(data);
     let response = await conn.post(`/ediciones/`, data, jwt.getAuthHeaderToken());
     return response;
   },
@@ -19,9 +24,25 @@ export default {
     let response = await conn.delete(`/ediciones/${id}/`, jwt.getAuthHeaderToken());
     return response;
   },
+
+  async buscarEdicion(id){
+    let response = await conn.get(`/ediciones/${id}/`, jwt.getAuthHeaderToken());
+    return response;
+  },
   async filtrar(data){
     let response = await conn.post(`/ediciones/filtrar/`, data, jwt.getAuthHeaderToken());
     return response;
   },
+
+  async cargarEncuestas(data,idEdicion) {
+    let response = await conn.post(`/ediciones/cargar_encuesta/${idEdicion}/`, data, headers);
+    return response;
+  },
+
+  async obtenerEncuestas(idEdicion) {
+    let response = await conn.get(`/ediciones/encuestas/${idEdicion}`, jwt.getAuthHeaderToken());
+    return response.data;
+  }
+
 
 };

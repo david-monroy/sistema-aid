@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 
 @csrf_exempt
-def validarCodigo(request):
+def validarCodigoEdicion(request):
    requestToDict= json.loads(request.body.decode("utf-8").replace("'", '"'))
    estudio = modelEdicion.Edicion.objects.filter(codigo=requestToDict["codigo"])
    return HttpResponse(estudio)

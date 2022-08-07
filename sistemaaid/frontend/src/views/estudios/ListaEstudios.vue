@@ -212,7 +212,17 @@
                     @click="mostrarInformacionEdicion(item.id)" class="mr-2 secondary--text">fa-info-circle</v-icon>
                 </template>
                 <span>Información</span>
-                </v-tooltip>
+            </v-tooltip>
+            <v-tooltip
+                    top 
+                    style="display: inline"
+                >
+                <template v-slot:activator="{ on, attrs }">
+                    <v-icon small v-bind="attrs" v-on="on"
+                    @click="CargarEncuestas(item.id)" class="mr-2 secondary--text">fa-upload</v-icon>
+                </template>
+                <span>Cargar encuestas</span>
+            </v-tooltip>
           </template>
         </v-data-table>
         <v-row class="d-flex" style="justify-content: center">
@@ -295,8 +305,6 @@ export default {
           });
           this.estudioSeleccionado = id
           this.ediciones = await EstudiosRepository.obtenerEdiciones(id)
-          console.log(id)
-          console.log(this.ediciones)
         },
         mostrarEliminarEstudio(id, nombre){
           this.modalEliminarEstudio = true;
@@ -304,8 +312,10 @@ export default {
           this.estudioAEliminarNombre = nombre;
         },
         cerrarEliminar(){
-        //   this.modalEliminar = false;
           this.modalEliminarEstudio = false;
+        },
+        CargarEncuestas(id){
+          this.$router.push(`/ediciones/AgregarEncuestas/${id}`);
         },
         editarEstudio(item){
             console.log(item);
@@ -323,13 +333,7 @@ export default {
           });
         },
         mostrarInformacionEdicion(id){
-          this.modalEdicion = true;
-          let edicion = id;
-          this.ediciones.forEach(edi => {
-            if (edi.id == edicion){
-              this.actualEdicion = edi;
-            }
-          });
+          this.$router.push(`/ediciones/${id}`);
         },
         async eliminarEstudio(){
           try{

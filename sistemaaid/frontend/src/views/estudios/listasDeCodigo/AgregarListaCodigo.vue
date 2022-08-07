@@ -111,7 +111,7 @@ export default {
                     var idLista = await ListaCodigoRepository.crear(this.form);
                     await ListaCodigoRepository.cargarListaCodigo(formData, idLista.id);
                     swal("Lista de código agregada satisfactoriamente", "", "success")
-                    this.goRoute('estudios/ListasCodigos')
+                    this.goRoute('ListasCodigos')
                 }
                 catch(err){
                     console.log(err)

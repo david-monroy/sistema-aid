@@ -13,7 +13,7 @@
                     <v-file-input
                         v-model="file"
                         truncate-length="15"
-                        label="Carga el archivo con los participantes"
+                        label="Cargue el archivo con los participantes"
                     ></v-file-input>
                 </div>
             </v-col>

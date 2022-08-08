@@ -70,10 +70,10 @@
               item-value="id"
               label="Tipo de gráfico"
             ></v-select>
-            <GraficoComponente
+            <!-- <GraficoComponente
               :chartID="diapositiva.id"
               :tipoGrafico="diapositiva.tipoGrafico"
-            ></GraficoComponente>
+            ></GraficoComponente> -->
           </v-col>
           <v-col cols="4">
             <v-textarea

@@ -30,17 +30,18 @@
             </v-col>
         </v-row>
             <div>
-                <p> A continuación, cargue un archivo .csv para <b>registrar o editar</b> participantes.</p>
-                <p> La estructura debe ser como la siguiente imagen, puede agregar tantas filas como desee.</p>
-                <p> Es importante mantener el nombre de las cabeceras tal como se indica, tomando en cuenta las mayúsculas y minúsculas.</p>
-                <p> El formato para la fecha de nacimiento debe ser <b>día/mes/año</b>.</p>
-                <p> Los campos marcados en <b><span class="red--text">rojo</span></b> son <b>obligatorios.</b></p>
-                <p> Los participantes deben ser <b>mayores de 11 años.</b></p>
-                <p class='secondary--text' style="font-size: 14px"><i>Pase el cursor por la imagen para hacer zoom.</i></p>
-                <img
+                <p> A continuación, descargue <a href="/assets/files/Plantilla_Participantes.xlsx"  download>esta plantilla</a>
+                 y luego inserte en ella todos los participantes a <b>agregar o editar,</b> cárguela nuevamente y haga click en el botón Enviar.</p>
+                <p>Tenga en cuenta:</p>
+                <ul>
+                    <li>El formato para la fecha de nacimiento debe ser <b>día/mes/año</b>.</li>
+                    <li>Las columnas marcadas en <b><span class="red--text">rojo</span></b> son <b>obligatorias.</b></li>
+                    <li>Los participantes deben ser <b>mayores de 11 años.</b></li>
+                </ul>
+                <!-- <img
                 class="img-zoom"
                 src="../../assets/Tabladeparticipantes.png"
-                />
+                /> -->
             </div>
 
           </div>

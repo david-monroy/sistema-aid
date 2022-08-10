@@ -1,3 +1,4 @@
+from distutils import text_file
 from lib2to3.pgen2.pgen import DFAState
 from pptx import Presentation
 from django.http import HttpResponse
@@ -10,8 +11,9 @@ from django.db.models import F
 import os
 from pptx.chart.data import CategoryChartData,ChartData
 from pptx.enum.chart import XL_CHART_TYPE
-from pptx.util import Inches
+from pptx.util import Inches, Pt
 from django.db.models import Count
+from datetime import datetime
 
 
 @csrf_exempt
@@ -40,6 +42,20 @@ def crearPresentacion(request):
         slide.shapes.title.text = 'Reporte de estudio ' + estudioData['nombre'] + ' - ' + estudioData['codigo']
         slide.placeholders[1].text = 'Ediciones: ' + ediciones
 
+        # Agregar logo
+        logo = 'backend/assets/logo_AID.png'
+        from_left = Inches(5)
+        from_top = Inches(2)
+        width = Inches(3)
+        add_picture = slide.shapes.add_picture(logo, from_left, from_top, width)
+
+        # Agregar fecha
+        text_left, text_top, text_width, text_height = Inches(5.7), Inches(6), Inches(2), Inches(1)
+        fechaItem = slide.shapes.add_textbox(text_left, text_top, text_width, text_height)
+        fechaTexto = fechaItem.text_frame.add_paragraph()
+        fechaTexto.text = "Fecha: " + datetime.today().strftime('%d-%m-%Y')
+        fechaTexto.font.size = Pt(14)
+
         i = 1
         for item in data['presentacion']: 
             print(item)
@@ -63,7 +79,7 @@ def crearPresentacion(request):
                 chart_data = CategoryChartData()
                 chart_data.categories = df["respuesta"]
                 chart_data.add_series('Series 1', df['id__count'])
-                x, y, cx, cy = Inches(2), Inches(2), Inches(6), Inches(4.5)
+                x, y, cx, cy = Inches(3.6), Inches(2), Inches(6), Inches(4.5)
                 slide.shapes.add_chart(
                 XL_CHART_TYPE.COLUMN_CLUSTERED, x, y, cx, cy, chart_data
                 )
@@ -72,7 +88,7 @@ def crearPresentacion(request):
                 chart_data = ChartData()
                 chart_data.categories = df["respuesta"]
                 chart_data.add_series('Series 1', df['id__count'])
-                x, y, cx, cy = Inches(2), Inches(2), Inches(6), Inches(4.5)
+                x, y, cx, cy = Inches(3.6), Inches(2), Inches(6), Inches(4.5)
                 slide.shapes.add_chart(
                 XL_CHART_TYPE.PIE, x, y, cx, cy, chart_data
                 )

@@ -9,7 +9,7 @@
         Seleccione una o dos ediciones del estudio
         <b>{{ estudio.nombre }}</b> para comparar sus resultados
         <v-select
-          v-model="presentacion[0].ediciones"
+          v-model="edicionesSelect"
           :items="ediciones"
           item-text="codigo"
           item-value="id"
@@ -124,6 +124,7 @@ export default {
     return {
       estudio_id: null,
       ediciones: [],
+      edicionesSelect: [],
       tiposGrafico: [
         { id: "pie", nombre: "Torta" },
         { id: "bar", nombre: "Barras" },
@@ -153,12 +154,21 @@ export default {
     },
     agregarDiapositiva(){
       this.chartID = this.chartID + 1
-      let diapositiva = {
-          tipoGrafico: 'pie',
-          texto: null,
-          ediciones: null,
-          pregunta: null,
-          id: this.chartID
+      let diapositiva = {}
+      if (this.chartID == 1)
+        diapositiva = {
+            tipoGrafico: 'pie',
+            texto: null,
+            ediciones: null,
+            id: this.chartID
+        }
+      else {
+        diapositiva = {
+            tipoGrafico: 'pie',
+            texto: null,
+            ediciones: this.edicionesSelect,
+            id: this.chartID
+        }
       }
       this.presentacion.push(diapositiva)
     },
@@ -171,15 +181,16 @@ export default {
       else return false
     },
     async getPreguntas(){
-      if (this.presentacion[0].ediciones.length <= 0){
+      if (this.edicionesSelect.length <= 0){
         swal("", "Debe seleccionar una edición primero", "warning")
       }
       else { 
-        this.preguntas = await PreguntasRepository.obtenerPreguntas(this.presentacion[0].ediciones);
+        this.preguntas = await PreguntasRepository.obtenerPreguntas(this.edicionesSelect);
       }
       
     },
     async crearPresentacion(){
+        this.presentacion[0].ediciones = this.edicionesSelect;
         console.log(this.presentacion)
         let presentacion = await EdicionesRepository.crearPresentacion(this.presentacion);
         console.log(presentacion)

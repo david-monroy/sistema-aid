@@ -3,7 +3,7 @@ from pptx import Presentation
 from django.http import HttpResponse
 import pandas as pd
 from django.views.decorators.csrf import csrf_exempt
-from backend.models import Pregunta,Respuesta
+from backend.models import Pregunta,Respuesta, Estudio, Edicion
 import json
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import F
@@ -19,8 +19,29 @@ def crearPresentacion(request):
     try:
         data = json.loads(request.body.decode("utf-8"))
         prs = Presentation('backend/ia/presentaciones/prueba1.pptx')
+        #prs = Presentation()
+
+        slide_layout = prs.slide_layouts[0]
+        slide = prs.slides.add_slide(slide_layout)
+
+        estudioData = data['estudio']
+        edicionesData = data['ediciones']
+        ediciones = ''
+        primero = 1
+
+        # Guarda codigos de ediciones en un array para luego mostrarlos como subtitulo
+        for edicion in edicionesData:
+            if (primero == 1):
+                ediciones = edicion['codigo']
+                primero = 0
+            else:
+                ediciones = ediciones + ', ' + edicion['codigo']
+        
+        slide.shapes.title.text = 'Reporte de estudio ' + estudioData['nombre'] + ' - ' + estudioData['codigo']
+        slide.placeholders[1].text = 'Ediciones: ' + ediciones
+
         i = 1
-        for item in data: 
+        for item in data['presentacion']: 
             print(item)
             slide_layout = prs.slide_layouts[5]
             print("entro1")

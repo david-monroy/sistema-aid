@@ -1,5 +1,6 @@
 from django.db import models
 from .modelParticipante import *
+from .modelEdicion import *
 from django.db.models.deletion import CASCADE
 
 class Encuesta(models.Model):
@@ -7,3 +8,4 @@ class Encuesta(models.Model):
     estaCodificada = models.BooleanField(default=False)
     codigo = models.IntegerField()
     participante =models.ForeignKey(Participante, on_delete=CASCADE, null=True, blank=True)
+    edicion = models.ForeignKey(Edicion, on_delete=CASCADE)

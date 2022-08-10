@@ -107,7 +107,7 @@
     <!-- BOTONES -->
     <div class="crud-buttons mx-auto">
       <v-btn color="accent2" class="mx-4" @click="goRoute('participantes/agregar')">Agregar participante</v-btn>
-      <v-btn color="accent2" class="mx-4" @click="goRoute('participantes/masivo')">Cargar .csv</v-btn>
+      <v-btn color="accent2" class="mx-4" @click="goRoute('participantes/masivo')">Cargar excel</v-btn>
       <v-btn color="accent1" class="mx-4" @click="buscador = true">Filtrar</v-btn>
     </div>
 

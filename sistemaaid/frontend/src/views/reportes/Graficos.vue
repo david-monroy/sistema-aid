@@ -157,6 +157,7 @@ export default {
           tipoGrafico: 'pie',
           texto: null,
           ediciones: null,
+          pregunta: null,
           id: this.chartID
       }
       this.presentacion.push(diapositiva)

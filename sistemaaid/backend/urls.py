@@ -35,7 +35,7 @@ urlpatterns = [
     path('estudios/ediciones/<int:id>', views.obtenerEdiciones),
     path('estudios/seleccionarVariablesRFE/', views.seleccionarVariablesRFE),
     path('ediciones/validarCodigo', views.validarCodigoEdicion),
-    path('ediciones/cargar_encuesta/<int:idEdicion>/', views.insertarEncuestas),
+    path('ediciones/cargar_encuesta/<int:idEdicion>/<str:username>/', views.insertarEncuestas),
     path('ediciones/clasificar/<int:idEdicion>/', views.clasificar),
     path('ediciones/encuestas/<int:idEdicion>', views.get_encuestas),
     path('categoria/cargar/<int:idLista>', views.cargarListaCodigo),
@@ -54,7 +54,7 @@ urlpatterns = [
     path('usuarios/', views.obtener_usuarios),
     path('metodologia/<int:idEdicion>/',views.get_metodologia),
     path('ia/entrenarModelo/', views.entrenarModelo),
-    path('ia/predecir/', views.predecir)
+    path('ia/predecir/', views.predecir),
 ]
 
 urlpatterns += router.urls

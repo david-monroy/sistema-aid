@@ -12,7 +12,7 @@ INSERT INTO public.backend_carrera(
 	('Comunicación Social', 4, true),
 	('Contaduría', 5, true),
 	('Administración', 6, true),
-	('Economía', 7, true)
+	('Economía', 7, true);
 
 INSERT INTO public.backend_sede(
 	nombre)
@@ -45,9 +45,9 @@ INSERT INTO public.backend_categoria(
 	(2, 'UCV', '1-1-2022', '1-1-2022', 4),
 	(3, 'USB', '1-1-2022', '1-1-2022', 4),
 	(4, 'UNIMET', '1-1-2022', '1-1-2022', 4),
-	(5, 'USM', '1-1-2022', '1-1-2022', 4)
+	(5, 'USM', '1-1-2022', '1-1-2022', 4);
 
-ALTER SEQUENCE backend_lugar_id_seq RESTART WITH 1
+ALTER SEQUENCE backend_lugar_id_seq RESTART WITH 1;
 
 INSERT INTO backend_lugar(
 	nombre, tipo, fk_lugar_id)

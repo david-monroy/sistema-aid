@@ -64,6 +64,7 @@ export default {
     },
      mounted(){
         this.buscarEdicion(this.$route.params.id);
+        this.username = this.$store.getters["users/getUser"].username;
     },
     components: {
         Loading
@@ -74,7 +75,7 @@ export default {
             formData.append('file', this.file)
             try{
                 this.activeLoading = true;
-                this.respuesta = await EdicionRepository.cargarEncuestas(formData,this.edicion.id);
+                this.respuesta = await EdicionRepository.cargarEncuestas(formData,this.edicion.id, this.username);
                 this.activeLoading = false
                 if (this.respuesta.status == 200 ){
                     swal("", this.respuesta.detail, "success");

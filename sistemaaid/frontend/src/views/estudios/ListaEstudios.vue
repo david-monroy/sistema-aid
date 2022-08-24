@@ -87,7 +87,7 @@
                 >
                 <template v-slot:activator="{ on, attrs }">
                     <v-icon small v-bind="attrs" v-on="on"
-                    @click="editarEstudio(item)" class="mr-2">fa-pen</v-icon>
+                    @click="editarEstudio(item.id)" class="mr-2">fa-pen</v-icon>
                 </template>
                 <span>Editar</span>
                 </v-tooltip>
@@ -317,8 +317,16 @@ export default {
         CargarEncuestas(id){
           this.$router.push(`/ediciones/AgregarEncuestas/${id}`);
         },
-        editarEstudio(item){
-            console.log(item);
+        async editarEstudio(id){
+          let ediciones = await EstudiosRepository.obtenerEdiciones(id)
+          let tieneEncuestas = false
+          for (let index = 0; index < ediciones.length; index++) {
+            const edicion = ediciones[index];
+            let encuestas = await EdicionesRepository.obtenerEncuestas(edicion.id)
+            if (encuestas.length > 0) tieneEncuestas = true
+          }
+          if (tieneEncuestas) swal("No se puede editar un estudio cuyas ediciones ya tienen encuestas", "", "error")
+          else this.goRoute(`estudios/${id}/editar`);
         },
         editarEdicion(item){
             console.log(item);

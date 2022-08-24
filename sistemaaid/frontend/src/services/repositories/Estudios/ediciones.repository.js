@@ -20,6 +20,10 @@ export default {
     let response = await conn.get(`/ediciones/`, jwt.getAuthHeaderToken());
     return response;
   },
+  async actualizar(id, data){
+    let response = await conn.put(`/ediciones/${id}/`, data, jwt.getAuthHeaderToken());
+    return response;
+  },
   async eliminar(id){
     let response = await conn.delete(`/ediciones/${id}/`, jwt.getAuthHeaderToken());
     return response;

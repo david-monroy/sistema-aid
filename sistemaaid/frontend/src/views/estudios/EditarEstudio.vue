@@ -2,10 +2,7 @@
   <v-container fluid elevation="0" class="nav-separator">
     <v-row no-gutters justify="center">
       <v-col cols="12" md="8" align="center">
-        <h3 class="primary--text mx-auto mb-6 mt-0 md=8" v-if="!estudioAEditar">
-          Agregar un nuevo estudio
-        </h3>
-        <h3 class="primary--text mx-auto mb-6 mt-0 md=8" v-else>
+        <h3 class="primary--text mx-auto mb-6 mt-0 md=8">
           Editar estudio {{ estudioAEditar.nombre }}
         </h3>
         <v-stepper v-model="pasoActual">
@@ -17,7 +14,7 @@
             <v-divider></v-divider>
 
             <v-stepper-step step="2" :complete="pasoActual > 2">
-              Muestra
+              Ediciones
             </v-stepper-step>
 
             <v-divider></v-divider>
@@ -35,16 +32,15 @@
 
           <v-stepper-items>
             <v-stepper-content step="1">
-              <FichaTecnica v-if="!estudioAEditar"></FichaTecnica>
-              <FichaTecnicaEditar v-else
+              <FichaTecnicaEditar
                 :form="estudioAEditar"
               ></FichaTecnicaEditar>
             </v-stepper-content>
             <v-stepper-content step="2">
-              <MuestraPonderada
-                :tamanoMuestral="fichaTecnica.totalMuestra"
+              <Ediciones
+                :ediciones="ediciones"
                 :tipo="tipo"
-              ></MuestraPonderada>
+              ></Ediciones>
             </v-stepper-content>
             <v-stepper-content step="3">
               <Metodologia :tipo="tipo" v-if="!estudioAEditar"></Metodologia>
@@ -64,10 +60,9 @@
 </template>
 
 <script>
-import Metodologia from "../../components/estudios/Metodologia.vue";
 import MetodologiaEditar from "../../components/estudios/editar/Metodologia.vue";
-import FichaTecnica from "../../components/estudios/FichaTecnica.vue";
 import FichaTecnicaEditar from "../../components/estudios/editar/FichaTecnica.vue";
+import Ediciones from "../../components/estudios/editar/Ediciones.vue";
 import MuestraPonderada from "../../components/estudios/MuestraPonderada.vue";
 import Instrumento from "../../components/estudios/Instrumento.vue";
 import { EventBus } from "../../main.js";
@@ -90,12 +85,11 @@ export default {
     estudioAEditar: null
   }),
   components: {
-    FichaTecnica,
     FichaTecnicaEditar,
     MuestraPonderada,
-    Metodologia,
     MetodologiaEditar,
-    Instrumento
+    Instrumento,
+    Ediciones
   },
 
   created() {
@@ -118,42 +112,19 @@ export default {
       EventBus.$on("pasoAnterior", () => {
         this.pasoActual -= 1;
       }),
-      EventBus.$on("registrar-estudio", (data) => {
-        this.instrumento = data;
-        if (this.estudioAEditar) this.actualizarEstudio(this.fichaTecnica)
-        else this.insertarEstudio(this.fichaTecnica);
+      EventBus.$on("actualizar-estudio", (data) => {
+        this.actualizarEstudio(this.fichaTecnica)
       });
   },
 
   methods: {
-    async insertarEstudio(data) {
-      try {
-        console.log("fICHA TECNICA" + this.fichaTecnica);
-        var estudio = await EstudiosRepository.agregar(data);
-        data.estudio_id = estudio.id;
-        var response = await EdicionesRepository.agregar(data);
-        this.idEdicion = response.id;
-        await MuestraPonderadaRepository.insertarMuestra(
-          this.muestra,
-          this.idEdicion
-        );
-        if (this.metodologia != []) {
-          this.metodologia.edicionId = response.id;
-          await MetodologiaRepository.insertarMetodologia(this.metodologia);
-        }
-        if (this.instrumento)
-          await PreguntasRepository.cargar(this.instrumento, this.idEdicion);
-        swal("El estudio ha sido agregado satisfactoriamente", "", "success");
-        this.$router.push("/estudios");
-      } catch (err) {
-        console.log(err);
-        swal("El estudio no pudo ser agregado" + err, "", "error");
-      }
-    },
-
     async actualizarEstudio(data){
         try {
             var estudio = await EstudiosRepository.actualizar(this.estudioAEditar.id, data);
+            for (let index = 0; index < this.ediciones.length; index++) {
+                const edicion = this.ediciones[index];
+                let editarEdicion = await EdicionesRepository.actualizar(edicion.id, edicion)
+            }
             swal("El estudio ha sido actualizado satisfactoriamente", "", "success");
             this.$router.push("/estudios");
         } catch (error) {
@@ -164,6 +135,7 @@ export default {
 
     async getEstudio(id) {
       this.estudioAEditar = await EstudiosRepository.consultarEstudio(id);
+      this.ediciones = await EstudiosRepository.obtenerEdiciones(id)
     },
   },
   mounted() {

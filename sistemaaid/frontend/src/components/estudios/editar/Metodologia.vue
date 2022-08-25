@@ -6,7 +6,7 @@
       </v-row>
       <v-row class="pb-0 mb-0 form-row mt-4">
         <v-col
-          md="5"
+          md="6"
           cols="12"
           class="py-0 info-text"
         >
@@ -23,7 +23,7 @@
           </div>
         </v-col>
         <v-col
-          md="5"
+          md="6"
           cols="12"
           class="py-0 info-text"
         >
@@ -34,20 +34,11 @@
             label="Modalidad"
           ></v-select>
         </v-col>
-        <v-col md="2" cols="12" align="center">
-          <v-btn
-            :small="$vuetify.breakpoint.smAndDown"
-            class="success"
-            @click="actualizarMetodologia(edicion.metodologia)"
-            :disable="!valid"
-          >
-            <p class="mt-3 hidden-sm-and-down">{{boton}}</p>
-          </v-btn>
-        </v-col>
+        
       </v-row>
       <v-row class="pb-0 mb-0 form-row mt-2">
         <v-col
-          md="5"
+          md="6"
           cols="12"
           class="py-0 info-text"
         >
@@ -62,7 +53,7 @@
           ></v-textarea>
         </v-col>
         <v-col
-          md="5"
+          md="6"
           cols="12"
           class="py-0 info-text"
         >
@@ -73,16 +64,7 @@
             label="Modalidad"
           ></v-select>
         </v-col>
-        <v-col md="2" cols="12" align="center">
-          <v-btn
-            :small="$vuetify.breakpoint.smAndDown"
-            class="success"
-            @click="actualizarMetodologia(edicion.metodologia)"
-            :disable="!valid"
-          >
-            <p class="mt-3 hidden-sm-and-down">{{boton}}</p>
-          </v-btn>
-        </v-col>
+        
       </v-row>
     </div>
   </div>

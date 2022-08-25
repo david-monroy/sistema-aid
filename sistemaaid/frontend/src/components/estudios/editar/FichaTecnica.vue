@@ -157,7 +157,7 @@ export default {
         async pasoSiguiente() {
             let validatedForm = this.$refs.registerForm.validate();
             if (validatedForm){
-                EventBus.$emit("pasoSiguiente", this.form)
+                EventBus.$emit("pasoSiguienteEdicion", this.form)
             }   
         },  
         actualizarFecha(){

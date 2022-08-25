@@ -32,19 +32,15 @@
 
           <v-stepper-items>
             <v-stepper-content step="1">
-              <FichaTecnicaEditar
-                :form="estudioAEditar"
-              ></FichaTecnicaEditar>
+              <FichaTecnicaEditar :form="estudioAEditar"></FichaTecnicaEditar>
             </v-stepper-content>
             <v-stepper-content step="2">
-              <Ediciones
-                :ediciones="ediciones"
-                :tipo="tipo"
-              ></Ediciones>
+              <Ediciones :ediciones="ediciones" :tipo="tipo"></Ediciones>
             </v-stepper-content>
             <v-stepper-content step="3">
               <Metodologia :tipo="tipo" v-if="!estudioAEditar"></Metodologia>
-              <MetodologiaEditar v-else
+              <MetodologiaEditar
+                v-else
                 :tipo="tipo"
                 :form="estudioAEditar"
               ></MetodologiaEditar>
@@ -82,24 +78,24 @@ export default {
     muestra: [],
     idEdicion: 0,
     tipo: null,
-    estudioAEditar: null
+    estudioAEditar: null,
   }),
   components: {
     FichaTecnicaEditar,
     MuestraPonderada,
     MetodologiaEditar,
     Instrumento,
-    Ediciones
+    Ediciones,
   },
 
   created() {
-    EventBus.$on("pasoSiguiente", (data) => {
+    EventBus.$on("pasoSiguienteEdicion", (data) => {
       if (this.pasoActual == 1) {
         this.fichaTecnica = data;
-        this.tipo = "Estudio";
       }
       if (this.pasoActual == 2) {
-        this.muestra = data;
+        this.ediciones = data;
+        this.actualizarEstudio(this.fichaTecnica);
       }
       if (this.pasoActual == 3) {
         this.metodologia = data;
@@ -113,29 +109,54 @@ export default {
         this.pasoActual -= 1;
       }),
       EventBus.$on("actualizar-estudio", (data) => {
-        this.actualizarEstudio(this.fichaTecnica)
+        this.actualizarEstudio(this.fichaTecnica);
       });
   },
 
   methods: {
-    async actualizarEstudio(data){
-        try {
-            var estudio = await EstudiosRepository.actualizar(this.estudioAEditar.id, data);
-            for (let index = 0; index < this.ediciones.length; index++) {
-                const edicion = this.ediciones[index];
-                let editarEdicion = await EdicionesRepository.actualizar(edicion.id, edicion)
-            }
-            swal("El estudio ha sido actualizado satisfactoriamente", "", "success");
-            this.$router.push("/estudios");
-        } catch (error) {
-            console.log(err);
-            swal("El estudio no pudo ser actualizado" + err, "", "error");
+    async actualizarEstudio(data) {
+      try {
+        var estudio = await EstudiosRepository.actualizar(
+          this.estudioAEditar.id,
+          data
+        );
+        for (let index = 0; index < this.ediciones.length; index++) {
+          const edicion = this.ediciones[index];
+          console.log(edicion)
+          let editarEdicion = await EdicionesRepository.actualizar(
+            edicion.id,
+            edicion
+          );
+
+          let editarMetodologia = await MetodologiaRepository.actualizar(
+          edicion.metodologia.id,
+          edicion.metodologia
+        );
         }
+
+        swal(
+          "El estudio ha sido actualizado satisfactoriamente",
+          "",
+          "success"
+        );
+        this.$router.push("/estudios");
+      } catch (error) {
+        console.log(err);
+        swal("El estudio no pudo ser actualizado" + err, "", "error");
+      }
     },
 
     async getEstudio(id) {
       this.estudioAEditar = await EstudiosRepository.consultarEstudio(id);
-      this.ediciones = await EstudiosRepository.obtenerEdiciones(id)
+      this.ediciones = await EstudiosRepository.obtenerEdiciones(id);
+      this.getMetodologias(this.ediciones)
+    },
+    async getMetodologias(ediciones){
+      for (let index = 0; index < ediciones.length; index++) {
+        const edicion = ediciones[index];
+        let metodologia = await MetodologiaRepository.buscarMetodologia(edicion.id);
+        edicion.metodologia = metodologia
+      }
     },
   },
   mounted() {

@@ -123,6 +123,7 @@
                   </v-menu>
                 </v-col>
               </v-row>
+              <MetodologiaEditar :edicion="edicion"></MetodologiaEditar>
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
@@ -171,7 +172,8 @@
 import swal from "sweetalert";
 import Repository from "../../../services/repositories/repositoryFactory";
 import { EventBus } from "../../../main.js";
-const MuestraPonderadaRepository = Repository.get("MuestraPonderada");
+const MetodologiaRepository = Repository.get("Metodologia");
+import MetodologiaEditar from "./Metodologia.vue";
 
 export default {
   data() {
@@ -192,7 +194,6 @@ export default {
                 (value.length <= 280) || "El texto es demasiado largo",
                 poblacion: (value) => 
                 (value.length <= 50) || "El texto es demasiado largo",
-
             }
     };
   },
@@ -200,11 +201,15 @@ export default {
     ediciones: Array,
     tipo: String,
   },
+  components: {
+    MetodologiaEditar,
+  },
   computed: {
     computedDateFormatted() {
       return this.formatDate(this.date);
     },
   },
+
   methods: {
     formatDate(date) {
       if (!date) return null;
@@ -219,6 +224,7 @@ export default {
     actualizarFecha() {
       this.form.fechaFin = "";
     },
+
     pasoAnterior() {
       if (this.tipo == "Estudio") {
         EventBus.$emit("pasoAnterior", this.form);
@@ -227,7 +233,7 @@ export default {
       }
     },
     pasoSiguiente() {
-      EventBus.$emit("actualizar-estudio",this.ediciones)
+      EventBus.$emit("pasoSiguienteEdicion",this.ediciones)
     },
     goRoute(route) {
       this.$router.push("/" + route);

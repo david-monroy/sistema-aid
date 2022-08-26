@@ -173,6 +173,7 @@ import swal from "sweetalert";
 import Repository from "../../../services/repositories/repositoryFactory";
 import { EventBus } from "../../../main.js";
 const MetodologiaRepository = Repository.get("Metodologia");
+const EdicionesRepository = Repository.get("Metodologia");
 import MetodologiaEditar from "./Metodologia.vue";
 
 export default {

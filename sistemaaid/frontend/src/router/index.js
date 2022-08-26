@@ -87,6 +87,12 @@ const router = new Router({
       component: () => import("../views/estudios/AgregarEdicion.vue")
     },
     {
+      path: `/estudios/editarEdicion/:id`,
+      name: 'EditarEdicion',
+      meta: { requiresAuth: true, permission: "backend | edicion | Can add edicion" },
+      component: () => import("../views/estudios/EditarEdicion.vue")
+    },
+    {
       path: '/configuracion',
       name: 'Configuracion',
       meta: { requiresAuth: true, permission: "auth | user | configuracion" },

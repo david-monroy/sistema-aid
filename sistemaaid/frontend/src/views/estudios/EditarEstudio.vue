@@ -19,15 +19,6 @@
 
             <v-divider></v-divider>
 
-            <v-stepper-step step="3" :complete="pasoActual > 3">
-              Metodología
-            </v-stepper-step>
-
-            <v-divider></v-divider>
-
-            <v-stepper-step step="4" :complete="pasoActual > 4">
-              Instrumento
-            </v-stepper-step>
           </v-stepper-header>
 
           <v-stepper-items>
@@ -36,17 +27,6 @@
             </v-stepper-content>
             <v-stepper-content step="2">
               <Ediciones :ediciones="ediciones" :tipo="tipo"></Ediciones>
-            </v-stepper-content>
-            <v-stepper-content step="3">
-              <Metodologia :tipo="tipo" v-if="!estudioAEditar"></Metodologia>
-              <MetodologiaEditar
-                v-else
-                :tipo="tipo"
-                :form="estudioAEditar"
-              ></MetodologiaEditar>
-            </v-stepper-content>
-            <v-stepper-content step="4">
-              <Instrumento :tipo="tipo"></Instrumento>
             </v-stepper-content>
           </v-stepper-items>
         </v-stepper>

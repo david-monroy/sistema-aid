@@ -124,6 +124,50 @@
               </v-menu>
             </v-col>
           </v-row>
+          <v-row class="pb-0 mb-0 form-row mt-4">
+            <v-col md="6" cols="12" class="py-0 info-text">
+              <strong>Cualitativa: </strong>
+              <div class="form-group">
+                <v-textarea
+                  v-model="metodologia.descripcionCualitativa"
+                  dense
+                  :rules="[rules.textos]"
+                  auto-grow
+                  counter
+                  rows="2"
+                ></v-textarea>
+              </div>
+            </v-col>
+            <v-col md="6" cols="12" class="py-0 info-text">
+              <strong>Modalidad: </strong>
+              <v-select
+                v-model="metodologia.modalidadCualitativa"
+                :items="modalidades"
+                label="Modalidad"
+              ></v-select>
+            </v-col>
+          </v-row>
+          <v-row class="pb-0 mb-0 form-row mt-2">
+            <v-col md="6" cols="12" class="py-0 info-text">
+              <strong>Cuantitativa: </strong>
+              <v-textarea
+                v-model="metodologia.descripcionCuantitativa"
+                dense
+                :rules="[rules.textos]"
+                auto-grow
+                counter
+                rows="2"
+              ></v-textarea>
+            </v-col>
+            <v-col md="6" cols="12" class="py-0 info-text">
+              <strong>Modalidad: </strong>
+              <v-select
+                v-model="metodologia.modalidadCuantitativa"
+                :items="modalidades"
+                label="Modalidad"
+              ></v-select>
+            </v-col>
+          </v-row>
         </v-expansion-panel-content>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -160,15 +204,15 @@
       </v-expansion-panel>
     </v-expansion-panels>
     <v-col align="center">
-            <v-btn
-              :small="$vuetify.breakpoint.smAndDown"
-              class="success"
-              @click="actualizarEdicion()"
-              :disable="!valid"
-            >
-              <p class="mt-3 hidden-sm-and-down">Actualizar</p>
-            </v-btn>
-          </v-col>
+      <v-btn
+        :small="$vuetify.breakpoint.smAndDown"
+        class="success"
+        @click="actualizarEdicion()"
+        :disable="!valid"
+      >
+        <p class="mt-3 hidden-sm-and-down">Actualizar</p>
+      </v-btn>
+    </v-col>
   </v-container>
 </template>
 
@@ -183,6 +227,7 @@ import ConsultarEncuestas from "../../components/estudios/ConsultarEncuestas.vue
 
 import { EventBus } from "../../main.js";
 const EdicionRepository = Repository.get("Ediciones");
+const MetodologiaRepository = Repository.get("Metodologia");
 
 export default {
   data() {
@@ -192,6 +237,12 @@ export default {
       respuesta: [],
       idEdicion: null,
       edicion: {},
+      metodologia: {},
+       modalidades: [
+      "Presencial autoadministrado",
+      "Presencial cara a cara",
+      "Online(autoadministrado)",
+    ],
       valid: true,
       muestraPonderada: [],
       date: new Date().toISOString().substr(0, 10),
@@ -224,40 +275,42 @@ export default {
   beforeMount() {
     this.buscarEdicion(this.$route.params.id);
   },
-   watch: {
+  watch: {
     date() {
       this.fechaFin = this.formatDate(this.date);
     },
   },
   methods: {
-    async actualizarEdicion(){
-        try {
-            let payload = {
-            id: this.edicion.id,
-            codigo: this.edicion.codigo,
-            fechaInicio: this.edicion.fechaInicio,
-            fechaFin: this.edicion.fechaFin,
-            periodo: this.edicion.periodo,
-            vinculada: this.edicion.vinculada,
-            totalMuestra: this.edicion.totalMuestra,
-            estudio_id: this.edicion.estudio.id
-        }
-            let editarEdicion = await EdicionRepository.actualizar(
-            payload.id,
-            payload
-          );
-        
-        console.log(payload)
-          swal(
+    async actualizarEdicion() {
+      try {
+        let payload = {
+          id: this.edicion.id,
+          codigo: this.edicion.codigo,
+          fechaInicio: this.edicion.fechaInicio,
+          fechaFin: this.edicion.fechaFin,
+          periodo: this.edicion.periodo,
+          vinculada: this.edicion.vinculada,
+          totalMuestra: this.edicion.totalMuestra,
+          estudio_id: this.edicion.estudio.id,
+        };
+        let editarEdicion = await EdicionRepository.actualizar(
+          payload.id,
+          payload
+        );
+
+        let editarMetodologia = await MetodologiaRepository.actualizar(
+          this.metodologia.id,
+          this.metodologia
+        );
+        swal(
           "La edición ha sido actualizada satisfactoriamente",
           "",
           "success"
         );
         this.$router.push("/estudios");
-        } catch (error) {
-            swal("No se pudo actualizar la edicion", "", "error");
-        }
-      
+      } catch (error) {
+        swal("No se pudo actualizar la edicion", "", "error");
+      }
     },
     async cargarExcel() {
       const formData = new FormData();
@@ -289,6 +342,7 @@ export default {
     async buscarEdicion(id) {
       try {
         this.edicion = await EdicionRepository.buscarEdicion(id);
+        this.metodologia = await MetodologiaRepository.buscarMetodologia(id);
       } catch (err) {
         console.log(err);
         swal("No se pudo procesar la muestra", "", "error");

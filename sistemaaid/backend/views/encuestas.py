@@ -48,7 +48,7 @@ def insertarEncuestas(request,idEdicion):
         Encuesta.objects.bulk_create(encuestas)
         Respuesta.objects.bulk_create(respuestas)
     
-        return HttpResponse(response(message="Se insertaron correctamente las " + df.shape[1] + " encuestas"))
+        return HttpResponse(response(message="Se insertaron correctamente las " + str(df.shape[1]) + " encuestas"))
 
     except BaseException as err:
         return HttpResponse(error_response(message="Ha ocurrido un error", error=err.args))

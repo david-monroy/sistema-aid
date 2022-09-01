@@ -20,6 +20,10 @@ export default {
   async obtenerInstrumento(idEdicion) {
     let response = await conn.get(`/preguntas/${idEdicion}/`, jwt.getAuthHeaderToken());
     return response;
-  }
+  }, 
 
+  async obtenerPreguntas(data) {
+    let response = await conn.post(`/preguntas/`, data, jwt.getAuthHeaderToken());
+    return response;
+  }
 };

@@ -59,8 +59,8 @@ export default {
         name: "Reportes",
         icon: "fa-chart-pie",
         rol: 3,
-        route: "#",
-        permiso: 'auth | user | reportes'
+        route: "reportes",
+        permiso: 'backend | edicion | view reportes'
       },
       {
         id: 4,

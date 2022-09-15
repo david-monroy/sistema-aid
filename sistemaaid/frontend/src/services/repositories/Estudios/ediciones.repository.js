@@ -34,8 +34,8 @@ export default {
     return response;
   },
 
-  async cargarEncuestas(data,idEdicion) {
-    let response = await conn.post(`/ediciones/cargar_encuesta/${idEdicion}/`, data, headers);
+  async cargarEncuestas(data,idEdicion,username) {
+    let response = await conn.post(`/ediciones/cargar_encuesta/${idEdicion}/${username}/`, data, headers);
     return response;
   },
 

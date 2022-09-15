@@ -149,6 +149,7 @@ export default {
       estudios.forEach((est) => {
         if (est.id == id) {
           this.estudio = est;
+          this.presentacion.estudio = this.estudio;
         }
       });
     },
@@ -191,8 +192,13 @@ export default {
     },
     async crearPresentacion(){
         this.presentacion[0].ediciones = this.edicionesSelect;
-        console.log(this.presentacion)
-        let presentacion = await EdicionesRepository.crearPresentacion(this.presentacion);
+        let payload = {
+          presentacion: this.presentacion,
+          estudio: this.estudio,
+          ediciones: this.ediciones
+        }
+        console.log(payload)
+        let presentacion = await EdicionesRepository.crearPresentacion(payload);
         console.log(presentacion)
       }
   },

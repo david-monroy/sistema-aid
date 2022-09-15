@@ -207,3 +207,10 @@ def participantes_filtrar(request):
     
     query_respuesta = json.dumps(list(query_participante) + list(query_participante_estado), cls=DjangoJSONEncoder) # Convierte el query retornado en un JSON para enviar a Vue
     return HttpResponse(query_respuesta)
+
+@csrf_exempt
+def obtenerEncuestasParticipante(request,id):
+    # encuestas = modelEncuesta.Encuesta.objects.filter(participante_id = id).values()
+    encuestas = modelEstudio.Estudio.objects.filter(edicion__encuesta__participante_id = id).values().distinct()
+    query_respuesta = json.dumps(list(encuestas), cls=DjangoJSONEncoder)
+    return HttpResponse(query_respuesta)

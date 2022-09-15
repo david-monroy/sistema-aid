@@ -1,10 +1,11 @@
 <template>
+<v-row>
   <v-row
     align="center"
     class="list px-3 mx-auto nav-separator container"
-    style="display: flex; align-items: flex-start"
+    style="display: flex; justify-content: center"
   >
-    <v-col cols="6" sm="6" class="mt-4">
+    <v-col cols="8" sm="8" class="mt-2">
       <v-card class="mx-auto p-3" tile>
         <v-card-title>
           <span class="primary--text">Estudios</span>
@@ -93,47 +94,11 @@
               >far fa-arrow-alt-circle-right</v-icon
             >
           </template>
-          <template v-slot:[`item.actions`]="{ item }">
-            <v-tooltip top style="display: inline">
-              <template v-slot:activator="{ on, attrs }">
-                <v-icon
-                  small
-                  v-bind="attrs"
-                  v-on="on"
-                  @click="editarEstudio(item.id)"
-                  class="mr-2"
-                  >fa-pen</v-icon
-                >
-              </template>
-              <span>Editar</span>
-            </v-tooltip>
-
-            <v-tooltip top style="display: inline">
-              <template v-slot:activator="{ on, attrs }">
-                <v-icon
-                  small
-                  v-bind="attrs"
-                  v-on="on"
-                  @click="mostrarInformacion(item.id)"
-                  class="mr-2 secondary--text"
-                  >fa-info-circle</v-icon
-                >
-              </template>
-              <span>Información</span>
-            </v-tooltip>
-          </template>
+        
         </v-data-table>
-        <v-row class="d-flex" style="justify-content: center">
-          <v-btn
-            color="accent2"
-            class="mx-4 my-6"
-            @click="goRoute('estudios/agregarEstudio')"
-            >Agregar estudio</v-btn
-          >
-        </v-row>
       </v-card>
     </v-col>
-    <v-col cols="6" sm="6" class="mt-4">
+    <!-- <v-col cols="6" sm="6" class="mt-2">
       <v-card class="mx-auto p-3 mb-0" tile>
         <div v-if="!estudio.id">
           Selecciona un estudio para ver sus ediciones.
@@ -230,38 +195,12 @@
                     small
                     v-bind="attrs"
                     v-on="on"
-                    @click="editarEdicion(item)"
+                    @click="editarEdicion(item.id)"
                     class="mr-2"
-                    >fa-pen</v-icon
+                    >fa-check</v-icon
                   >
                 </template>
-                <span>Editar</span>
-              </v-tooltip>
-              <v-tooltip top style="display: inline">
-                <template v-slot:activator="{ on, attrs }">
-                  <v-icon
-                    small
-                    v-bind="attrs"
-                    v-on="on"
-                    @click="mostrarInformacionEdicion(item.id)"
-                    class="mr-2 secondary--text"
-                    >fa-info-circle</v-icon
-                  >
-                </template>
-                <span>Información</span>
-              </v-tooltip>
-              <v-tooltip top style="display: inline">
-                <template v-slot:activator="{ on, attrs }">
-                  <v-icon
-                    small
-                    v-bind="attrs"
-                    v-on="on"
-                    @click="CargarEncuestas(item.id)"
-                    class="mr-2 secondary--text"
-                    >fa-upload</v-icon
-                  >
-                </template>
-                <span>Cargar encuestas</span>
+                <span>Seleccionar</span>
               </v-tooltip>
             </template>
           </v-data-table>
@@ -275,7 +214,15 @@
           </v-row>
         </div>
       </v-card>
-    </v-col>
+      
+    </v-col> -->
+  </v-row>
+    <v-btn
+        @click="goRoute('inicio')"
+        class="btn-block accent1 w-25 mx-auto mb-0 d-none d-sm-flex"
+      >
+        Regresar
+      </v-btn>
   </v-row>
 </template>
 
@@ -285,69 +232,56 @@ import Repository from "../../services/repositories/repositoryFactory";
 const EstudiosRepository = Repository.get("Estudios");
 const EdicionesRepository = Repository.get("Ediciones");
 export default {
-  data() {
-    return {
-      search: "",
-      search2: "",
-      headersEstudios: [
-        { text: "Código", value: "codigo" },
-        { text: "Nombre", value: "nombre" },
-        {
-          text: "Ediciones",
-          value: "ediciones",
-          sortable: false,
-          align: "center",
-        },
-        {
-          text: "Acciones",
-          value: "actions",
-          sortable: false,
-          align: "center",
-        },
-      ],
-      headerEdiciones: [
-        { text: "Código", value: "codigo" },
-        { text: "Fecha Inicio", value: "fechaInicio" },
-        { text: "Fecha Fin", value: "fechaFin" },
-        { text: "Período", value: "periodo" },
-        {
-          text: "Acciones",
-          value: "actions",
-          sortable: false,
-          align: "center",
-        },
-      ],
-      estudios: [],
-      ediciones: [],
-      estudio: {
-        id: null,
-        nombre: null,
+  name: "Reportes",
+  computed: {},
+  data: () => ({
+    search: "",
+    search2: "",
+    headersEstudios: [
+      { text: "Código", value: "codigo" },
+      { text: "Nombre", value: "nombre" },
+      {
+        text: "Ediciones",
+        value: "ediciones",
+        sortable: false,
+        align: "center",
       },
-      modalEliminarEstudio: false,
-      modalEditarEstudio: false,
-      modalEstudio: false,
-      modalEdicion: false,
-      actualEstudio: {
-        nombre: null,
-        codigo: null,
-        poblacionObjetivo: null,
-        antecedentes: null,
-        objetivoNegocio: null,
-      },
-      actualEdicion: {
-        codigo: null,
-        fechaInicio: null,
-        fechaFin: null,
-        periodo: null,
-        totalMuestra: null,
-      },
-      estudioSeleccionado: null,
-      estudioAEliminar: "",
-      estudioAEliminarNombre: "",
-      date: new Date().toISOString().substr(0, 10),
-    };
-  },
+    ],
+    headerEdiciones: [
+      { text: "Código", value: "codigo" },
+      { text: "Fecha Inicio", value: "fechaInicio" },
+      { text: "Fecha Fin", value: "fechaFin" },
+      { text: "Período", value: "periodo" },
+      { text: "Acciones", value: "actions", sortable: false, align: "center" },
+    ],
+    modalEstudio: false,
+    modalEdicion: false,
+    estudios: [],
+    ediciones: [],
+    estudio: {
+      id: null,
+      nombre: null,
+    },
+    actualEstudio: {
+      nombre: null,
+      codigo: null,
+      poblacionObjetivo: null,
+      antecedentes: null,
+      objetivoNegocio: null,
+    },
+    actualEdicion: {
+      codigo: null,
+      fechaInicio: null,
+      fechaFin: null,
+      periodo: null,
+      totalMuestra: null,
+    },
+    estudioSeleccionado: null,
+  }),
   methods: {
+    goRoute(route) {
+      this.$router.push("/" + route);
+    },
     async getEstudios() {
       try {
         this.estudios = await EstudiosRepository.consultar();
@@ -355,6 +289,15 @@ export default {
         console.log(err);
         swal("No se pudo obtener los estudios", "", "error");
       }
+    },
+    mostrarInformacionEdicion(id) {
+      this.modalEdicion = true;
+      let edicion = id;
+      this.ediciones.forEach((edi) => {
+        if (edi.id == edicion) {
+          this.actualEdicion = edi;
+        }
+      });
     },
     async seleccionar(id) {
       this.estudios.forEach((est) => {
@@ -364,71 +307,8 @@ export default {
       });
       this.estudioSeleccionado = id;
       this.ediciones = await EstudiosRepository.obtenerEdiciones(id);
-    },
-    mostrarEliminarEstudio(id, nombre) {
-      this.modalEliminarEstudio = true;
-      this.estudioAEliminar = id;
-      this.estudioAEliminarNombre = nombre;
-    },
-    cerrarEliminar() {
-      this.modalEliminarEstudio = false;
-    },
-    CargarEncuestas(id) {
-      this.$router.push(`/ediciones/AgregarEncuestas/${id}`);
-    },
-    async editarEstudio(id) {
-      let ediciones = await EstudiosRepository.obtenerEdiciones(id);
-      let tieneEncuestas = false;
-      for (let index = 0; index < ediciones.length; index++) {
-        const edicion = ediciones[index];
-        let encuestas = await EdicionesRepository.obtenerEncuestas(edicion.id);
-        if (encuestas.length > 0) tieneEncuestas = true;
-      }
-      if (tieneEncuestas)
-        swal(
-          "No se puede editar un estudio cuyas ediciones ya tienen encuestas",
-          "",
-          "error"
-        );
-      else this.goRoute(`estudios/${id}/editar`);
-    },
-    async editarEdicion(edicion) {
-      let encuestas = await EdicionesRepository.obtenerEncuestas(edicion.id);
-      if (encuestas.length > 0) {
-        swal(
-          "No se puede editar un estudio cuyas ediciones ya tienen encuestas",
-          "",
-          "error"
-        );
-      } else this.goRoute(`estudios/editarEdicion/${edicion.id}`);
-    },
-    mostrarInformacion(id) {
-      this.modalEstudio = true;
-      let estudio = id;
-      this.estudios.forEach((est) => {
-        if (est.id == estudio) {
-          this.actualEstudio = est;
-        }
-      });
-    },
-    mostrarInformacionEdicion(id) {
-      this.$router.push(`/ediciones/${id}`);
-    },
-    async eliminarEstudio() {
-      try {
-        await EstudiosRepository.eliminar(this.estudioAEliminar);
-        // location.href = '/participantes'
-        swal("Estudio eliminado", "", "success");
-        this.modalEliminarEstudio = false;
-        this.getEstudios();
-        this.ediciones = [];
-      } catch (err) {
-        console.log(err);
-        swal("el estudio no pudo ser eliminado", "", "error");
-      }
-    },
-    goRoute(route) {
-      this.$router.push("/" + route);
+      this.goRoute(`graficos/${id}`);
+
     },
   },
   mounted() {
@@ -438,5 +318,6 @@ export default {
 </script>
 
 <style>
+@import "../../styles/components/dashboard.css";
 @import "../../styles/main.css";
 </style>

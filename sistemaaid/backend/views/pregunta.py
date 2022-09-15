@@ -91,6 +91,15 @@ def get_preguntas(request,idEdicion):
     except BaseException as err:
         return HttpResponse(err)
 
+@csrf_exempt
+def get_preguntasPorEdiciones(request):
+    try:
+        data = json.loads(request.body.decode("utf-8"))
+        preguntas = Pregunta.objects.filter(preguntaedicion__edicion__pk__in=data).values('id','etiqueta').distinct()
+        query_respuesta = json.dumps(list(preguntas), cls=DjangoJSONEncoder) 
+        return HttpResponse(query_respuesta)
+    except BaseException as err:
+        return HttpResponse(err)
 
 
 

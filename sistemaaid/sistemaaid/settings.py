@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     'backend',
     'corsheaders',
     'rest_framework',
+    'background_task',
     'sqlalchemy',
     'rest_framework_simplejwt',
 ]
@@ -127,7 +128,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'SistemaAID',
         'USER': 'postgres',
-        'PASSWORD': '209fadfc',
+        'PASSWORD': 'admin',
         'HOST': '127.0.0.1',
         'PORT': '5432',
         'ATOMIC_REQUEST': True
@@ -178,3 +179,9 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.googlemail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'monroy02@gmail.com'
+EMAIL_HOST_PASSWORD = 'otymmqquqlijgqaq'

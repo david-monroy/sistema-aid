@@ -20,6 +20,10 @@ export default {
     let response = await conn.get(`/ediciones/`, jwt.getAuthHeaderToken());
     return response;
   },
+  async actualizar(id, data){
+    let response = await conn.put(`/ediciones/${id}/`, data, jwt.getAuthHeaderToken());
+    return response;
+  },
   async eliminar(id){
     let response = await conn.delete(`/ediciones/${id}/`, jwt.getAuthHeaderToken());
     return response;
@@ -34,15 +38,21 @@ export default {
     return response;
   },
 
-  async cargarEncuestas(data,idEdicion) {
-    let response = await conn.post(`/ediciones/cargar_encuesta/${idEdicion}/`, data, headers);
+  async cargarEncuestas(data,idEdicion,username) {
+    let response = await conn.post(`/ediciones/cargar_encuesta/${idEdicion}/${username}/`, data, headers);
     return response;
   },
 
   async obtenerEncuestas(idEdicion) {
     let response = await conn.get(`/ediciones/encuestas/${idEdicion}`, jwt.getAuthHeaderToken());
     return response.data;
+  },
+
+  async crearPresentacion(data) {
+    let response = await conn.post(`/ediciones/crear-presentacion/`, data, jwt.getAuthHeaderToken());
+    return response;
   }
+
 
 
 };

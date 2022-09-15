@@ -10,8 +10,12 @@ export default {
     let response = await conn.get(`/estudios/`, jwt.getAuthHeaderToken());
     return response;
   },
+  async actualizar(id, data){
+    let response = await conn.put(`/estudios/${id}/`, data, jwt.getAuthHeaderToken());
+    return response;
+  },
   async consultarEstudio(id) {
-    let response = await conn.get(`/estudios/${id}`, jwt.getAuthHeaderToken());
+    let response = await conn.get(`/estudios/${id}/`, jwt.getAuthHeaderToken());
     return response;
   },
   async obtenerEdiciones(id) {

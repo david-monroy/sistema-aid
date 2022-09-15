@@ -1,14 +1,12 @@
 <template>
-
-  <v-card @click="goRoute(route)" class="pa-4 ma-0 dashboard-card__item" >
-    <div class="text-center">
-      <v-icon size="60" color="light"
-              class="mb-2">{{icon}}
-      </v-icon>
-      <h4 color="light">{{ name }}</h4>
+  <v-card @click="goRoute(route)" class="pa-4 dashboard-card__item">
+    <div style="display: flex; justify-content: center; flex: 1">
+      <v-icon size="60" color="light" class="ml-12 pl-12">{{ icon }} </v-icon>
     </div>
-    </v-card>
-
+    <div style="display: flex; justify-content: flex-start; flex: 1">
+      <h4 color="light" cols="8">{{ name }}</h4>
+    </div>
+  </v-card>
 </template>
 
 <script>

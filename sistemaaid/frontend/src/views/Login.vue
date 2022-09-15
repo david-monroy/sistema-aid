@@ -54,12 +54,15 @@
 
 <script>
 import swal from 'sweetalert'
+import Repository from "../services/repositories/repositoryFactory";
+const UsuariosRepository = Repository.get("Usuarios");
 export default {
   data() {
       return {
           form:{
             username:'',
-            password:''
+            password:'',
+            email: ''
           },
           loading: false,
           show: false,

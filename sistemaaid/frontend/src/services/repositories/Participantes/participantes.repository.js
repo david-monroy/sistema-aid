@@ -14,6 +14,10 @@ export default {
     let response = await conn.get(`/participantes/${id}/`, jwt.getAuthHeaderToken());
     return response;
   },
+  async obtenerEncuestas(id){
+    let response = await conn.get(`/participantes/obtenerEncuestas/${id}/`, jwt.getAuthHeaderToken());
+    return response;
+  },
   async actualizar(id, data){
     let response = await conn.put(`/participantes/${id}/`, data, jwt.getAuthHeaderToken());
     return response;

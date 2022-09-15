@@ -107,7 +107,7 @@
     <!-- BOTONES -->
     <div class="crud-buttons mx-auto">
       <v-btn color="accent2" class="mx-4" @click="goRoute('participantes/agregar')">Agregar participante</v-btn>
-      <v-btn color="accent2" class="mx-4" @click="goRoute('participantes/masivo')">Cargar .csv</v-btn>
+      <v-btn color="accent2" class="mx-4" @click="goRoute('participantes/masivo')">Cargar excel</v-btn>
       <v-btn color="accent1" class="mx-4" @click="buscador = true">Filtrar</v-btn>
     </div>
 
@@ -195,6 +195,32 @@
                   </v-card-text>
 
                   <v-expansion-panels focusable class="px-5 mb-2">
+
+                    <v-expansion-panel v-if='encuestas'>
+                        <v-expansion-panel-header>Estudios que ha participado</v-expansion-panel-header>
+                        <v-expansion-panel-content>
+                            <v-simple-table max-height="240px">
+                                <template v-slot:default>
+                                <thead >
+                                    <tr>
+                                      <th class="text-center">
+                                        Código
+                                      </th>
+                                        <th class="text-center">
+                                        Nombre
+                                      </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="encuesta in encuestas" key="id">
+                                    <td class="text-center">{{encuesta.codigo}}</td>
+                                    <td class="text-center">{{encuesta.nombre}}</td>
+                                    </tr>
+                                </tbody>
+                                </template>
+                            </v-simple-table>
+                        </v-expansion-panel-content>
+                    </v-expansion-panel>
 
                     <v-expansion-panel v-if='actualParticipanteEstudios.estado || actualParticipanteEstudios.municipio || actualParticipanteEstudios.direccion'>
                         <v-expansion-panel-header>Ubicación</v-expansion-panel-header>
@@ -455,7 +481,8 @@ name: "ParticipantesView",
             lista_consultada: [],
             participantes_origen: [],
             estados: [],
-            municipios_todos: []
+            municipios_todos: [],
+            encuestas: []
         }
     },
     computed: {
@@ -586,7 +613,7 @@ name: "ParticipantesView",
           }
         },
 
-        abrirEstudios(userID){
+        async abrirEstudios(userID){
           this.actualParticipanteCarreras.splice(0, this.actualParticipanteCarreras.length)
           this.modalEstudios = true;
           this.participanteEstudios = userID;
@@ -596,6 +623,8 @@ name: "ParticipantesView",
             }
           });
           this.setParticipanteCarreras(userID);
+          this.encuestas = await ParticipantesRepository.obtenerEncuestas(userID)
+          console.log(this.encuestas)
         },
 
         async filtrar(){

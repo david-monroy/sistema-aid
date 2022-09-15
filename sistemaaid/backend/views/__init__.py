@@ -11,4 +11,5 @@ from .usuario import *
 from .encuestas import *
 from .metodologia import *
 from .clasificarTextos import * 
+from .presentaciones import * 
 

@@ -42,7 +42,7 @@
                 <v-file-input
                         v-model="file"
                         truncate-length="15"
-                        label="Carga el archivo .csv con la lista de código"
+                        label="Cargue el archivo excel con la lista de código"
                         :rules='[rules.required]'
                 ></v-file-input>
             </div>

@@ -69,7 +69,8 @@ def carga_masiva(request):
 
     path = request.FILES['file']
 
-    df = pd.read_csv(path, header=0, encoding='ISO-8859-1', delimiter=';')
+    # df = pd.read_csv(path, header=0, encoding='ISO-8859-1', delimiter=';')
+    df = pd.read_excel(path)
     
     row_iter = df.iterrows()
 

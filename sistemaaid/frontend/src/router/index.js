@@ -75,10 +75,22 @@ const router = new Router({
       component: () => import("../views/estudios/AgregarEstudio.vue")
     },
     {
+      path: '/estudios/:id/editar',
+      name: 'EditarUsuario',
+      meta: { requiresAuth: true, permission: "backend | estudio | Can change estudio" },
+      component: () => import("../views/estudios/EditarEstudio.vue")
+    },
+    {
       path: `/estudios/agregarEdicion`,
       name: 'AgregarEdicion',
       meta: { requiresAuth: true, permission: "backend | edicion | Can add edicion" },
       component: () => import("../views/estudios/AgregarEdicion.vue")
+    },
+    {
+      path: `/estudios/editarEdicion/:id`,
+      name: 'EditarEdicion',
+      meta: { requiresAuth: true, permission: "backend | edicion | Can add edicion" },
+      component: () => import("../views/estudios/EditarEdicion.vue")
     },
     {
       path: '/configuracion',

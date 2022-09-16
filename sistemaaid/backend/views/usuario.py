@@ -53,6 +53,13 @@ def obtener_usuario_id(request, id):
 
 @csrf_exempt
 def editar_usuario(request, id):
-        queryset = User.objects.get(pk = id)
-        queryset.delete()
+        user = User.objects.get(pk = id)
+
+        usuario_dict = json.loads(request.body.decode('utf8').replace("'", '"')) # request en formato DICCIONARIO, esto servira para trabajar los atributos en DJango
+        
+        user.first_name = usuario_dict["first_name"]
+        user.last_name = usuario_dict["last_name"]
+        user.save()
+        user.groups.add(usuario_dict["group"])
+
         return HttpResponse("Exitoso")

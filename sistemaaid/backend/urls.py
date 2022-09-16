@@ -46,6 +46,7 @@ urlpatterns = [
     path('participantes/participantecarreras/', views.get_participantecarrera),
     path('participantes/filtrar/', views.participantes_filtrar),
     path('participantes/obtenerEncuestas/<int:id>/', views.obtenerEncuestasParticipante),
+    path('participantes/obtenerEncuestas/fechas/<int:id>/', views.obtenerEncuestasParticipantePorFechas),
     path('lugares/estados/', views.get_estados),
     path('lugares/municipios/', views.get_municipios),
     path('preguntas/cargar/<int:idEdicion>/', views.insertarPreguntas),

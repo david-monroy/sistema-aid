@@ -236,7 +236,7 @@
                     >
                     <v-expansion-panel-content>
                       <v-row class="pb-0 mb-0 form-row mt-2">
-                        <v-col md="4" cols="12" class="py-0">
+                        <v-col md="3" cols="12" class="py-0">
                           <v-menu
                             ref="menu1"
                             v-model="menu1"
@@ -267,7 +267,7 @@
                             ></v-date-picker>
                           </v-menu>
                         </v-col>
-                        <v-col md="4" cols="12" class="py-0">
+                        <v-col md="3" cols="12" class="py-0">
                           <v-menu
                             ref="menu2"
                             v-model="menu2"
@@ -298,13 +298,22 @@
                             ></v-date-picker>
                           </v-menu>
                         </v-col>
-                        <v-col>
+                        <v-col md="3" cols="12">
                           <v-btn
                             color="secondary"
                             class="mx-4"
                             @click="filtrarPorFechas()"
                           >
                             Filtrar por fechas
+                          </v-btn>
+                        </v-col>
+                        <v-col md="3" cols="12">
+                          <v-btn
+                            color="accent"
+                            class="mx-4"
+                            @click="limpiarFechas(usuarioAFiltrar)"
+                          >
+                            Limpiar
                           </v-btn>
                         </v-col>
                       </v-row>
@@ -874,6 +883,11 @@ export default {
       }
       this.encuestas = await ParticipantesRepository.obtenerEncuestasPorFechas(this.usuarioAFiltrar, fechas);
     },
+
+    async limpiarFechas(userID){
+      this.encuestas = await ParticipantesRepository.obtenerEncuestas(userID);
+    },
+
 
     async filtrar() {
       try {

@@ -19,7 +19,7 @@ export default {
     return response;
   },
   async actualizar(id, data){
-    let response = await conn.put(`/usuarios/${id}/`, data, jwt.getAuthHeaderToken());
+    let response = await conn.post(`/usuarios/editar/${id}/`, data, jwt.getAuthHeaderToken());
     return response;
   },
   async eliminar(id){

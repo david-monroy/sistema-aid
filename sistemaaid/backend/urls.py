@@ -55,6 +55,7 @@ urlpatterns = [
     path('usuarios/agregar/', views.agregar_usuario),
     path('usuarios/usuario', views.obtener_usuario),
     path('usuarios/', views.obtener_usuarios),
+    path('usuarios/editar/<int:id>/', views.editar_usuario),
     path('metodologia/buscar/<int:idEdicion>/',views.get_metodologia),
     path('ia/entrenarModelo/', views.entrenarModelo),
     path('ia/predecir/', views.predecir),

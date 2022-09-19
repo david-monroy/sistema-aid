@@ -14,6 +14,7 @@ from pptx.enum.chart import XL_CHART_TYPE
 from pptx.util import Inches, Pt
 from django.db.models import Count
 from datetime import datetime
+from pptx.enum.chart import XL_LEGEND_POSITION, XL_LABEL_POSITION
 
 
 @csrf_exempt
@@ -94,19 +95,23 @@ def crearPresentacion(request):
                     chart_data = CategoryChartData()
                     chart_data.categories = df["respuesta"]
                     chart_data.add_series(etiqueta_series, df['id__count'])
-                    slide.shapes.add_chart(
+                    chart = slide.shapes.add_chart(
                     XL_CHART_TYPE.COLUMN_CLUSTERED, x, y, cx, cy, chart_data
-                    )
+                    ).chart
+                    chart.has_legend = True
+                    chart.legend.position = XL_LEGEND_POSITION.BOTTOM
+                    chart.legend.include_in_layout = False
 
                 if (item["tipoGrafico"] == "pie"):
                     chart_data = ChartData()
                     chart_data.categories = (df["respuesta"])
                     chart_data.add_series(etiqueta_series, df['id__count'])
-                    slide.shapes.add_chart(
+                    chart = slide.shapes.add_chart(
                     XL_CHART_TYPE.PIE, x, y, cx, cy, chart_data
-                    )
-            
-            
+                    ).chart
+                    chart.has_legend = True
+                    chart.legend.position = XL_LEGEND_POSITION.BOTTOM
+                    chart.legend.include_in_layout = False
             
             print("entro7")
             

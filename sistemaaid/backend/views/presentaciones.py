@@ -28,8 +28,8 @@ def crearPresentacion(request):
 
         estudioData = data['estudio']
         edicionesData = data['ediciones']
-        ediciones = ''
         primero = 1
+        ediciones = ''
 
         # Guarda codigos de ediciones en un array para luego mostrarlos como subtitulo
         for edicion in edicionesData:
@@ -38,7 +38,7 @@ def crearPresentacion(request):
                 primero = 0
             else:
                 ediciones = ediciones + ', ' + edicion['codigo']
-        
+               
         slide.shapes.title.text = 'Reporte de estudio ' + estudioData['nombre'] + ' - ' + estudioData['codigo']
         slide.placeholders[1].text = 'Ediciones: ' + ediciones
 

@@ -195,11 +195,18 @@ export default {
         let payload = {
           presentacion: this.presentacion,
           estudio: this.estudio,
-          ediciones: this.ediciones
+          ediciones: []
         }
+        this.ediciones.forEach(edicion => {
+          this.edicionesSelect.forEach(es => {
+            if (edicion.id == es){
+              payload.ediciones.push(edicion)
+            }
+          });
+        });
         console.log(payload)
         let presentacion = await EdicionesRepository.crearPresentacion(payload);
-        console.log(presentacion)
+        
       }
   },
   mounted() {

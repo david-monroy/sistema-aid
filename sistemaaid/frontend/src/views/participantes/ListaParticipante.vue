@@ -616,7 +616,7 @@
     </v-col>
     <v-div style="display: flex; flex-direction: column" class="mx-auto mt-4">
       <div class="crud-buttons mx-auto mt-4">
-        <v-btn color="secondary" class="mx-4" @click="exportarCSV(csvData)">
+        <v-btn color="secondary" class="mx-4" @click="exportarCSV()">
           Exportar a excel
         </v-btn>
       </div>
@@ -726,7 +726,8 @@ export default {
       menu2: false,
       fechaInicio: moment().format("YYYY-MM-DD"),
       fechaFin: moment().format("YYYY-MM-DD"),
-      usuarioAFiltrar: null
+      usuarioAFiltrar: null,
+      exportarConFiltro: false
     };
   },
   computed: {
@@ -936,6 +937,7 @@ export default {
             linkedin: par.linkedin,
             tiktok: par.tiktok,
           });
+          this.exportarConFiltro = true
         });
       } catch (err) {
         console.log(err);
@@ -943,9 +945,14 @@ export default {
       }
     },
 
-    exportarCSV(arrData) {
+    exportarCSV() {
       let csvContent = "data:text/csv;charset=utf-8,";
+      let arrData
+      if (!this.exportarConFiltro)
+        arrData = this.participantes_origen
+      else arrData = this.csvData
 
+      console.log(arrData)
       csvContent += [
         Object.keys(arrData[0]).join(";"),
         ...arrData.map((item) => Object.values(item).join(";")),
@@ -965,6 +972,7 @@ export default {
       this.$refs.registerForm.reset();
       this.participantes = [];
       this.getParticipantes();
+      this.exportarConFiltro = false
     },
 
     async getCarreras() {

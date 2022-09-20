@@ -958,8 +958,6 @@ export default {
     },
 
     exportarExcel() {
-      let csvContent = "data:text/csv;charset=utf-8,";
-
       const data = this.participantes
       const fileName = "participantes";
       const exportType = exportFromJSON.types.xls;

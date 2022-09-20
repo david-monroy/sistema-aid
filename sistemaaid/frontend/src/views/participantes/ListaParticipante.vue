@@ -616,7 +616,7 @@
     </v-col>
     <v-div style="display: flex; flex-direction: column" class="mx-auto mt-4">
       <div class="crud-buttons mx-auto mt-4">
-        <v-btn color="secondary" class="mx-4" @click="exportarCSV()">
+        <v-btn color="secondary" class="mx-4" @click="exportarExcel()">
           Exportar a excel
         </v-btn>
       </div>
@@ -636,6 +636,7 @@
 import swal from "sweetalert";
 import moment from "moment";
 import Repository from "../../services/repositories/repositoryFactory";
+import exportFromJSON from "export-from-json";
 const LugaresRepository = Repository.get("Lugares");
 const ParticipantesRepository = Repository.get("Participantes");
 const ParticipanteCarrerasRepository = Repository.get("ParticipanteCarreras");
@@ -727,7 +728,7 @@ export default {
       fechaInicio: moment().format("YYYY-MM-DD"),
       fechaFin: moment().format("YYYY-MM-DD"),
       usuarioAFiltrar: null,
-      exportarConFiltro: false
+      exportarConFiltro: false,
     };
   },
   computed: {
@@ -870,25 +871,27 @@ export default {
           this.actualParticipanteEstudios = par;
         }
       });
-      this.usuarioAFiltrar = userID
+      this.usuarioAFiltrar = userID;
       this.setParticipanteCarreras(userID);
       this.encuestas = await ParticipantesRepository.obtenerEncuestas(userID);
-      
+
       console.log(this.encuestas);
     },
 
-    async filtrarPorFechas(){
+    async filtrarPorFechas() {
       let fechas = {
         fechaInicio: this.fechaInicio,
-        fechaFin: this.fechaFin
-      }
-      this.encuestas = await ParticipantesRepository.obtenerEncuestasPorFechas(this.usuarioAFiltrar, fechas);
+        fechaFin: this.fechaFin,
+      };
+      this.encuestas = await ParticipantesRepository.obtenerEncuestasPorFechas(
+        this.usuarioAFiltrar,
+        fechas
+      );
     },
 
-    async limpiarFechas(userID){
+    async limpiarFechas(userID) {
       this.encuestas = await ParticipantesRepository.obtenerEncuestas(userID);
     },
-
 
     async filtrar() {
       try {
@@ -899,6 +902,9 @@ export default {
         let estado;
         let municipio;
         let lugar_id;
+        let colegio_id;
+        let colegio;
+        
         this.participantes_origen.forEach((par) => {
           (estado = null), (municipio = null), console.log(par);
           lugar_id = par.lugar_id;
@@ -917,6 +923,11 @@ export default {
               });
             }
           });
+          this.colegios.forEach((c) => {
+            if (c.id == par.colegio_id) {
+              colegio = c.nombre;
+            }
+          });
           this.participantes.push({
             id: par.id,
             nombre: par.nombre,
@@ -927,7 +938,7 @@ export default {
             telfSecundario: par.telfSecundario,
             fechaNacimiento: par.fechaNacimiento,
             genero: par.genero,
-            colegio: par.colegio_id,
+            colegio: colegio,
             estado: estado,
             municipio: municipio,
             direccion: par.direccion,
@@ -937,42 +948,30 @@ export default {
             linkedin: par.linkedin,
             tiktok: par.tiktok,
           });
-          this.exportarConFiltro = true
         });
+        this.exportarConFiltro = true;
+        this.buscador = false;
       } catch (err) {
         console.log(err);
         swal("La consulta no pudo ser realizada", "", "error");
       }
     },
 
-    exportarCSV() {
+    exportarExcel() {
       let csvContent = "data:text/csv;charset=utf-8,";
-      let arrData
-      if (!this.exportarConFiltro)
-        arrData = this.participantes_origen
-      else arrData = this.csvData
 
-      console.log(arrData)
-      csvContent += [
-        Object.keys(arrData[0]).join(";"),
-        ...arrData.map((item) => Object.values(item).join(";")),
-      ]
-        .join("\n")
-        .replace(/(^\[)|(\]$)/gm, "");
+      const data = this.participantes
+      const fileName = "participantes";
+      const exportType = exportFromJSON.types.xls;
 
-      const data = encodeURI(csvContent);
-      const link = document.createElement("a");
-      link.setAttribute("href", data);
-      link.setAttribute("download", "participantes.csv");
-      link.click();
-      console.log(arrData);
+      exportFromJSON({ data, fileName, exportType });
     },
 
     async limpiar() {
       this.$refs.registerForm.reset();
       this.participantes = [];
       this.getParticipantes();
-      this.exportarConFiltro = false
+      this.exportarConFiltro = false;
     },
 
     async getCarreras() {

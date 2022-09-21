@@ -15,6 +15,7 @@ from pptx.util import Inches, Pt
 from django.db.models import Count
 from datetime import datetime
 from pptx.enum.chart import XL_LEGEND_POSITION, XL_LABEL_POSITION
+from pptx.enum.text import PP_ALIGN
 
 
 @csrf_exempt
@@ -70,6 +71,16 @@ def crearPresentacion(request):
             print("entro4")
             slide.shapes.title.text = pregunta.etiqueta
             print("entro5")
+            if (item["texto"]):
+                left, top, width, height = Inches(2.2), Inches(6), Inches(8), Inches(1.5)
+                caja_texto = slide.shapes.add_textbox(left, top, width, height)
+                tf = caja_texto.text_frame
+           
+                p = tf.add_paragraph()
+                p.text = item["texto"]
+                p.font.size = Pt(14)
+                p.alignment = PP_ALIGN.CENTER
+                
             respuestasData = []
             numero_ediciones = len(item["ediciones"])
             for edicion in item["ediciones"]:
@@ -78,14 +89,19 @@ def crearPresentacion(request):
                 respuestasData.append(respuestas)
                 df = pd.DataFrame(respuestas)
 
-                posicion = item["ediciones"].index(edicion)+1
+                if (numero_ediciones>1):
+                    posicion = item["ediciones"].index(edicion)+1
 
-                if (posicion == 1):
-                    x = Inches(7/posicion)
+                    if (posicion == 1):
+                        x = Inches(7/posicion)
+                    else:
+                        x = Inches((7/posicion)-(0.5*numero_ediciones))
+
+                    y, cx, cy = Inches(2), Inches(8/numero_ediciones), Inches(7/numero_ediciones)
+                    
                 else:
-                    x = Inches((7/posicion)-(0.5*numero_ediciones))
-
-                y, cx, cy = Inches(2.5), Inches(8/numero_ediciones), Inches(7/numero_ediciones)
+                    x, y, cx, cy = Inches(4), Inches(2), Inches(5), Inches(3.6)
+                
 
                 codigo_edicion = Edicion.objects.get(pk=edicion)
                 etiqueta_series = 'Edición: ' + str(codigo_edicion)
@@ -101,6 +117,7 @@ def crearPresentacion(request):
                     chart.has_legend = True
                     chart.legend.position = XL_LEGEND_POSITION.BOTTOM
                     chart.legend.include_in_layout = False
+                    
 
                 if (item["tipoGrafico"] == "pie"):
                     chart_data = ChartData()
@@ -112,6 +129,7 @@ def crearPresentacion(request):
                     chart.has_legend = True
                     chart.legend.position = XL_LEGEND_POSITION.BOTTOM
                     chart.legend.include_in_layout = False
+                    
             
             print("entro7")
             

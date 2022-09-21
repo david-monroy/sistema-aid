@@ -78,14 +78,19 @@ def crearPresentacion(request):
                 respuestasData.append(respuestas)
                 df = pd.DataFrame(respuestas)
 
-                posicion = item["ediciones"].index(edicion)+1
+                if (numero_ediciones>1):
+                    posicion = item["ediciones"].index(edicion)+1
 
-                if (posicion == 1):
-                    x = Inches(7/posicion)
+                    if (posicion == 1):
+                        x = Inches(7/posicion)
+                    else:
+                        x = Inches((7/posicion)-(0.5*numero_ediciones))
+
+                    y, cx, cy = Inches(2.5), Inches(8/numero_ediciones), Inches(7/numero_ediciones)
+                    
                 else:
-                    x = Inches((7/posicion)-(0.5*numero_ediciones))
-
-                y, cx, cy = Inches(2.5), Inches(8/numero_ediciones), Inches(7/numero_ediciones)
+                    x, y, cx, cy = Inches(3.6), Inches(2), Inches(6), Inches(4.5)
+                
 
                 codigo_edicion = Edicion.objects.get(pk=edicion)
                 etiqueta_series = 'Edición: ' + str(codigo_edicion)

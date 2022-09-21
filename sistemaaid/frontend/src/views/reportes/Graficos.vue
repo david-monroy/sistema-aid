@@ -191,6 +191,7 @@ export default {
       
     },
     async crearPresentacion(){
+      try {
         this.presentacion[0].ediciones = this.edicionesSelect;
         let payload = {
           presentacion: this.presentacion,
@@ -206,6 +207,11 @@ export default {
         });
         console.log(payload)
         let presentacion = await EdicionesRepository.crearPresentacion(payload);
+        swal("Se creó la presentación", "", "success");
+      } catch (error) {
+        swal("No se pudo crear la presentación", "", "error");
+      }
+        
         
       }
   },

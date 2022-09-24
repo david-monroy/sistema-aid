@@ -191,15 +191,28 @@ export default {
       
     },
     async crearPresentacion(){
+      try {
         this.presentacion[0].ediciones = this.edicionesSelect;
         let payload = {
           presentacion: this.presentacion,
           estudio: this.estudio,
-          ediciones: this.ediciones
+          ediciones: []
         }
+        this.ediciones.forEach(edicion => {
+          this.edicionesSelect.forEach(es => {
+            if (edicion.id == es){
+              payload.ediciones.push(edicion)
+            }
+          });
+        });
         console.log(payload)
         let presentacion = await EdicionesRepository.crearPresentacion(payload);
-        console.log(presentacion)
+        swal("Se creó la presentación", "", "success");
+      } catch (error) {
+        swal("No se pudo crear la presentación", "", "error");
+      }
+        
+        
       }
   },
   mounted() {

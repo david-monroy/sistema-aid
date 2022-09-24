@@ -61,6 +61,7 @@
                         v-model="form.username"
                         label="Nombre de usuario *"
                         required
+                        disabled
                         :rules='[rules.required]'
                     ></v-text-field>
                 </div>
@@ -98,7 +99,7 @@
             <v-btn @click="editarUsuario"
                 :disabled="!valid"
                 class="btn success btn-block w-50 my-2 mx-auto  d-none d-sm-flex">
-                Registrar
+                Actualizar
             </v-btn>
             <v-btn @click="goRoute('usuarios')"
                 class="btn-block accent1 w-25 mx-auto  mb-0 d-none d-sm-flex">
@@ -151,13 +152,13 @@ export default {
                 if (this.form.password == this.form.confirmPassword) {
 
                     try{
-                        let res = await UsuariosRepository.agregar(this.form);
+                        let res = await UsuariosRepository.actualizar(this.form.id, this.form);
                         swal("Usuario editado satisfactoriamente", "", "success")
                         this.goRoute('usuarios')
                     }
                     catch(err){
                         console.log(err)
-                        swal("El usuario no pudo ser creado", "", "error")
+                        swal("El usuario no pudo ser actualizado", "", "error")
                     }
                 } else {
                     swal("La contraseña no es la misma", "", "error")

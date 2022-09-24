@@ -14,6 +14,8 @@ from pptx.enum.chart import XL_CHART_TYPE
 from pptx.util import Inches, Pt
 from django.db.models import Count
 from datetime import datetime
+from pptx.enum.chart import XL_LEGEND_POSITION, XL_LABEL_POSITION
+from pptx.enum.text import PP_ALIGN
 
 
 @csrf_exempt
@@ -28,8 +30,8 @@ def crearPresentacion(request):
 
         estudioData = data['estudio']
         edicionesData = data['ediciones']
-        ediciones = ''
         primero = 1
+        ediciones = ''
 
         # Guarda codigos de ediciones en un array para luego mostrarlos como subtitulo
         for edicion in edicionesData:
@@ -38,7 +40,7 @@ def crearPresentacion(request):
                 primero = 0
             else:
                 ediciones = ediciones + ', ' + edicion['codigo']
-        
+               
         slide.shapes.title.text = 'Reporte de estudio ' + estudioData['nombre'] + ' - ' + estudioData['codigo']
         slide.placeholders[1].text = 'Ediciones: ' + ediciones
 
@@ -69,29 +71,68 @@ def crearPresentacion(request):
             print("entro4")
             slide.shapes.title.text = pregunta.etiqueta
             print("entro5")
-            respuestas = Respuesta.objects.filter(pregunta__edicion__pk__in=item["ediciones"], pregunta__pregunta__pk=preguntaData["id"]).values(
+            if (item["texto"]):
+                left, top, width, height = Inches(2.2), Inches(6), Inches(8), Inches(1.5)
+                caja_texto = slide.shapes.add_textbox(left, top, width, height)
+                tf = caja_texto.text_frame
+           
+                p = tf.add_paragraph()
+                p.text = item["texto"]
+                p.font.size = Pt(14)
+                p.alignment = PP_ALIGN.CENTER
+                
+            respuestasData = []
+            numero_ediciones = len(item["ediciones"])
+            for edicion in item["ediciones"]:
+                respuestas = Respuesta.objects.filter(pregunta__edicion__pk=edicion, pregunta__pregunta__pk=preguntaData["id"]).values(
                 "respuesta").annotate(Count("id"))
-            print("entro6")
-            df = pd.DataFrame(respuestas)
-            print("entro7")
-            if (item["tipoGrafico"] == "bar"):
-                print("entro")
-                chart_data = CategoryChartData()
-                chart_data.categories = df["respuesta"]
-                chart_data.add_series('Series 1', df['id__count'])
-                x, y, cx, cy = Inches(3.6), Inches(2), Inches(6), Inches(4.5)
-                slide.shapes.add_chart(
-                XL_CHART_TYPE.COLUMN_CLUSTERED, x, y, cx, cy, chart_data
-                )
+                respuestasData.append(respuestas)
+                df = pd.DataFrame(respuestas)
 
-            if (item["tipoGrafico"] == "pie"):
-                chart_data = ChartData()
-                chart_data.categories = df["respuesta"]
-                chart_data.add_series('Series 1', df['id__count'])
-                x, y, cx, cy = Inches(3.6), Inches(2), Inches(6), Inches(4.5)
-                slide.shapes.add_chart(
-                XL_CHART_TYPE.PIE, x, y, cx, cy, chart_data
-                )
+                if (numero_ediciones>1):
+                    posicion = item["ediciones"].index(edicion)+1
+
+                    if (posicion == 1):
+                        x = Inches(7/posicion)
+                    else:
+                        x = Inches((7/posicion)-(0.5*numero_ediciones))
+
+                    y, cx, cy = Inches(2), Inches(8/numero_ediciones), Inches(7/numero_ediciones)
+                    
+                else:
+                    x, y, cx, cy = Inches(4), Inches(2), Inches(5), Inches(3.6)
+                
+
+                codigo_edicion = Edicion.objects.get(pk=edicion)
+                etiqueta_series = 'Edición: ' + str(codigo_edicion)
+
+                if (item["tipoGrafico"] == "bar"):
+                    print("entro")
+                    chart_data = CategoryChartData()
+                    chart_data.categories = df["respuesta"]
+                    chart_data.add_series(etiqueta_series, df['id__count'])
+                    chart = slide.shapes.add_chart(
+                    XL_CHART_TYPE.COLUMN_CLUSTERED, x, y, cx, cy, chart_data
+                    ).chart
+                    chart.has_legend = True
+                    chart.legend.position = XL_LEGEND_POSITION.BOTTOM
+                    chart.legend.include_in_layout = False
+                    
+
+                if (item["tipoGrafico"] == "pie"):
+                    chart_data = ChartData()
+                    chart_data.categories = (df["respuesta"])
+                    chart_data.add_series(etiqueta_series, df['id__count'])
+                    chart = slide.shapes.add_chart(
+                    XL_CHART_TYPE.PIE, x, y, cx, cy, chart_data
+                    ).chart
+                    chart.has_legend = True
+                    chart.legend.position = XL_LEGEND_POSITION.BOTTOM
+                    chart.legend.include_in_layout = False
+                    
+            
+            print("entro7")
+            
             
             i+=1
 

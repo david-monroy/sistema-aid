@@ -1,4 +1,6 @@
+from ast import For
 from datetime import date, datetime, timedelta
+import re
 from django.shortcuts import render
 from django.http import HttpResponse
 import pandas as pd
@@ -213,4 +215,20 @@ def obtenerEncuestasParticipante(request,id):
     # encuestas = modelEncuesta.Encuesta.objects.filter(participante_id = id).values()
     encuestas = modelEstudio.Estudio.objects.filter(edicion__encuesta__participante_id = id).values().distinct()
     query_respuesta = json.dumps(list(encuestas), cls=DjangoJSONEncoder)
+    return HttpResponse(query_respuesta)
+
+@csrf_exempt
+def obtenerEncuestasParticipantePorFechas(request,id):
+    
+    fechas = json.loads(request.body.decode('utf8').replace("'", '"')) 
+    fechaInicio = fechas["fechaInicio"]
+    fechaFin = fechas["fechaFin"]
+
+    encuestas = modelEncuesta.Encuesta.objects.filter(participante_id = id).values()
+    encuestas = modelEstudio.Estudio.objects.filter(edicion__encuesta__participante_id = id).values().distinct()
+    encuestas = modelEstudio.Estudio.objects.filter(edicion__encuesta__fechaAplicacion__gte=fechaInicio).filter(edicion__encuesta__fechaAplicacion__lte=fechaFin).values().distinct()
+    query_respuesta = json.dumps(list(encuestas), cls=DjangoJSONEncoder)
+
+    
+    print(query_respuesta)
     return HttpResponse(query_respuesta)

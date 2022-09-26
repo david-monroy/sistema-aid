@@ -157,6 +157,18 @@ const router = new Router({
       name: 'ConsultarEdicion',
       meta: { requiresAuth: true, permission: "backend | edicion | Can view edicion" },
       component: () => import("../views/estudios/ConsultarEdicion.vue")
+    },
+    {
+      path: `/InteligenciaArtificial`,
+      name: 'InteligenciaArtificial',
+      meta: { requiresAuth: true, permission: "auth | user | ia" },
+      component: () => import("../views/IaDashboard.vue")
+    },
+    {
+      path: `/Preprocesamiento`,
+      name: 'Preprocesamiento',
+      meta: { requiresAuth: true, permission: "backend | edicion | preprocesamiento" },
+      component: () => import("../views/ia/Preprocesamiento.vue")
     }
 
   ],

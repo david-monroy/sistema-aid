@@ -60,6 +60,7 @@ urlpatterns = [
     path('metodologia/buscar/<int:idEdicion>/',views.get_metodologia),
     path('ia/entrenarModelo/', views.entrenarModelo),
     path('ia/predecir/', views.predecir),
+    path('ia/preprocesamiento/', views.preprocesamiento)
 ]
 
 urlpatterns += router.urls

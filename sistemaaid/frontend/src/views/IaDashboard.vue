@@ -32,7 +32,7 @@
 <script>
 import DashboardCard from "../components/dashboard/DashboardCard.vue";
 export default {
-  name: "ConfiguracionDashboard",
+  name: "IaDashboard",
   components: {
     DashboardCard
   },
@@ -43,27 +43,19 @@ export default {
       dashItems: [
       {
         id: 1,
-        name: "Usuarios",
+        name: "Patrones",
         icon: "fa-users-cog",
         rol: 2,
-        route: "usuarios",
-        permiso: "auth | user | Can add user"
+        route: "Patrones",
+        permiso: "backend | edicion | patrones"
       },
       {
         id: 2,
-        name: "Inteligencia Artificial",
+        name: "Preprocesamiento",
         icon: "fa-clipboard-list",
         rol: 2,
-        route: "InteligenciaArtificial",
-        permiso: "auth | user | ia"
-      },
-      {
-        id: 3,
-        name: "Listas de código",
-        icon: "fa-clipboard-list",
-        rol: 2,
-        route: "ListasCodigos",
-        permiso: 'backend | lista codigo | Can add lista codigo'
+        route: "Preprocesamiento",
+        permiso: "backend | edicion | preprocesamiento"
       },
 
     ]

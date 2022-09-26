@@ -12,6 +12,7 @@ import MetodologiaRepository from "./Estudios/metodologia.repository";
 import UsuariosRepository from "./usuarios.repository";
 import ListaCodigoRepository from "./Estudios/listaCodigo.repository";
 import PreguntasRepository from "./Estudios/preguntas.repository";
+import IaRepository from "./Estudios/ia.repository";
 
 const repositories = {
     Autorizacion: AutorizacionRepository,
@@ -27,7 +28,8 @@ const repositories = {
     Colegios: ColegiosRepository,
     Lugares: LugaresRepository,
     Preguntas: PreguntasRepository,
-    Usuarios: UsuariosRepository
+    Usuarios: UsuariosRepository,
+    IA: IaRepository,
 };
 
 export default {

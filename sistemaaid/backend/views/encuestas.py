@@ -2,6 +2,7 @@ import email
 from django.http import HttpResponse
 import pandas as pd
 from backend.models import Encuesta, Pregunta,Respuesta, PreguntaEdicion,Participante,Edicion
+from backend.models import * 
 from django.contrib.auth.models import User, Group
 from backend.serializers import GroupSerializer, UserSerializer
 from django.views.decorators.csrf import csrf_exempt
@@ -42,11 +43,21 @@ def insertarEncuestas(request,idEdicion,username):
         for row, column in df.iterrows():
             
             if (math.isnan(column[0]) == False):
+                participante = Participante.objects.get(cedula=column[0])
+                print(column[6])
+                if (column[5] == 1):
+                    genero = "M"
+                else:
+                    genero = "F"
+
+                participante.colegio = modelColegio.Colegio.objects.get(nombre=column[6])
+                participante.genero = genero
+                participante.save()
                 nuevaEncuesta = Encuesta(
                     participante = Participante.objects.get(cedula=column[0]),
                     fechaAplicacion = column[1],
                     codigo = column[2],
-                    edicion = getEdicion
+                    edicion = getEdicion,
                 )
             else: 
                 nuevaEncuesta = Encuesta(

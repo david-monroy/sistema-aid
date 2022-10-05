@@ -44,13 +44,13 @@ def insertarEncuestas(request,idEdicion,username):
             
             if (math.isnan(column[0]) == False):
                 participante = Participante.objects.get(cedula=column[0])
-                print(column[6])
-                if (column[5] == 1):
+                
+                if (column["Sexo_Sexo (F=1 M=2)"] == 1):
                     genero = "M"
                 else:
                     genero = "F"
 
-                participante.colegio = modelColegio.Colegio.objects.get(nombre=column[6])
+                participante.colegio = modelColegio.Colegio.objects.get(nombre=column["Colegio_Colegio"])
                 participante.genero = genero
                 participante.save()
                 nuevaEncuesta = Encuesta(

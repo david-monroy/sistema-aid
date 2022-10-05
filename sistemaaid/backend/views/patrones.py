@@ -1,36 +1,56 @@
 from django.http import HttpResponse
 import pandas as pd
 from django.views.decorators.csrf import csrf_exempt
-from backend.ia.clasificarTextos.TextClassifier import train,predict
-from backend.models import Encuesta, Respuesta,Categoria
-import json
-from django.core.serializers.json import DjangoJSONEncoder
+from backend.ia.patrones.randomForestClassifier import entrenar, exportarArbol
+from backend.models import Respuesta,Categoria
 from django.db.models import F
 import os
+from backend.response import *
+from django.http import HttpResponse
+from random import random
+import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import precision_score
+from sklearn.model_selection import train_test_split
+from PIL import Image, ImageDraw, ImageFont
+from subprocess import check_call
+from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import KFold
+from sklearn.metrics import accuracy_score
+from sklearn import tree
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('SVG')
+import pickle
+from tkinter.filedialog import asksaveasfilename
 
-
-from backend.serializers import ListaCodigoSerializer
 
 @csrf_exempt
-def entrenarModelo(request):
+def entrenarArbol(request):
     try:
         path = request.FILES['file']
         df = pd.read_excel(path)
-        train(df, "RazonUniversidad")
+        df = df.dropna(axis=1, how='all', inplace=False)
+        df =df.replace(-777777777,)
+        df =df.replace(-999999999,)
+        for i in range(0,df.shape[1]):
+            clasificacion = pd.get_dummies(df.iloc[:,i], prefix=df.columns[i])
+            df= df.join(clasificacion)
 
-        return HttpResponse('Se entrenó el modelo')
+        df = df.drop(df.iloc[:, 0:i],axis = 1)
+        accuracy = entrenar(df)
+        return HttpResponse(response(message="Se preproceso todo correctamente"))
 
     except BaseException as err:
         return HttpResponse(err)
 
 @csrf_exempt
-def predecir(request):
+def exportar(request):
     try:
-        path = request.FILES['file']
-        df = pd.read_excel(path)
-        predict(df, "prueba")
-
-        return HttpResponse('Se realizó la predicción del modelo')
+        exportarArbol()
+        return HttpResponse(response(message="Se exportó uno de los árboles"))
 
     except BaseException as err:
         return HttpResponse(err)

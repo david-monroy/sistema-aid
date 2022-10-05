@@ -6,9 +6,11 @@ from backend.models import Pregunta, PreguntaEdicion, Edicion
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.core.serializers.json import DjangoJSONEncoder
-from django.db.models import F
 import math
+from django.db.models import F, Value as V
+from django.db.models.functions import Concat
 from backend.response import *
+from tkinter.filedialog import asksaveasfilename
 
 from backend.models.modelListaCodigo import ListaCodigo
 
@@ -28,9 +30,7 @@ def insertarPreguntas(request, idEdicion):
         for row,column in df.iterrows():
             listaCodigo = None
             if (column[3] == 'Cadena'):
-                if (math.isnan(column[4]) == True):
-                    return HttpResponse("Debe asociar una lista de código a la pregunta " + column [1])
-                else:
+                if (math.isnan(column[4]) == False):
                     listaCodigo = asignarListaCodigo(column[4])
      
             preguntaFilter = Pregunta.objects.filter(codigo=column[1])
@@ -101,7 +101,21 @@ def get_preguntasPorEdiciones(request):
     except BaseException as err:
         return HttpResponse(err)
 
-
+@csrf_exempt
+def get_dataEntry(request,idEdicion):
+    try: 
+        preguntas = Pregunta.objects.filter(preguntaedicion__edicion=idEdicion).values('codigo','etiqueta').annotate(pregunta=Concat('codigo', V('_'),'etiqueta'))
+        preguntasDf = pd.DataFrame(preguntas)
+        preguntasDf = preguntasDf.drop(['codigo', 'etiqueta'], axis=1)
+        preguntasDf = preguntasDf.set_index('pregunta').T
+        preguntasDf.insert(0,"Participante","")
+        preguntasDf.insert(1,"Fecha","")
+        preguntasDf.insert(2,"ID","")
+        file_name = asksaveasfilename(filetypes=[('excel file', '*.xlsx')], defaultextension='.xlsx')
+        preguntasDf.to_excel(file_name)
+        return HttpResponse(preguntasDf.to_json(orient="table"))             
+    except BaseException as err:
+        return HttpResponse(err)
 
 
     

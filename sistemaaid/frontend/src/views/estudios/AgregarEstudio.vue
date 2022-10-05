@@ -115,7 +115,6 @@ export default {
   methods:{
     async insertarEstudio(data){
       try{
-        console.log("fICHA TECNICA" + this.fichaTecnica)
         var estudio = await EstudiosRepository.agregar(data);
         data.estudio_id = estudio.id
         var response = await EdicionesRepository.agregar(data);
@@ -125,6 +124,7 @@ export default {
           this.metodologia.edicionId = response.id
           await MetodologiaRepository.insertarMetodologia (this.metodologia)
         }
+
         if (this.instrumento) await PreguntasRepository.cargar(this.instrumento, this.idEdicion);
         swal("El estudio ha sido agregado satisfactoriamente", "", "success")
         this.$router.push("/estudios");

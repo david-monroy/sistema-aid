@@ -105,6 +105,7 @@ export default {
             try{
                 this.edicion = await EdicionRepository.buscarEdicion(id);
 
+
             }
             catch(err){
                 console.log(err)

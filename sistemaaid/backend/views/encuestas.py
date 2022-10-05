@@ -90,20 +90,18 @@ def get_encuestas(request,idEdicion):
         encuestas = Encuesta.objects.filter(edicion=idEdicion).values('codigo', 'fechaAplicacion').annotate(
                                         participante=F('participante__nombre'))
         encuestasDf = pd.DataFrame(encuestas)
-
         preguntas = Pregunta.objects.filter(preguntaedicion__edicion=idEdicion).values('codigo','etiqueta').annotate(pregunta=Concat('codigo', V('_'),'etiqueta'))
         preguntasDf = pd.DataFrame(preguntas)
         preguntasDf = preguntasDf.drop(['codigo', 'etiqueta'], axis=1)
         preguntasDf = preguntasDf.set_index('pregunta').T
         encuestasDf = pd.concat((encuestasDf,preguntasDf),axis=0)
-
-
         respuestas = Respuesta.objects.filter(encuesta__edicion=idEdicion).values('respuesta', 'pregunta__pregunta__codigo', 'encuesta_id')
         respuestasDf= pd.DataFrame(respuestas)
 
         for row1,column1 in encuestasDf.iterrows():
             for row2,column2 in respuestasDf.iterrows():
                 for i in range(3,encuestasDf.shape[1]):
+                    print(i)
                     if(column2[1]==column1.index[i].split('_')[0]):
                         if(column2[2]==column1[0]):
                             encuestasDf.loc[row1, column1.index[i]]=column2[0]
@@ -111,3 +109,5 @@ def get_encuestas(request,idEdicion):
         return HttpResponse(respuestasDf.to_json(orient="table"))             
     except BaseException as err:
         return HttpResponse(err)
+
+

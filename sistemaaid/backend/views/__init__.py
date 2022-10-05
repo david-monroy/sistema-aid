@@ -13,4 +13,5 @@ from .metodologia import *
 from .clasificarTextos import * 
 from .presentaciones import * 
 from .preprocesamiento import *
+from .patrones import * 
 

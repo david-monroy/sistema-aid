@@ -44,7 +44,7 @@ export default {
       {
         id: 1,
         name: "Patrones",
-        icon: "fa-users-cog",
+        icon: "fa-chart-line",
         rol: 2,
         route: "Patrones",
         permiso: "backend | edicion | patrones"
@@ -55,6 +55,14 @@ export default {
         icon: "fa-clipboard-list",
         rol: 2,
         route: "Preprocesamiento",
+        permiso: "backend | edicion | preprocesamiento"
+      },
+      {
+        id: 3,
+        name: "Reentrenar modelo",
+        icon: "fa-hammer",
+        rol: 2,
+        route: "Entrenar",
         permiso: "backend | edicion | preprocesamiento"
       },
 

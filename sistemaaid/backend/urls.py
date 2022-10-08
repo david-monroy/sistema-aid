@@ -36,7 +36,7 @@ urlpatterns = [
     path('estudios/seleccionarVariablesRFE/', views.seleccionarVariablesRFE),
     path('ediciones/validarCodigo', views.validarCodigoEdicion),
     path('ediciones/cargar_encuesta/<int:idEdicion>/<str:username>/', views.insertarEncuestas),
-    path('ediciones/clasificar/<int:idEdicion>/', views.clasificar),
+    path('ediciones/clasificar/<int:idEdicion>/', views.clasificarTextos),
     path('ediciones/encuestas/<int:idEncuesta>', views.get_encuestas),
     path('ediciones/crear-presentacion/', views.crearPresentacion),
     path('categoria/cargar/<int:idLista>', views.cargarListaCodigo),

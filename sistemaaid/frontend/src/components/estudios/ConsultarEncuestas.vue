@@ -6,9 +6,11 @@
         <Boton titulo="Cargar encuestas" 
         :route=route
         permiso="backend | encuesta | Can add encuesta"></Boton>
-        <Boton v-if="encuestas.length > 0" titulo="Codificar respuestas" 
-          :route=route  
-          permiso="backend | encuesta | Can add encuesta"></Boton>
+        <v-btn :small="$vuetify.breakpoint.smAndDown"
+                    class="primary"
+                    @click="clasificar()"
+                >Codificar encuestas
+          </v-btn>
         </v-row>
       <v-row>
       <v-text-field
@@ -33,14 +35,14 @@ import Repository from "../../services/repositories/repositoryFactory";
 import DataTable from "../../components/comunes/DataTable.vue"
 import Boton from "../../components/comunes/Boton.vue"
 const EdicionesRepository = Repository.get("Ediciones");
-import exportFromJSON from "export-from-json";
 import Loading from "../../components/comunes/Loading.vue"
 export default {
   data: () => ({
     encuestas: [],
     route: "",
     activeLoading: false,
-    encuestaId: ""
+    encuestaId: "",
+    respuesta: []
   }),
   props:{
       edicion: {},
@@ -59,13 +61,12 @@ export default {
         this.encuestas = await EdicionesRepository.obtenerEncuestas(this.encuestaId)
         this.activeLoading=false;
     },
-     exportarExcel() {
-      const data = this.instrumento;
-      const fileName = "instrumento";
-      const exportType = exportFromJSON.types.xls;
-
-      exportFromJSON({ data, fileName, exportType });
-    },
+    async clasificar(){
+      this.activeLoading=true;
+      this.respuesta = await EdicionesRepository.clasificar(this.edicion.id)
+      console.log(this.respuesta)
+      this.activeLoading=false;
+    }
   }
 }
 </script>

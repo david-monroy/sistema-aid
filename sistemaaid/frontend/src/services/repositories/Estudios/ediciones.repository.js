@@ -51,7 +51,13 @@ export default {
   async crearPresentacion(data) {
     let response = await conn.post(`/ediciones/crear-presentacion/`, data, jwt.getAuthHeaderToken());
     return response;
+  },
+
+  async clasificar(idEdicion) {
+    let response = await conn.get(`/ediciones/clasificar/${idEdicion}/`, jwt.getAuthHeaderToken());
+    return response;
   }
+
 
 
 

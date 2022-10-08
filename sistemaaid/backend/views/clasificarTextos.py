@@ -29,14 +29,13 @@ def predecir(request):
         path = request.FILES['file']
         df = pd.read_excel(path)
         predict(df, "prueba")
-
         return HttpResponse('Se realizó la predicción del modelo')
 
     except BaseException as err:
         return HttpResponse(err)
 
 @csrf_exempt
-def clasificar(request,idEdicion):
+def clasificarTextos(request,idEdicion):
     try:
         respuestas = []
         listasCodigo = Respuesta.objects.filter(

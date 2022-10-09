@@ -48,6 +48,11 @@ export default {
     return response.data;
   },
 
+  async tieneEncuestas(idEncuesta) {
+    let response = await conn.get(`/ediciones/tieneEncuestas/${idEncuesta}`, jwt.getAuthHeaderToken());
+    return response.data;
+  },
+
   async crearPresentacion(data) {
     let response = await conn.post(`/ediciones/crear-presentacion/`, data, jwt.getAuthHeaderToken());
     return response;

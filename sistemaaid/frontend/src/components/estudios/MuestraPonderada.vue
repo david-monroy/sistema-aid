@@ -40,8 +40,8 @@
                 </v-data-table>
             </div>
             <div v-else>
-                <p> A continuación puede cargar un archivo .csv para obtener la distribución de la población para este estudio.</p>
-                <p> Puede guiarse de esta tabla, puede agregar tantas columnas desee.</p>
+                <p> A continuación puede cargar un archivo excel para obtener la distribución de la población para este estudio.</p>
+                <p> Puede guiarse de esta tabla, puede agregar tantos registros como desee.</p>
                 <img
                 src="../../assets/tablademuestraponderada.png"
                 />

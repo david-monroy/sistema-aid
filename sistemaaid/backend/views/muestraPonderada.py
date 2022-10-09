@@ -9,7 +9,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 @csrf_exempt
 def cargarMuestra(request, tamanoMuestral):
     path = request.FILES['file']
-    df = pd.read_csv(path, header=0, encoding='ISO-8859-1', delimiter=',')
+    df = pd.read_excel(path)
     totalColumnas = df.shape[1]
     poblacion = df.iloc[:, 1:df.shape[1]].sum()
     totalPoblacion = 0

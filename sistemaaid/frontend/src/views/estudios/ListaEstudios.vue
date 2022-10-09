@@ -381,8 +381,9 @@ export default {
       let tieneEncuestas = false;
       for (let index = 0; index < ediciones.length; index++) {
         const edicion = ediciones[index];
-        let encuestas = await EdicionesRepository.obtenerEncuestas(edicion.id);
-        if (encuestas.length > 0) tieneEncuestas = true;
+        let encuestas = await EdicionesRepository.tieneEncuestas(edicion.id);
+        console.log(encuestas)
+        if (encuestas > 0) tieneEncuestas = true;
       }
       if (tieneEncuestas)
         swal(
@@ -393,8 +394,10 @@ export default {
       else this.goRoute(`estudios/${id}/editar`);
     },
     async editarEdicion(edicion) {
-      let encuestas = await EdicionesRepository.obtenerEncuestas(edicion.id);
-      if (encuestas.length > 0) {
+      console.log(edicion)
+      let encuestas = await EdicionesRepository.tieneEncuestas(edicion.id);
+      console.log(encuestas)
+      if (encuestas > 0) {
         swal(
           "No se puede editar un estudio cuyas ediciones ya tienen encuestas",
           "",

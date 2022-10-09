@@ -35,7 +35,6 @@
                 <p>Tenga en cuenta:</p>
                 <ul>
                     <li>El formato para la fecha de nacimiento debe ser <b>día/mes/año</b>.</li>
-                    <li>Las columnas marcadas en <b><span class="red--text">rojo</span></b> son <b>obligatorias.</b></li>
                     <li>Los participantes deben ser <b>mayores de 11 años.</b></li>
                 </ul>
                 <!-- <img

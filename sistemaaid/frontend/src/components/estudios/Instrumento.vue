@@ -34,7 +34,7 @@
                 <DataTable :items="preguntas"></DataTable>
             </div>
             <div v-else>
-                <p> A continuación puede cargar un archivo .csv con la lista de preguntas de este estudio.</p>
+                <p> A continuación puede cargar un archivo excel con la lista de preguntas de este estudio.</p>
                 <p> Debe contener en la primera columna el código de la Pregunta el cual debe ser único.</p>
                 <p> En la segunda columna la etiqueta de la Pregunta</p>
                 <p> En la tercera columna el tipo de pregunta Numerico o Cadena</p>

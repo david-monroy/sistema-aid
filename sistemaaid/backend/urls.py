@@ -38,6 +38,7 @@ urlpatterns = [
     path('ediciones/cargar_encuesta/<int:idEdicion>/<str:username>/', views.insertarEncuestas),
     path('ediciones/clasificar/<int:idEdicion>/', views.clasificarTextos),
     path('ediciones/encuestas/<int:idEncuesta>', views.get_encuestas),
+    path('ediciones/tieneEncuestas/<int:idEdicion>', views.tieneEncuestas),
     path('ediciones/crear-presentacion/', views.crearPresentacion),
     path('categoria/cargar/<int:idLista>', views.cargarListaCodigo),
     path('categoria/consultar/<int:idLista>', views.obtenerCategorias),

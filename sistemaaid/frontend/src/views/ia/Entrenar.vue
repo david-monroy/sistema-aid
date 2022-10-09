@@ -2,10 +2,26 @@
   <v-container fluid elevation="0" class="nav-separator">
     <Loading :show=activeLoading />
     <v-row no-gutters justify="center">
-      <h3 class="primary--text mx-auto mb-6 mt-0 md=8">Agregar encuestas a </h3>
+      <h3 class="primary--text mx-auto mb-6 mt-0 md=8">Reentrenar modelo</h3>
     </v-row>
-    <v-row no-gutters justify="start">
-      <h4 class="primary--text mx-auto mb-6 mt-0 md=8">{{edicion.estudio.nombre}} - {{edicion.codigo}}</h4>
+    <v-row
+      align="center"
+      class="list px-3 mx-auto nav-separator container mt-12"
+      style="display: flex; justify-content: center"
+    >
+      <v-col cols="12" sm="6" class="mt-4">
+        Seleccione el modelo a entrenar
+        <v-select
+          v-model="listaCodigoSelect"
+          :items="listasDeCodigo"
+          item-text="nombre"
+          item-value="id"
+          chips
+          label="Modelos"
+          outlined
+          class="mt-2"
+        ></v-select>
+      </v-col>
     </v-row>
     <v-row no-gutters justify="center">
       <v-col cols="12" md="8" align="center">
@@ -20,7 +36,7 @@
                             <v-file-input
                                 v-model="file"
                                 truncate-length="15"
-                                label="Carga las respuestas de esta edicion"
+                                label="Sube el archivo con los registros para entrenar"
                             ></v-file-input>
                         </div>
                     </v-col>
@@ -50,6 +66,9 @@ import Repository from "../../services/repositories/repositoryFactory";
 import Loading from "../../components/comunes/Loading.vue"
 import { EventBus } from "../../main.js";
 const EdicionRepository = Repository.get("Ediciones");
+const ListaCodigoRepository = Repository.get("ListaCodigo");
+import exportFromJSON from "export-from-json";
+const IaRepository = Repository.get("IA");
 
 export default {
     data(){
@@ -59,7 +78,9 @@ export default {
             respuesta: [],
             idEdicion: null,
             edicion: {},
-            activeLoading: false
+            activeLoading: false,
+            listaCodigoSelect: true,
+            listasDeCodigo: []
         }
     },
      mounted(){
@@ -74,24 +95,31 @@ export default {
             formData.append('file', this.file)
             try{
                 this.activeLoading = true;
-                this.respuesta = await EdicionRepository.cargarEncuestas(formData,this.edicion.id, this.username);
-                this.activeLoading = false
+                this.respuesta= await IaRepository.entrenar(formData, this.listaCodigoSelect);
+                this.activeLoading = false 
                 if (this.respuesta.status == 200 ){
                     swal("", this.respuesta.detail, "success");
-                    this.$router.push(`/ediciones/ConsultarEdicion/${this.edicion.id}`);
                 }
-                else{
-                    swal("Error", this.respuesta.error[0], "error")
-                }
-                    
             }
             catch(err){
                 this.activeLoading = false
-                swal("Error", err, "error")
+                swal("Error", this.respuesta.error[0], "error")
             } 
+        },
+        async getListasDeCodigo(){
+            try{
+                this.listasDeCodigo = await ListaCodigoRepository.consultar();
+            }
+            catch(err){
+                console.log(err)
+                swal("No se pudo obtener las listas de código", "", "error")
+            }
         },
         
     },
+    mounted(){
+        this.getListasDeCodigo();
+    }
 }
 </script>
 

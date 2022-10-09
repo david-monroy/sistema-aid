@@ -170,6 +170,12 @@ const router = new Router({
       meta: { requiresAuth: true, permission: "backend | edicion | preprocesamiento" },
       component: () => import("../views/ia/Preprocesamiento.vue")
     },
+    {
+      path: `/Entrenar`,
+      name: 'Entrenar',
+      meta: { requiresAuth: true, permission: "backend | edicion | entrenar" },
+      component: () => import("../views/ia/Entrenar.vue")
+    }
 
   ],
   mode: 'history',

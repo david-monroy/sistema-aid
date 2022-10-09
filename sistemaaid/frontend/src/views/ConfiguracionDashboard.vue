@@ -52,7 +52,7 @@ export default {
       {
         id: 2,
         name: "Inteligencia Artificial",
-        icon: "fa-clipboard-list",
+        icon: "fa-file-code",
         rol: 2,
         route: "InteligenciaArtificial",
         permiso: "auth | user | ia"

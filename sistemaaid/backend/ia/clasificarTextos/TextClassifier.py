@@ -28,12 +28,14 @@ def tags(df):
 
 
 def train(df, fileName):
+    print(fileName)
     train, test = train_test_split(df, test_size = 0.20)
     tokenization(train)
     tags(train)
     SKClassifier = SklearnClassifier(MultinomialNB())
     SKClassifier.train(array_words)
     save_classifier = open("backend/ia/clasificarTextos/"+ fileName, "wb")
+    print(fileName)
     pickle.dump(SKClassifier, save_classifier)
     save_classifier.close()
     return ("success")

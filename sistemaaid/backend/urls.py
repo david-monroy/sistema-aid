@@ -60,7 +60,7 @@ urlpatterns = [
     path('usuarios/', views.obtener_usuarios),
     path('usuarios/editar/<int:id>/', views.editar_usuario),
     path('metodologia/buscar/<int:idEdicion>/',views.get_metodologia),
-    path('ia/entrenarModelo/', views.entrenarModelo),
+    path('ia/entrenarModelo/<int:idListaCodigo>/', views.entrenarModelo),
     path('ia/predecir/', views.predecir),
     path('ia/preprocesamiento/', views.preprocesamiento),
     path('ia/entrenarArbol/', views.entrenarArbol),

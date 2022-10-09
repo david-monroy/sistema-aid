@@ -128,7 +128,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'SistemaAID',
         'USER': 'postgres',
-        'PASSWORD': 'admin',
+        'PASSWORD': '209fadfc',
         'HOST': '127.0.0.1',
         'PORT': '5432',
         'ATOMIC_REQUEST': True

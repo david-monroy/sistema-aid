@@ -22,7 +22,6 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib
-matplotlib.use('SVG')
 import pickle
 from tkinter.filedialog import asksaveasfilename
 
@@ -32,15 +31,15 @@ def entrenarArbol(request):
     try:
         path = request.FILES['file']
         df = pd.read_excel(path)
-        df = df.dropna(axis=1, how='all', inplace=False)
-        df =df.replace(-777777777,)
-        df =df.replace(-999999999,)
-        for i in range(0,df.shape[1]):
-            clasificacion = pd.get_dummies(df.iloc[:,i], prefix=df.columns[i])
-            df= df.join(clasificacion)
+        ##df = df.dropna(axis=1, how='all', inplace=False)
+        ##df =df.replace(-777777777,)
+        ##df =df.replace(-999999999,)
+        ##for i in range(0,df.shape[1]):
+        ##    clasificacion = pd.get_dummies(df.iloc[:,i], prefix=df.columns[i])
+        ##    df= df.join(clasificacion)
 
-        df = df.drop(df.iloc[:, 0:i],axis = 1)
-        accuracy = entrenar(df)
+        ##df = df.drop(df.iloc[:, 0:i],axis = 1)
+        entrenar(df)
         return HttpResponse(response(message="Se preproceso todo correctamente"))
 
     except BaseException as err:
@@ -49,6 +48,7 @@ def entrenarArbol(request):
 @csrf_exempt
 def exportar(request):
     try:
+        print("entra")
         exportarArbol()
         return HttpResponse(response(message="Se exportó uno de los árboles"))
 

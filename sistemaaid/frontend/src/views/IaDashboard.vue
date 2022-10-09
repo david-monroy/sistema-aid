@@ -59,11 +59,11 @@ export default {
       },
       {
         id: 3,
-        name: "Reentrenar modelo",
+        name: "Entrenar modelo",
         icon: "fa-hammer",
         rol: 2,
         route: "Entrenar",
-        permiso: "backend | edicion | preprocesamiento"
+        permiso: "backend | edicion | entrenar"
       },
 
     ]

@@ -2,21 +2,25 @@ from django.http import HttpResponse
 import pandas as pd
 from django.views.decorators.csrf import csrf_exempt
 from backend.ia.clasificarTextos.TextClassifier import train,predict
-from backend.models import Encuesta, Respuesta,Categoria
+from backend.models import Encuesta, Respuesta,Categoria, ListaCodigo
 import json
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import F
 import os
+from backend.models.modelListaCodigo import ListaCodigo
 
 
 from backend.serializers import ListaCodigoSerializer
 
 @csrf_exempt
-def entrenarModelo(request):
+def entrenarModelo(request, idListaCodigo):
     try:
         path = request.FILES['file']
         df = pd.read_excel(path)
-        train(df, "prueba")
+
+        ListaCodigoNombre = ListaCodigo.objects.get(id=idListaCodigo)
+
+        train(df, str(ListaCodigoNombre))
 
         return HttpResponse('Se entrenó el modelo')
 

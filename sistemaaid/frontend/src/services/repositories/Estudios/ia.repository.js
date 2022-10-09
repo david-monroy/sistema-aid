@@ -12,4 +12,8 @@ export default {
     let response = await conn.post(`/ia/preprocesamiento/`, data, headers);
     return response;
   },
+  async entrenar(data, idListaCodigo) {
+    let response = await conn.post(`/ia/entrenarModelo/${idListaCodigo}/`, data, headers);
+    return response;
+  },
 };

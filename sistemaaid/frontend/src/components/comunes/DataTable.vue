@@ -15,6 +15,7 @@
         :items-per-page="10"
         class="elevation-1"
         :search="search"
+        
     >
     </v-data-table>
   </v-div>
@@ -41,3 +42,24 @@ export default {
   data: () => ({}),
 };
 </script>
+<style>
+
+/* This is the size of the path of the scrollbar */
+#wrapper2{
+      width: 100%;
+      overflow-x: scroll; 
+      overflow-y:hidden;
+  }
+
+/* This div allow to make the scroll function and show the scrollbar */
+  #div2 {
+      height: 1px;
+      overflow: scroll;
+  }
+
+  /* This is the size of the scrollbar */
+  .width-scroll{
+    width:1800px;
+  }
+
+</style>

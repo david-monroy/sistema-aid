@@ -22,6 +22,11 @@ export default {
     return response;
   }, 
 
+  async dataEntry(idEdicion) {
+    let response = await conn.get(`/preguntas/dataEntry/${idEdicion}/`, jwt.getAuthHeaderToken());
+    return response;
+  }, 
+
   async obtenerPreguntas(data) {
     let response = await conn.post(`/preguntas/`, data, jwt.getAuthHeaderToken());
     return response;

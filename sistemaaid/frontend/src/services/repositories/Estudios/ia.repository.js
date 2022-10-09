@@ -12,4 +12,15 @@ export default {
     let response = await conn.post(`/ia/preprocesamiento/`, data, headers);
     return response;
   },
+
+  async entrenarArbol(data) {
+    let response = await conn.post(`/ia/entrenarArbol/`, data, headers);
+    return response;
+  },
+
+  async exportarArbol() {
+    let response = await conn.get(`/ia/exportarArbol/`, jwt.getAuthHeaderToken());
+    return response;
+  },
+
 };

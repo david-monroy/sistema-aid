@@ -1,8 +1,9 @@
 <template>
   <div class="col-md-12 nav-separator pt-1">
     <div class="card card-container mt-0 form-card">
+      <Loading :show=activeLoading />
       <h3 class="primary--text mx-auto mb-6 mt-0">
-        Variables
+        Creación de árboles de decisión
       </h3>
       <v-spacer></v-spacer>
 
@@ -10,11 +11,10 @@
         <div class="container">
           <div class="mb-8">
             <p>
-              A continuación, cargue un archivo .csv con las
-              <b>variables</b> a ser seleccionadas por el algoritmo.
+              A continuación, cargue el archivo .xlsx con la información a trabajar, para detectar los patrones de los grupos en base a su probabilidad de estudio en la UCAB. 
             </p>
             <p>
-              La columna de la <b>variable a predecir</b> debe estar ubicada <b>de última.</b>
+              La columna de la variable a predecir debe estar ubicada de última, y se llama Probabilidad
             </p>
           </div>
           <v-row class="pb-0 mb-0 form-row">
@@ -23,7 +23,7 @@
                 <v-file-input
                   v-model="file"
                   truncate-length="15"
-                  label="Carga el archivo con las variables"
+                  label="Carga el archivo aquí"
                 ></v-file-input>
               </div>
             </v-col>
@@ -39,6 +39,16 @@
               </v-btn>
             </v-col>
           </v-row>
+          <v-row>
+            <v-btn
+                :small="$vuetify.breakpoint.smAndDown"
+                class="primary"
+                @click="exportarArbol()"
+                :disable="!valid"
+              >
+                <p class="mt-3 hidden-sm-and-down">Exportar árbol</p>
+              </v-btn>
+          </v-row>
         </div>
       </div>
     </div>
@@ -49,65 +59,51 @@
 <script>
 import swal from "sweetalert";
 import Repository from "../../services/repositories/repositoryFactory";
-const ParticipantesRepository = Repository.get("Participantes");
-const EstudiosRepository = Repository.get("Estudios");
+import Loading from "../../components/comunes/Loading.vue"
+const IaRepository = Repository.get("IA");
 export default {
   data() {
     return {
       file: "",
-    //   variablesSeleccionadas: []
+      respuesta: [],
+      activeLoading: false
     };
   },
-  computed: {
-      csvData() {
-      return this.variablesSeleccionadas.map(item => ({
-        ...item
-      }));
-    }
+  components: {
+        Loading
     },
   methods: {
-    seleccionarCSV() {
-      this.file = this.$refs.file.files[0];
-    },
-    goRoute(route) {
-      this.$router.push("/" + route);
-    },
     async cargarCSV() {
       const formData = new FormData();
       formData.append("file", this.file);
       try {
-        let variablesSeleccionadas = await EstudiosRepository.seleccionarVariablesRFE(formData);
-        swal("Archivo cargado exitosamente", "", "success");
-        // console.log(variablesSeleccionadas)
-        let varlist = []
-        for(var i in variablesSeleccionadas)
-            varlist.push(variablesSeleccionadas [i]);
-
-        
-        this.exportarCSV(varlist)
+        this.activeLoading = true;
+        this.respuesta = await IaRepository.entrenarArbol(formData);
+        this.activeLoading = false;
+        if (this.respuesta.status == 200 ){
+            swal("", this.respuesta.detail, "success");
+        }
       } catch (err) {
+        this.activeLoading = false;
         console.log(err);
         swal("No se ha podido cargar el archivo", "", "error");
       }
     },
-    exportarCSV(arrData){
-          let csvContent = "data:text/csv;charset=utf-8,";
-          csvContent += [
-            Object.keys(arrData[0]).join(";"),
-            ...arrData.map(item => Object.values(item).join(";"))
-          ]
-            .join("\n")
-            .replace(/(^\[)|(\]$)/gm, "");
-
-          const data = encodeURI(csvContent);
-          const link = document.createElement("a");
-          link.setAttribute("href", data);
-          link.setAttribute("download", "variablesSeleccionadasRFE.csv");
-          link.click();
-          console.log(arrData)
-        },
-  },
-  created() {},
+    async exportarArbol() {
+      try {
+        this.activeLoading = true;
+        this.respuesta = await IaRepository.exportarArbol();
+        this.activeLoading = false;
+        if (this.respuesta.status == 200 ){
+            swal("", this.respuesta.detail, "success");
+        }
+      } catch (err) {
+        this.activeLoading = false;
+        console.log(err);
+        swal("No se ha podido cargar el archivo", "", "error");
+      }
+    },
+  }
 };
 </script>
 

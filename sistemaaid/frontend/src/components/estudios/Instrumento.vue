@@ -31,14 +31,7 @@
             </v-col>
         </v-row>
             <div v-if="preguntas.length > 0">
-                <v-data-table
-                :headers="headers"
-                :items="preguntas"
-                hide-default-footer
-                :items-per-page="10"
-                class="elevation-1"
-                >
-                </v-data-table>
+                <DataTable :items="preguntas"></DataTable>
             </div>
             <div v-else>
                 <p> A continuación puede cargar un archivo .csv con la lista de preguntas de este estudio.</p>
@@ -97,6 +90,7 @@ import { EventBus } from "../../main.js";
 import {saveAs} from 'file-saver';
 import axios from 'axios';
 const PreguntasRepository = Repository.get("Preguntas");
+import DataTable from "../../components/comunes/DataTable.vue"
 
 export default {
     data(){
@@ -113,6 +107,9 @@ export default {
     },
     props: {
         tipo:String
+    },
+    components: {
+    DataTable
     },
     methods: {
         descargarPlantilla() {
@@ -142,14 +139,6 @@ export default {
             }
 
         },  
-        pasoSiguiente() {
-            if (this.tipo == "Estudio"){
-                EventBus.$emit("pasoSiguiente",this.muestraPonderada)
-            }
-            else {
-                EventBus.$emit("pasoSiguienteEdi",this.muestraPonderada)
-            }
-        }, 
         goRoute(route) {
             this.$router.push("/" + route);
         },

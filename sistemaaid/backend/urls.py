@@ -36,8 +36,8 @@ urlpatterns = [
     path('estudios/seleccionarVariablesRFE/', views.seleccionarVariablesRFE),
     path('ediciones/validarCodigo', views.validarCodigoEdicion),
     path('ediciones/cargar_encuesta/<int:idEdicion>/<str:username>/', views.insertarEncuestas),
-    path('ediciones/clasificar/<int:idEdicion>/', views.clasificar),
-    path('ediciones/encuestas/<int:idEdicion>', views.get_encuestas),
+    path('ediciones/clasificar/<int:idEdicion>/', views.clasificarTextos),
+    path('ediciones/encuestas/<int:idEncuesta>', views.get_encuestas),
     path('ediciones/crear-presentacion/', views.crearPresentacion),
     path('categoria/cargar/<int:idLista>', views.cargarListaCodigo),
     path('categoria/consultar/<int:idLista>', views.obtenerCategorias),
@@ -53,6 +53,7 @@ urlpatterns = [
     path('preguntas/preview/', views.previewPreguntas),
     path('preguntas/<int:idEdicion>/', views.get_preguntas),
     path('preguntas/', views.get_preguntasPorEdiciones),
+    path('preguntas/dataEntry/<int:idEdicion>/', views.get_dataEntry),
     path('usuarios/agregar/', views.agregar_usuario),
     path('usuarios/usuario', views.obtener_usuario),
     path('usuarios/', views.obtener_usuarios),
@@ -60,7 +61,10 @@ urlpatterns = [
     path('metodologia/buscar/<int:idEdicion>/',views.get_metodologia),
     path('ia/entrenarModelo/', views.entrenarModelo),
     path('ia/predecir/', views.predecir),
-    path('ia/preprocesamiento/', views.preprocesamiento)
+    path('ia/preprocesamiento/', views.preprocesamiento),
+    path('ia/entrenarArbol/', views.entrenarArbol),
+    path('ia/exportarArbol/', views.exportar)
+
 ]
 
 urlpatterns += router.urls

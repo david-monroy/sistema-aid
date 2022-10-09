@@ -31,13 +31,6 @@
             :complete="pasoActual>4">
             Instrumento
             </v-stepper-step>
-
-            <v-divider></v-divider>
-
-            <v-stepper-step step="5"
-            >
-            Flujo de ejecución
-            </v-stepper-step>
             
           </v-stepper-header>
 

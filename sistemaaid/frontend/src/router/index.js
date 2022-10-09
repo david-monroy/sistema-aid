@@ -101,8 +101,8 @@ const router = new Router({
     {
       path: '/patrones',
       name: 'Patrones',
-      meta: { requiresAuth: true },
-      component: () => import("../views/estudios/Patrones.vue")
+      meta: { requiresAuth: true, permission: "backend | edicion | patrones"},
+      component: () => import("../views/ia/Patrones.vue")
     },
     {
       path: '/usuarios',
@@ -169,7 +169,7 @@ const router = new Router({
       name: 'Preprocesamiento',
       meta: { requiresAuth: true, permission: "backend | edicion | preprocesamiento" },
       component: () => import("../views/ia/Preprocesamiento.vue")
-    }
+    },
 
   ],
   mode: 'history',

@@ -1,7 +1,15 @@
 <template>
   <div class="col-md-12 pt-1">
     <div class="card-container mt-0 form-card">
-        <div v-if="instrumento.length > 0">
+      <div v-if="instrumento.length > 0">
+        <v-row >
+          <v-btn
+                    :small="$vuetify.breakpoint.smAndDown"
+                    class="primary"
+                    @click="exportarExcel()"
+                >Exportar</v-btn>
+        </v-row>
+        
             <DataTable :items="instrumento"></DataTable>    
         </div>
         <div v-else>
@@ -15,9 +23,10 @@
 import Repository from "../../services/repositories/repositoryFactory";
 import DataTable from "../../components/comunes/DataTable.vue"
 const PreguntasRepository = Repository.get("Preguntas");
+import exportFromJSON from "export-from-json";
 export default {
   data: () => ({
-    instrumento: []
+    instrumento: [],
   }),
   props:{
       edicion: {},
@@ -31,7 +40,11 @@ export default {
   methods:{
     async getInstrumento(id){
         this.instrumento = await PreguntasRepository.obtenerInstrumento(id);
-        console.log(this.instrumento)
+    },
+    async exportarExcel() {
+
+      await PreguntasRepository.dataEntry(this.edicion.id);
+      
     },
   }
 }
